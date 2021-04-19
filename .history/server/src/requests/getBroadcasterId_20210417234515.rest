@@ -1,0 +1,3 @@
+GET https://api.twitch.tv/helix/users?login=xqcow
+Content-Type: application/json
+Client-Id: tctkc758owz1egz7tich6z98kyekli

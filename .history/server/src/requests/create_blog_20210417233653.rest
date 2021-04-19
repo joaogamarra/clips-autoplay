@@ -1,0 +1,9 @@
+POST http://localhost:3001/api/blogs 
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjYwMWI0ZmU2MDZiMzk3NTg3ZWY4YzY4MSIsImlhdCI6MTYxMjQwMzEwM30.SbHJ-CFirpiFPhAkMNWtCSqZCr4rj8frg97cjCQk5Sk
+
+{ 
+    "title": "ttest for comments", 
+    "author": "124124124",
+    "url": "test"
+}
