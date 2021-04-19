@@ -13,10 +13,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const twitch_1 = __importDefault(require("../services/twitch"));
+const token_1 = __importDefault(require("../services/twitch/token"));
+const clips_1 = __importDefault(require("../services/twitch/clips"));
+const channel_1 = __importDefault(require("../services/twitch/channel"));
+const category_1 = __importDefault(require("../services/twitch/category"));
 const router = express_1.default.Router();
-router.get('/:id', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const clips = yield twitch_1.default.getClips();
+router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = yield token_1.default();
+    const channel = yield channel_1.default(token, req.params.id);
+    const clips = yield clips_1.default(token, channel);
+    res.send(clips);
+}));
+router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = yield token_1.default();
+    const category = yield category_1.default(token, req.params.id);
+    const clips = yield clips_1.default(token, undefined, category);
     res.send(clips);
 }));
 exports.default = router;

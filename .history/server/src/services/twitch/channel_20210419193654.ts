@@ -1,9 +1,9 @@
 import axios from 'axios'
-import getToken from '../services/twitchToken'
+import { TwitchToken } from 'src/types/twitch'
 
-const getClips = async () => {
-	const token = await getToken()
-	const baseUrl = `https://api.twitch.tv/helix/clips?broadcaster_id=71092938&first=5`
+const getChannel = async (token: TwitchToken, channel: string) => {
+	const baseUrl = `https://api.twitch.tv/helix/users?login=${channel}`
+	console.log(channel)
 
 	try {
 		if (token && process.env.TWITCH_CLIENT_ID) {
@@ -23,4 +23,4 @@ const getClips = async () => {
 	}
 }
 
-export default { getClips }
+export default getChannel

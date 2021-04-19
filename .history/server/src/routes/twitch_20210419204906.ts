@@ -17,7 +17,7 @@ router.get('/channel/:id', async (req, res) => {
 router.get('/category/:id', async (req, res) => {
 	const token = await getToken()
 	const category = await getCategory(token, req.params.id)
-	const clips = await getClips(token, undefined, category)
+	const clips = await getClips(token, category)
 
 	res.send(clips)
 })

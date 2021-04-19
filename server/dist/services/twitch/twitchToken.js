@@ -13,27 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
-const twitchToken_1 = __importDefault(require("../services/twitchToken"));
-const getClips = () => __awaiter(void 0, void 0, void 0, function* () {
-    const token = yield twitchToken_1.default();
-    const baseUrl = 'https://api.twitch.tv/helix/clips?broadcaster_id=71092938&first=5';
+const baseUrl = `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_SECRET}&grant_type=client_credentials`;
+const getToken = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (token && process.env.TWITCH_CLIENT_ID) {
-            const res = yield axios_1.default.get(baseUrl, {
-                headers: {
-                    'Client-Id': process.env.TWITCH_CLIENT_ID,
-                    Authorization: `Bearer ${token.access_token}`,
-                },
-            });
-            return res.data;
-        }
-        else {
-            throw 'incorrect token or client id';
-        }
+        const res = yield axios_1.default.post(baseUrl);
+        return res.data;
     }
     catch (e) {
         console.log(e);
+        return false;
     }
 });
-exports.default = { getClips };
-//# sourceMappingURL=twitch.js.map
+exports.default = getToken;
+//# sourceMappingURL=twitchToken.js.map
