@@ -5,14 +5,18 @@ import { useStateValue } from 'src/state/state'
 
 const Search: React.FC = () => {
 	const [searchValue, setSearchValue] = useState('')
-	const [, dispatch] = useStateValue()
+	const [{ clips }, dispatch] = useStateValue()
 	const apiBaseUrl = 'http://localhost:4000/api/twitch/channel/'
+
+	console.log(clips)
 
 	const getClips = async () => {
 		try {
 			const { data } = await axios.get(`${apiBaseUrl}${searchValue}`)
 
 			dispatch(setClips(data))
+
+			console.log(clips)
 		} catch (e) {
 			console.error(e)
 		}

@@ -3,13 +3,11 @@ import ReactDOM from 'react-dom'
 
 import App from './App'
 import { reducer } from './state/reducer'
-import { StateProvider } from './state/state'
+import { stateProvider } from './state/state'
 
 ReactDOM.render(
 	<React.StrictMode>
-		<StateProvider reducer={reducer}>
-			<App />
-		</StateProvider>
+		<App />
 	</React.StrictMode>,
 	document.getElementById('root')
 )

@@ -1,5 +1,5 @@
 import Search from './components/search/Search'
-import Player from './components/videoplayer/Player'
+import Player from './components/videoplayer/player'
 
 const App: React.FC = () => {
 	return (
