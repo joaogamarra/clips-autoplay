@@ -3,7 +3,7 @@ import getToken from '../services/twitch/token'
 import getClips from '../services/twitch/clips'
 import getChannel from '../services/twitch/channel'
 import getCategory from '../services/twitch/category'
-import { parseTwitchQuery } from '../common/queryParsing'
+import { parseTwitchQuery } from 'src/common/queryParsing'
 
 const router = express.Router()
 

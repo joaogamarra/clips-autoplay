@@ -3,14 +3,13 @@ import getToken from '../services/twitch/token'
 import getClips from '../services/twitch/clips'
 import getChannel from '../services/twitch/channel'
 import getCategory from '../services/twitch/category'
-import { parseTwitchQuery } from '../common/queryParsing'
+import { apiTimePeriod } from 'src/types/twitch'
+import { parseTimePeriod, parseTwitchQuery } from 'src/common/queryParsing'
 
 const router = express.Router()
 
 router.get('/channel/:id', async (req, res) => {
 	const query = await parseTwitchQuery(req)
-
-	console.log(query)
 
 	const token = await getToken()
 	const channel = await getChannel(token, req.params.id)

@@ -3,28 +3,29 @@ import getToken from '../services/twitch/token'
 import getClips from '../services/twitch/clips'
 import getChannel from '../services/twitch/channel'
 import getCategory from '../services/twitch/category'
-import { parseTwitchQuery } from '../common/queryParsing'
+import { apiTimePeriod } from 'src/types/twitch'
 
 const router = express.Router()
 
-router.get('/channel/:id', async (req, res) => {
-	const query = await parseTwitchQuery(req)
+let after = ''
+let timePeriod: apiTimePeriod = apiTimePeriod.all
 
-	console.log(query)
+router.get('/channel/:id', async (req, res) => {
+	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`
 
 	const token = await getToken()
 	const channel = await getChannel(token, req.params.id)
-	const clips = await getClips(token, channel, undefined, query)
+	const clips = await getClips(token, channel, undefined, timePeriod, after)
 
 	res.send(clips)
 })
 
 router.get('/category/:id', async (req, res) => {
-	const query = await parseTwitchQuery(req)
+	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`
 
 	const token = await getToken()
 	const category = await getCategory(token, req.params.id)
-	const clips = await getClips(token, undefined, category, query)
+	const clips = await getClips(token, undefined, category, timePeriod, after)
 
 	res.send(clips)
 })

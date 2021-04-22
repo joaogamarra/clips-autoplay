@@ -1,4 +1,4 @@
-import { TwitchCategory, TwitchChannel, TwitchToken } from '../../types/twitch'
+import { TwitchCategory, TwitchChannel, TwitchToken, apiTimePeriod } from '../../types/twitch'
 import getResponse from './service'
 
 const getClips = async (
