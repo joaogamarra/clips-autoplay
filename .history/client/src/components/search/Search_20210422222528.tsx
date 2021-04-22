@@ -77,7 +77,7 @@ const Search: React.FC = () => {
 					id='timePeriodYear'
 					type='radio'
 					name='timePeriod'
-					value={apiTimePeriod.year}
+					value={apiTimePeriod.month}
 					onChange={handleTimePeriodChange}
 				/>
 

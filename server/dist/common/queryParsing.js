@@ -26,6 +26,8 @@ const parseTimePeriod = (timePeriod) => {
         return twitch_1.apiTimePeriod.week;
     if (timePeriod === 'month')
         return twitch_1.apiTimePeriod.month;
+    if (timePeriod === 'year')
+        return twitch_1.apiTimePeriod.year;
     if (timePeriod === 'all')
         return twitch_1.apiTimePeriod.all;
     throw new Error('Bad Request: Time Period');
@@ -46,8 +48,13 @@ const convertTimePeriod = (timePeriod) => {
     }
     if (timePeriod === twitch_1.apiTimePeriod.month) {
         const month = new Date(currentDate);
-        month.setDate(month.getDate() - 7);
+        month.setDate(month.getDate() - 30);
         startDate = month.toISOString();
+    }
+    if (timePeriod === twitch_1.apiTimePeriod.year) {
+        const year = new Date(currentDate);
+        year.setDate(year.getDate() - 365);
+        startDate = year.toISOString();
     }
     const currentDateFormatted = currentDate.toISOString();
     return `&started_at=${startDate}&ended_at=${currentDateFormatted}`;

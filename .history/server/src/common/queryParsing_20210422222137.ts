@@ -24,7 +24,6 @@ export const parseTimePeriod = (timePeriod: string) => {
 	if (timePeriod === 'day') return apiTimePeriod.day
 	if (timePeriod === 'week') return apiTimePeriod.week
 	if (timePeriod === 'month') return apiTimePeriod.month
-	if (timePeriod === 'year') return apiTimePeriod.year
 	if (timePeriod === 'all') return apiTimePeriod.all
 
 	throw new Error('Bad Request: Time Period')
@@ -50,12 +49,6 @@ export const convertTimePeriod = (timePeriod: apiTimePeriod) => {
 		const month = new Date(currentDate)
 		month.setDate(month.getDate() - 30)
 		startDate = month.toISOString()
-	}
-
-	if (timePeriod === apiTimePeriod.year) {
-		const year = new Date(currentDate)
-		year.setDate(year.getDate() - 365)
-		startDate = year.toISOString()
 	}
 
 	const currentDateFormatted = currentDate.toISOString()

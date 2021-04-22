@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { getClips } from 'src/common/api'
 import { setClipIndex, setClips, setCurrentClip, setSearchMode } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
-import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
+import { apiTimePeriod, searchType } from 'src/types/search'
 
 const Search: React.FC = () => {
 	const [searchValue, setSearchValue] = useState('')
@@ -14,17 +14,17 @@ const Search: React.FC = () => {
 		e.preventDefault()
 
 		try {
-			const searchObj: currentSearch = {
-				mode: localSearchMode,
-				value: searchValue,
-				timePeriod: timePeriod,
-			}
-			const data = await getClips(searchValue, searchObj)
+			const data = await getClips(searchValue, localSearchMode)
 
 			dispatch(setClips(data))
 			dispatch(setCurrentClip(data.data[0]))
 			dispatch(setClipIndex(0))
-			dispatch(setSearchMode(searchObj))
+			dispatch(
+				setSearchMode({
+					mode: localSearchMode,
+					value: searchValue,
+				})
+			)
 		} catch (e) {
 			console.error(e)
 		}
@@ -66,21 +66,12 @@ const Search: React.FC = () => {
 				/>
 				<label htmlFor='timePeriodWeek'>Last Week</label>
 				<input
-					id='timePeriodMonth'
+					id='timePeriodYear'
 					type='radio'
 					name='timePeriod'
 					value={apiTimePeriod.month}
 					onChange={handleTimePeriodChange}
 				/>
-				<label htmlFor='timePeriodMonth'>Last Month</label>
-				<input
-					id='timePeriodYear'
-					type='radio'
-					name='timePeriod'
-					value={apiTimePeriod.year}
-					onChange={handleTimePeriodChange}
-				/>
-
 				<label htmlFor='timePeriodYear'>Last Year</label>
 				<input
 					id='timePeriodAll'

@@ -66,21 +66,12 @@ const Search: React.FC = () => {
 				/>
 				<label htmlFor='timePeriodWeek'>Last Week</label>
 				<input
-					id='timePeriodMonth'
+					id='timePeriodYear'
 					type='radio'
 					name='timePeriod'
 					value={apiTimePeriod.month}
 					onChange={handleTimePeriodChange}
 				/>
-				<label htmlFor='timePeriodMonth'>Last Month</label>
-				<input
-					id='timePeriodYear'
-					type='radio'
-					name='timePeriod'
-					value={apiTimePeriod.year}
-					onChange={handleTimePeriodChange}
-				/>
-
 				<label htmlFor='timePeriodYear'>Last Year</label>
 				<input
 					id='timePeriodAll'
