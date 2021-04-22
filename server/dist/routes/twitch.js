@@ -19,15 +19,21 @@ const channel_1 = __importDefault(require("../services/twitch/channel"));
 const category_1 = __importDefault(require("../services/twitch/category"));
 const router = express_1.default.Router();
 router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let after = '';
+    if (typeof req.query.after === 'string')
+        after = `&after=${req.query.after}`;
     const token = yield token_1.default();
     const channel = yield channel_1.default(token, req.params.id);
-    const clips = yield clips_1.default(token, channel);
+    const clips = yield clips_1.default(token, channel, undefined, after);
     res.send(clips);
 }));
 router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let after = '';
+    if (typeof req.query.after === 'string')
+        after = `&after=${req.query.after}`;
     const token = yield token_1.default();
     const category = yield category_1.default(token, req.params.id);
-    const clips = yield clips_1.default(token, undefined, category);
+    const clips = yield clips_1.default(token, undefined, category, after);
     res.send(clips);
 }));
 exports.default = router;
