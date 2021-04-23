@@ -9,8 +9,9 @@ const Player: React.FC = () => {
 
 	const nextClip = useCallback(
 		(direction?: string) => {
+			console.log(direction)
 			const clipsData = clips.data
-			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+			const newClipIndex = clipIndex + 1
 
 			dispatch(setCurrentClip(clipsData[newClipIndex]))
 			dispatch(setClipIndex(newClipIndex))

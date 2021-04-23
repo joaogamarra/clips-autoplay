@@ -10,7 +10,8 @@ const Player: React.FC = () => {
 	const nextClip = useCallback(
 		(direction?: string) => {
 			const clipsData = clips.data
-			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+			let newClipIndex
+			direction === 'prev' ? (newClipIndex = clipIndex - 1) : (newClipIndex = clipIndex + 1)
 
 			dispatch(setCurrentClip(clipsData[newClipIndex]))
 			dispatch(setClipIndex(newClipIndex))
@@ -59,9 +60,9 @@ const Player: React.FC = () => {
 						src={`${currentClip.thumbnail_url.split('-preview-')[0]}.mp4`}
 						height='378'
 						width='620'
-						onEnded={() => nextClip()}
+						onEnded={() => nextClip}
 					></video>
-					{clips.data.length > clipIndex + 1 && <button onClick={() => nextClip()}>Next Clip</button>}
+					{clips.data.length > clipIndex + 1 && <button onClick={() => nextClip}>Next Clip</button>}
 				</>
 			)}
 		</>

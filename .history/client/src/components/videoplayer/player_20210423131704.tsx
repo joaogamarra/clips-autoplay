@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { ReactEventHandler, useCallback, useEffect } from 'react'
 import { getClips } from 'src/common/api'
 import { setClipIndex, setCurrentClip, updateClips } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
@@ -7,16 +7,14 @@ import { searchType } from 'src/types/search'
 const Player: React.FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
 
-	const nextClip = useCallback(
-		(direction?: string) => {
-			const clipsData = clips.data
-			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+	const nextClip = useCallback(() => {
+		console.log('call')
+		const clipsData = clips.data
+		const newClipIndex = clipIndex + 1
 
-			dispatch(setCurrentClip(clipsData[newClipIndex]))
-			dispatch(setClipIndex(newClipIndex))
-		},
-		[clipIndex, clips, dispatch]
-	)
+		dispatch(setCurrentClip(clipsData[newClipIndex]))
+		dispatch(setClipIndex(newClipIndex))
+	}, [clipIndex, clips, dispatch])
 
 	const loadMoreClips = useCallback(async () => {
 		const after = clips.pagination.cursor
@@ -50,7 +48,7 @@ const Player: React.FC = () => {
 			{currentClip.thumbnail_url && (
 				<>
 					{clips.data.length > 0 && clipIndex > 0 && (
-						<button onClick={() => nextClip('prev')}>Previous Clip</button>
+						<button onClick={() => nextClip()}>Previous Clip</button>
 					)}
 					<video
 						className='video'
@@ -59,7 +57,7 @@ const Player: React.FC = () => {
 						src={`${currentClip.thumbnail_url.split('-preview-')[0]}.mp4`}
 						height='378'
 						width='620'
-						onEnded={() => nextClip()}
+						onEnded={nextClip}
 					></video>
 					{clips.data.length > clipIndex + 1 && <button onClick={() => nextClip()}>Next Clip</button>}
 				</>
