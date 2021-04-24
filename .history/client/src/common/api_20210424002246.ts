@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { currentSearch } from 'src/types/search'
-import { AutocompleteObj, TwitchClipsResponse } from 'src/types/twitch'
+import { TwitchClipsResponse } from 'src/types/twitch'
 
 export const getClips = async (queryId: string, currentSearch: currentSearch, after?: string) => {
 	let query = `http://localhost:4000/api/twitch/${currentSearch.mode}/${queryId}?timeperiod=${currentSearch.timePeriod}`
@@ -15,9 +15,7 @@ export const getClips = async (queryId: string, currentSearch: currentSearch, af
 export const getAutocomplete = async (query: string) => {
 	const baseUrl = `http://localhost:4000/api/twitch/autocomplete/${query}`
 
-	const data: AutocompleteObj[] = await axios.get(baseUrl)
-
-	console.log(data)
+	const data = await axios.get(baseUrl)
 
 	return data
 }

@@ -17,7 +17,5 @@ export const getAutocomplete = async (query: string) => {
 
 	const data: AutocompleteObj[] = await axios.get(baseUrl)
 
-	console.log(data)
-
 	return data
 }

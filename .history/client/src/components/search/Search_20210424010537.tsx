@@ -48,11 +48,9 @@ const Search: React.FC = () => {
 		const val = e.currentTarget.value
 		setSearchValue(val)
 
-		if (val.length > 1) {
-			const autoRes: any = await getAutocomplete(val)
+		const autoRes: any = await getAutocomplete(val)
 
-			setSearchSuggestions(autoRes.data)
-		}
+		setSearchSuggestions(autoRes.data)
 	}
 
 	return (

@@ -48,11 +48,9 @@ const Search: React.FC = () => {
 		const val = e.currentTarget.value
 		setSearchValue(val)
 
-		if (val.length > 1) {
-			const autoRes: any = await getAutocomplete(val)
+		const autoRes: any = await getAutocomplete(val)
 
-			setSearchSuggestions(autoRes.data)
-		}
+		setSearchSuggestions(autoRes.data)
 	}
 
 	return (
@@ -104,7 +102,13 @@ const Search: React.FC = () => {
 				/>
 				<label htmlFor='timePeriodAll'>All Time</label>
 				<br />
-				<input type='text' placeholder='Search...' value={searchValue} onChange={handleSearchChange} />
+				<input
+					name='search'
+					type='text'
+					placeholder='Search...'
+					value={searchValue}
+					onChange={handleSearchChange}
+				/>
 				<button type='submit' onClick={formSubmit}>
 					Submit
 				</button>
@@ -112,7 +116,7 @@ const Search: React.FC = () => {
 				{searchSuggestions.length > 0 && (
 					<ul>
 						{searchSuggestions.map((suggestion) => (
-							<li key={suggestion.login}>{suggestion.login}</li>
+							<li>{suggestion.login}</li>
 						))}
 					</ul>
 				)}
