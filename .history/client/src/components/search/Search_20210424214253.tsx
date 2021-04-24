@@ -12,6 +12,7 @@ const Search: React.FC = () => {
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
 
+	console.log(params.searchTimePeriod)
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
 
@@ -52,7 +53,7 @@ const Search: React.FC = () => {
 					id='timePeriodDay'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.day}
+					checked={timePeriod === apiTimePeriod.week}
 					value={apiTimePeriod.day}
 					onChange={handleTimePeriodChange}
 				/>

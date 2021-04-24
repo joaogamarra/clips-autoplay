@@ -5,15 +5,9 @@ import Player from './components/videoplayer/Player'
 const App: React.FC = () => {
 	return (
 		<div className='App'>
+			<Search />
 			<Switch>
-				<Route path='/:searchMode/:searchValue/:searchTimePeriod'>
-					<Search />
-					<Player />
-				</Route>
-
-				<Route path='/'>
-					<Search />
-				</Route>
+				<Route path='/watch' component={Player}></Route>
 			</Switch>
 		</div>
 	)

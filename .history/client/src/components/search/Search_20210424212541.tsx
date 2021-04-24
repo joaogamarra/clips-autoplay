@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { getAutocomplete } from 'src/common/api'
-import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
+import { apiTimePeriod, searchType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
 
 const Search: React.FC = () => {
-	const params = useParams<currentSearch>()
-	const [searchValue, setSearchValue] = useState(params.searchValue)
-	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(params.searchTimePeriod)
-	const [localSearchMode, setLocalSearchMode] = useState<searchType>(params.searchMode)
+	const [searchValue, setSearchValue] = useState('')
+	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(apiTimePeriod.all)
+	const [localSearchMode, setLocalSearchMode] = useState<searchType>(searchType.channel)
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
+	const params = useParams<{ mode: searchType; id: string; timeperiod: apiTimePeriod }>()
+
+	if (params.mode && params.id && params.timeperiod) {
+	}
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
@@ -52,7 +55,6 @@ const Search: React.FC = () => {
 					id='timePeriodDay'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.day}
 					value={apiTimePeriod.day}
 					onChange={handleTimePeriodChange}
 				/>
@@ -61,7 +63,6 @@ const Search: React.FC = () => {
 					id='timePeriodWeek'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.week}
 					value={apiTimePeriod.week}
 					onChange={handleTimePeriodChange}
 				/>
@@ -70,7 +71,6 @@ const Search: React.FC = () => {
 					id='timePeriodMonth'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.month}
 					value={apiTimePeriod.month}
 					onChange={handleTimePeriodChange}
 				/>
@@ -79,7 +79,6 @@ const Search: React.FC = () => {
 					id='timePeriodYear'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.year}
 					value={apiTimePeriod.year}
 					onChange={handleTimePeriodChange}
 				/>
@@ -89,7 +88,6 @@ const Search: React.FC = () => {
 					id='timePeriodAll'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.all}
 					value={apiTimePeriod.all}
 					onChange={handleTimePeriodChange}
 				/>

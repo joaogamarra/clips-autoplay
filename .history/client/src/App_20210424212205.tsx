@@ -6,7 +6,7 @@ const App: React.FC = () => {
 	return (
 		<div className='App'>
 			<Switch>
-				<Route path='/:searchMode/:searchValue/:searchTimePeriod'>
+				<Route path='/:mode/:id/:timeperiod'>
 					<Search />
 					<Player />
 				</Route>

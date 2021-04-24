@@ -3,30 +3,29 @@ import { useParams } from 'react-router-dom'
 import { getClips } from 'src/common/api'
 import { setClipIndex, setClips, setCurrentClip, setSearchMode, updateClips } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
-import { currentSearch } from 'src/types/search'
+import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
 
 const Player: React.FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
-	const params = useParams<currentSearch>()
+	const params = useParams<{ mode: searchType; id: string; timeperiod: apiTimePeriod }>()
 
-	const firstLoad = useCallback(async () => {
-		console.log(params)
-		const searchObj: currentSearch = {
-			searchMode: params.searchMode,
-			searchValue: params.searchValue,
-			searchTimePeriod: params.searchTimePeriod,
+	if (clips.data.length === 0) {
+		const firstLoad = async () => {
+			const searchObj: currentSearch = {
+				mode: params.mode,
+				value: params.id,
+				timePeriod: params.timeperiod,
+			}
+			const data = await getClips(searchObj)
+
+			dispatch(setClips(data))
+			dispatch(setCurrentClip(data.data[0]))
+			dispatch(setClipIndex(0))
+			dispatch(setSearchMode(searchObj))
 		}
-		const data = await getClips(searchObj)
 
-		dispatch(setClips(data))
-		dispatch(setCurrentClip(data.data[0]))
-		dispatch(setClipIndex(0))
-		dispatch(setSearchMode(searchObj))
-	}, [dispatch, params])
-
-	useEffect(() => {
 		firstLoad()
-	}, [params, firstLoad])
+	}
 
 	const nextClip = useCallback(
 		(direction?: string) => {
@@ -40,6 +39,7 @@ const Player: React.FC = () => {
 	)
 
 	const loadMoreClips = useCallback(async () => {
+		console.log('loadmore')
 		const after = clips.pagination.cursor
 
 		const newClips = await getClips(currentSearch, after)

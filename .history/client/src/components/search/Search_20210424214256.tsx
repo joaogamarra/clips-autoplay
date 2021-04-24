@@ -12,6 +12,7 @@ const Search: React.FC = () => {
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
 
+	console.log(params.searchTimePeriod)
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
 

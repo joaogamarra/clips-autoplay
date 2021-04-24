@@ -9,7 +9,7 @@ const Player: React.FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
 	const params = useParams<currentSearch>()
 
-	const firstLoad = useCallback(async () => {
+	const firstLoad = async () => {
 		console.log(params)
 		const searchObj: currentSearch = {
 			searchMode: params.searchMode,
@@ -22,11 +22,9 @@ const Player: React.FC = () => {
 		dispatch(setCurrentClip(data.data[0]))
 		dispatch(setClipIndex(0))
 		dispatch(setSearchMode(searchObj))
-	}, [dispatch, params])
+	}
 
-	useEffect(() => {
-		firstLoad()
-	}, [params, firstLoad])
+	firstLoad()
 
 	const nextClip = useCallback(
 		(direction?: string) => {
@@ -40,6 +38,7 @@ const Player: React.FC = () => {
 	)
 
 	const loadMoreClips = useCallback(async () => {
+		console.log('loadmore')
 		const after = clips.pagination.cursor
 
 		const newClips = await getClips(currentSearch, after)

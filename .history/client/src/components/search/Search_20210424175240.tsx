@@ -1,21 +1,40 @@
 import React, { useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
-import { getAutocomplete } from 'src/common/api'
+import { useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { getAutocomplete, getClips } from 'src/common/api'
+import { setClipIndex, setClips, setCurrentClip, setSearchMode } from 'src/state/reducer'
+import { useStateValue } from 'src/state/state'
 import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
 
 const Search: React.FC = () => {
-	const params = useParams<currentSearch>()
-	const [searchValue, setSearchValue] = useState(params.searchValue)
-	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(params.searchTimePeriod)
-	const [localSearchMode, setLocalSearchMode] = useState<searchType>(params.searchMode)
+	const [searchValue, setSearchValue] = useState('')
+	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(apiTimePeriod.all)
+	const [localSearchMode, setLocalSearchMode] = useState<searchType>(searchType.channel)
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
+	const [, dispatch] = useStateValue()
 	const history = useHistory()
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
 
-		history.push(`/${localSearchMode}/${searchValue}/${timePeriod}`)
+		try {
+			const searchObj: currentSearch = {
+				mode: localSearchMode,
+				value: searchValue,
+				timePeriod: timePeriod,
+			}
+			const data = await getClips(searchValue, searchObj)
+
+			dispatch(setClips(data))
+			dispatch(setCurrentClip(data.data[0]))
+			dispatch(setClipIndex(0))
+			dispatch(setSearchMode(searchObj))
+
+			history.push(`/watch/${searchValue}`)
+		} catch (e) {
+			console.error(e)
+		}
 	}
 
 	const handleSearchTypeChange = (e: React.FormEvent<HTMLSelectElement>) => {
@@ -52,7 +71,6 @@ const Search: React.FC = () => {
 					id='timePeriodDay'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.day}
 					value={apiTimePeriod.day}
 					onChange={handleTimePeriodChange}
 				/>
@@ -61,7 +79,6 @@ const Search: React.FC = () => {
 					id='timePeriodWeek'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.week}
 					value={apiTimePeriod.week}
 					onChange={handleTimePeriodChange}
 				/>
@@ -70,7 +87,6 @@ const Search: React.FC = () => {
 					id='timePeriodMonth'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.month}
 					value={apiTimePeriod.month}
 					onChange={handleTimePeriodChange}
 				/>
@@ -79,7 +95,6 @@ const Search: React.FC = () => {
 					id='timePeriodYear'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.year}
 					value={apiTimePeriod.year}
 					onChange={handleTimePeriodChange}
 				/>
@@ -89,7 +104,6 @@ const Search: React.FC = () => {
 					id='timePeriodAll'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.all}
 					value={apiTimePeriod.all}
 					onChange={handleTimePeriodChange}
 				/>
@@ -107,6 +121,8 @@ const Search: React.FC = () => {
 						))}
 					</ul>
 				)}
+
+				<Link to='/watch'>test</Link>
 			</form>
 		</>
 	)
