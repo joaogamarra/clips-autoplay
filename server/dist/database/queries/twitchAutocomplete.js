@@ -9,12 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.categoriesAuto = exports.channelsAuto = void 0;
 const twitch_1 = require("../models/twitch");
-const twitchAutocomplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
+const channelsAuto = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield twitch_1.TwitchSearch.find({ login: new RegExp('^' + query) })
         .sort({ rank: -1 })
         .limit(10);
     return res;
 });
-exports.default = twitchAutocomplete;
+exports.channelsAuto = channelsAuto;
+const categoriesAuto = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(query);
+    const res = yield twitch_1.TwitchSearchCategory.find({ name: new RegExp('^' + query) })
+        .sort({ rank: -1 })
+        .limit(10);
+    return res;
+});
+exports.categoriesAuto = categoriesAuto;
 //# sourceMappingURL=twitchAutocomplete.js.map

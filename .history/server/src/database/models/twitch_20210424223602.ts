@@ -10,7 +10,7 @@ const twitchSearchSchema = new Mongoose.Schema({
 	rank: Number,
 })
 
-const twitchSearchCategorySchema = new Mongoose.Schema({
+const twitchCategorySchema = new Mongoose.Schema({
 	id: {
 		type: String,
 		unique: true,
@@ -20,7 +20,7 @@ const twitchSearchCategorySchema = new Mongoose.Schema({
 })
 
 twitchSearchSchema.plugin(uniqueValidator)
-twitchSearchCategorySchema.plugin(uniqueValidator)
+twitchCategorySchema.plugin(uniqueValidator)
 
 export const TwitchSearch = Mongoose.model('twitchSearch', twitchSearchSchema)
-export const TwitchSearchCategory = Mongoose.model('twitchCategory', twitchSearchCategorySchema)
+export const TwitchCategory = Mongoose.model('twitchCategory', twitchCategorySchema)

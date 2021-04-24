@@ -13,6 +13,7 @@ const categoriesAuto = async (query: string) => {
 		.sort({ rank: -1 })
 		.limit(10)
 
+	console.log(res)
 	return res
 }
 

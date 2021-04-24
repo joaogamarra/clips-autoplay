@@ -19,7 +19,8 @@ const channel_1 = __importDefault(require("../services/twitch/channel"));
 const category_1 = __importDefault(require("../services/twitch/category"));
 const queryParsing_1 = require("../common/queryParsing");
 const streams_1 = __importDefault(require("../services/twitch/streams"));
-const twitchAutocomplete_1 = __importDefault(require("../database/queries/twitchAutocomplete"));
+const twitchAutocomplete_1 = require("../database/queries/twitchAutocomplete");
+const categories_1 = __importDefault(require("../services/twitch/categories"));
 const router = express_1.default.Router();
 router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = yield queryParsing_1.parseTwitchQuery(req);
@@ -36,11 +37,15 @@ router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     const clips = yield clips_1.default(token, undefined, category, query);
     res.send(clips);
 }));
-router.get('/autocomplete/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const autocomplete = yield twitchAutocomplete_1.default(req.params.id);
+router.get('/channelsauto/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const autocomplete = yield twitchAutocomplete_1.channelsAuto(req.params.id);
     res.send(autocomplete);
 }));
-router.get('/streams/update/', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/categoriesauto/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const autocomplete = yield twitchAutocomplete_1.categoriesAuto(req.params.id);
+    res.send(autocomplete);
+}));
+router.get('/update/streams', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = yield token_1.default();
     const streams = yield streams_1.default(token);
     let after = streams.pagination.cursor;
@@ -55,6 +60,22 @@ router.get('/streams/update/', (_, res) => __awaiter(void 0, void 0, void 0, fun
     });
     streamsLoop();
     res.send(streams);
+}));
+router.get('/update/categories', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = yield token_1.default();
+    const categories = yield categories_1.default(token);
+    let after = categories.pagination.cursor;
+    const categoriesLoop = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (after) {
+            const newCategories = yield categories_1.default(token, after);
+            after = newCategories.pagination.cursor;
+            if (after) {
+                categoriesLoop();
+            }
+        }
+    });
+    categoriesLoop();
+    res.send(categories);
 }));
 exports.default = router;
 //# sourceMappingURL=twitch.js.map

@@ -5,8 +5,7 @@ import getChannel from '../services/twitch/channel'
 import getCategory from '../services/twitch/category'
 import { parseTwitchQuery } from '../common/queryParsing'
 import saveStreams from '../services/twitch/streams'
-import { categoriesAuto, channelsAuto } from '../database/queries/twitchAutocomplete'
-import saveCategories from '../services/twitch/categories'
+import twitchAutocomplete from '../database/queries/twitchAutocomplete'
 
 const router = express.Router()
 
@@ -32,14 +31,8 @@ router.get('/category/:id', async (req, res) => {
 	res.send(clips)
 })
 
-router.get('/channelsauto/:id', async (req, res) => {
-	const autocomplete = await channelsAuto(req.params.id)
-
-	res.send(autocomplete)
-})
-
-router.get('/categoriesauto/:id', async (req, res) => {
-	const autocomplete = await categoriesAuto(req.params.id)
+router.get('/autocomplete/:id', async (req, res) => {
+	const autocomplete = await twitchAutocomplete(req.params.id)
 
 	res.send(autocomplete)
 })
@@ -67,23 +60,23 @@ router.get('/update/streams', async (_, res) => {
 
 router.get('/update/categories', async (_, res) => {
 	const token = await getToken()
-	const categories = await saveCategories(token)
-	let after = categories.pagination.cursor
+	const streams = await saveStreams(token)
+	let after = streams.pagination.cursor
 
-	const categoriesLoop = async () => {
+	const streamsLoop = async () => {
 		if (after) {
-			const newCategories = await saveCategories(token, after)
+			const newStreams = await saveStreams(token, after)
 
-			after = newCategories.pagination.cursor
+			after = newStreams.pagination.cursor
 
-			if (after) {
-				categoriesLoop()
+			if (newStreams.data[0].viewer_count > 100) {
+				streamsLoop()
 			}
 		}
 	}
-	categoriesLoop()
+	streamsLoop()
 
-	res.send(categories)
+	res.send(streams)
 })
 
 export default router
