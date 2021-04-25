@@ -11,7 +11,6 @@ import {
 	channelIncreaseRanking,
 	categoryIncreaseRanking,
 	channelsDefault,
-	categoriesDefault,
 } from '../database/queries/twitchSuggestions'
 import saveCategories from '../services/twitch/categories'
 
@@ -51,12 +50,6 @@ router.get('/channelsauto/:id', async (req, res) => {
 	const autocomplete = await channelsAuto(req.params.id)
 
 	res.send(autocomplete)
-})
-
-router.get('/categoriesauto//', async (_, res) => {
-	const suggestions = await categoriesDefault()
-
-	res.send(suggestions)
 })
 
 router.get('/categoriesauto/:id', async (req, res) => {

@@ -19,7 +19,7 @@ const channel_1 = __importDefault(require("../services/twitch/channel"));
 const category_1 = __importDefault(require("../services/twitch/category"));
 const queryParsing_1 = require("../common/queryParsing");
 const streams_1 = __importDefault(require("../services/twitch/streams"));
-const twitchAutocomplete_1 = require("../database/queries/twitchAutocomplete");
+const twitchSuggestions_1 = require("../database/queries/twitchSuggestions");
 const categories_1 = __importDefault(require("../services/twitch/categories"));
 const router = express_1.default.Router();
 router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,7 +29,7 @@ router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const channel = yield channel_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, channel, undefined, query);
     res.send(clips);
-    twitchAutocomplete_1.channelIncreaseRanking(channel.login);
+    twitchSuggestions_1.channelIncreaseRanking(channel.login);
 }));
 router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = yield queryParsing_1.parseTwitchQuery(req);
@@ -37,14 +37,22 @@ router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     const category = yield category_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, undefined, category, query);
     res.send(clips);
-    twitchAutocomplete_1.categoryIncreaseRanking(category.name);
+    twitchSuggestions_1.categoryIncreaseRanking(category.name);
+}));
+router.get('/channelsauto/', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const suggestions = yield twitchSuggestions_1.channelsDefault();
+    res.send(suggestions);
 }));
 router.get('/channelsauto/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const autocomplete = yield twitchAutocomplete_1.channelsAuto(req.params.id);
+    const autocomplete = yield twitchSuggestions_1.channelsAuto(req.params.id);
     res.send(autocomplete);
 }));
+router.get('/categoriesauto//', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const suggestions = yield twitchSuggestions_1.categoriesDefault();
+    res.send(suggestions);
+}));
 router.get('/categoriesauto/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const autocomplete = yield twitchAutocomplete_1.categoriesAuto(req.params.id);
+    const autocomplete = yield twitchSuggestions_1.categoriesAuto(req.params.id);
     res.send(autocomplete);
 }));
 router.get('/update/streams', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
