@@ -115,10 +115,7 @@ const Search: React.FC = () => {
 							<>
 								{searchSuggestions.map((suggestion) => (
 									<li key={suggestion.login}>
-										<Link
-											onClick={() => setSearchSuggestions([])}
-											to={`/${searchType.channel}/${suggestion.login}/${timePeriod}`}
-										>
+										<Link to={`/${searchType.channel}/${suggestion.login}/${timePeriod}`}>
 											{suggestion.login}
 										</Link>
 									</li>
@@ -129,14 +126,7 @@ const Search: React.FC = () => {
 						{localSearchMode === searchType.category && (
 							<>
 								{searchSuggestions.map((suggestion) => (
-									<li key={suggestion.name}>
-										<Link
-											onClick={() => setSearchSuggestions([])}
-											to={`/${searchType.category}/${suggestion.name}/${timePeriod}`}
-										>
-											{suggestion.name}
-										</Link>
-									</li>
+									<li key={suggestion.name}>{suggestion.name}</li>
 								))}
 							</>
 						)}

@@ -14,7 +14,7 @@ export const getClips = async (currentSearch: currentSearch, after?: string) => 
 
 export const getAutocomplete = async (query: string, searchMode: searchType) => {
 	let modeQuery
-	searchMode === searchType.category ? (modeQuery = 'categoriesauto') : (modeQuery = 'channelsauto')
+	searchMode === searchType.category ? (modeQuery = 'cattegoriesauto') : (modeQuery = 'channelsauto')
 
 	const baseUrl = `http://localhost:4000/api/twitch/${modeQuery}/${query}`
 

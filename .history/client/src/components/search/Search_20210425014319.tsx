@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { getAutocomplete } from 'src/common/api'
 import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
 
 const Search: React.FC = () => {
 	const params = useParams<currentSearch>()
-	const [searchValue, setSearchValue] = useState('')
-	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(apiTimePeriod.week)
-	const [localSearchMode, setLocalSearchMode] = useState<searchType>(searchType.channel)
+	const [searchValue, setSearchValue] = useState(params.searchValue)
+	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(params.searchTimePeriod)
+	const [localSearchMode, setLocalSearchMode] = useState<searchType>(params.searchMode)
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
 
-	useEffect(() => {
-		if (params.searchValue) {
-			setSearchValue(params.searchValue)
-			setTimePeriod(params.searchTimePeriod)
-			setLocalSearchMode(params.searchMode)
-		}
-	}, [params])
+	if (params.searchValue) {
+		console.log('yyeea')
+	}
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
@@ -114,14 +110,7 @@ const Search: React.FC = () => {
 						{localSearchMode === searchType.channel && (
 							<>
 								{searchSuggestions.map((suggestion) => (
-									<li key={suggestion.login}>
-										<Link
-											onClick={() => setSearchSuggestions([])}
-											to={`/${searchType.channel}/${suggestion.login}/${timePeriod}`}
-										>
-											{suggestion.login}
-										</Link>
-									</li>
+									<li key={suggestion.login}>{suggestion.login}</li>
 								))}
 							</>
 						)}
@@ -129,14 +118,7 @@ const Search: React.FC = () => {
 						{localSearchMode === searchType.category && (
 							<>
 								{searchSuggestions.map((suggestion) => (
-									<li key={suggestion.name}>
-										<Link
-											onClick={() => setSearchSuggestions([])}
-											to={`/${searchType.category}/${suggestion.name}/${timePeriod}`}
-										>
-											{suggestion.name}
-										</Link>
-									</li>
+									<li key={suggestion.name}>{suggestion.name}</li>
 								))}
 							</>
 						)}
