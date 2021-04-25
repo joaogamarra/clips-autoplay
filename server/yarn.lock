@@ -156,7 +156,7 @@
   dependencies:
     "@types/mongoose" "*"
 
-"@types/mongoose@*", "@types/mongoose@^5.10.5":
+"@types/mongoose@*":
   version "5.10.5"
   resolved "https://registry.yarnpkg.com/@types/mongoose/-/mongoose-5.10.5.tgz#0f4fb0440e8cf0213caec1e5c7b163dbd9847c56"
   integrity sha512-37QMIA954T3n+HSksSNLlxZsqF8fMJu5S4dyPBod6gRxGtsXlQ9jUtL8BE8Seimv99u79eLXI3bggoCnSQ/fxQ==

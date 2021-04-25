@@ -17,12 +17,8 @@ const categoriesAuto = async (query: string) => {
 }
 
 const channelIncreaseRanking = async (id: string) => {
-	await TwitchSearch.updateOne({ login: id }, { $inc: { rank: 1 } })
+	const update = await TwitchSearch.updateOne({ login: id }, { $inc: { rank: 1 } })
+	console.log(update)
 }
 
-const categoryIncreaseRanking = async (id: string) => {
-	const idParsed = id.toLowerCase()
-	await TwitchSearchCategory.updateOne({ name: idParsed }, { $inc: { rank: 1 } })
-}
-
-export { channelsAuto, categoriesAuto, channelIncreaseRanking, categoryIncreaseRanking }
+export { channelsAuto, categoriesAuto, channelIncreaseRanking }

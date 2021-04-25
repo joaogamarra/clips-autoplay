@@ -5,12 +5,7 @@ import getChannel from '../services/twitch/channel'
 import getCategory from '../services/twitch/category'
 import { parseTwitchQuery } from '../common/queryParsing'
 import saveStreams from '../services/twitch/streams'
-import {
-	categoriesAuto,
-	channelsAuto,
-	channelIncreaseRanking,
-	categoryIncreaseRanking,
-} from '../database/queries/twitchAutocomplete'
+import { categoriesAuto, channelsAuto, channelIncreaseRanking } from '../database/queries/twitchAutocomplete'
 import saveCategories from '../services/twitch/categories'
 
 const router = express.Router()
@@ -25,6 +20,7 @@ router.get('/channel/:id', async (req, res) => {
 	const clips = await getClips(token, channel, undefined, query)
 
 	res.send(clips)
+
 	channelIncreaseRanking(channel.login)
 })
 
@@ -36,7 +32,6 @@ router.get('/category/:id', async (req, res) => {
 	const clips = await getClips(token, undefined, category, query)
 
 	res.send(clips)
-	categoryIncreaseRanking(category.name)
 })
 
 router.get('/channelsauto/:id', async (req, res) => {

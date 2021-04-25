@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.categoriesAuto = exports.channelsAuto = void 0;
+exports.categoryIncreaseRanking = exports.channelIncreaseRanking = exports.categoriesAuto = exports.channelsAuto = void 0;
 const twitch_1 = require("../models/twitch");
 const channelsAuto = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield twitch_1.TwitchSearch.find({ login: new RegExp('^' + query) })
@@ -26,4 +26,13 @@ const categoriesAuto = (query) => __awaiter(void 0, void 0, void 0, function* ()
     return res;
 });
 exports.categoriesAuto = categoriesAuto;
+const channelIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    yield twitch_1.TwitchSearch.updateOne({ login: id }, { $inc: { rank: 1 } });
+});
+exports.channelIncreaseRanking = channelIncreaseRanking;
+const categoryIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const idParsed = id.toLowerCase();
+    yield twitch_1.TwitchSearchCategory.updateOne({ name: idParsed }, { $inc: { rank: 1 } });
+});
+exports.categoryIncreaseRanking = categoryIncreaseRanking;
 //# sourceMappingURL=twitchAutocomplete.js.map

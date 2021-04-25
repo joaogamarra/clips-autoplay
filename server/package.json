@@ -26,7 +26,6 @@
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.11",
-		"@types/mongoose": "^5.10.5",
 		"@types/mongoose-unique-validator": "^1.0.4",
 		"@typescript-eslint/eslint-plugin": "^4.22.0",
 		"@typescript-eslint/parser": "^4.22.0",

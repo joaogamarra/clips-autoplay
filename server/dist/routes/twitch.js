@@ -29,6 +29,7 @@ router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const channel = yield channel_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, channel, undefined, query);
     res.send(clips);
+    twitchAutocomplete_1.channelIncreaseRanking(channel.login);
 }));
 router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = yield queryParsing_1.parseTwitchQuery(req);
@@ -36,6 +37,7 @@ router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, func
     const category = yield category_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, undefined, category, query);
     res.send(clips);
+    twitchAutocomplete_1.categoryIncreaseRanking(category.name);
 }));
 router.get('/channelsauto/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const autocomplete = yield twitchAutocomplete_1.channelsAuto(req.params.id);
