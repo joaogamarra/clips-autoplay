@@ -16,9 +16,7 @@ export const getSuggestions = async (searchMode: searchType, query?: string) => 
 	let modeQuery
 	searchMode === searchType.category ? (modeQuery = 'categoriesauto') : (modeQuery = 'channelsauto')
 
-	let baseUrl = `http://localhost:4000/api/twitch/${modeQuery}/`
-
-	if (query) baseUrl = `${baseUrl}${query}`
+	const baseUrl = `http://localhost:4000/api/twitch/${modeQuery}/${query && query}`
 
 	const data: AutocompleteObj[] = await axios.get(baseUrl)
 

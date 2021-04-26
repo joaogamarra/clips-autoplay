@@ -43,6 +43,7 @@ const Search: React.FC = () => {
 		const val = e.currentTarget.value as searchType
 
 		setLocalSearchMode(val)
+		setSearchSuggestions([])
 	}
 
 	const handleTimePeriodChange = (e: React.FormEvent<HTMLInputElement>) => {

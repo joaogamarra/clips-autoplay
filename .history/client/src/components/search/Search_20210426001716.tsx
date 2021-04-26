@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { getSuggestions } from 'src/common/api'
 import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
@@ -12,18 +12,6 @@ const Search: React.FC = () => {
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
 
-	const updateSuggestions = useCallback(async () => {
-		if (searchValue.length === 0) {
-			const suggestions: any = await getSuggestions(localSearchMode)
-
-			setSearchSuggestions(suggestions.data)
-		} else {
-			const suggestions: any = await getSuggestions(localSearchMode, searchValue)
-
-			setSearchSuggestions(suggestions.data)
-		}
-	}, [localSearchMode, searchValue])
-
 	useEffect(() => {
 		if (params.searchValue) {
 			setSearchValue(params.searchValue)
@@ -31,8 +19,14 @@ const Search: React.FC = () => {
 			setLocalSearchMode(params.searchMode)
 		}
 
-		updateSuggestions()
-	}, [updateSuggestions, params])
+		const getDefaultSuggestions = async () => {
+			const suggestions: any = await getSuggestions(localSearchMode)
+
+			setSearchSuggestions(suggestions.data)
+		}
+
+		getDefaultSuggestions()
+	}, [localSearchMode, params])
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
@@ -54,6 +48,14 @@ const Search: React.FC = () => {
 	const handleSearchChange = async (e: React.FormEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value
 		setSearchValue(val)
+
+		if (val.length > 1) {
+			const autoRes: any = await getSuggestions(localSearchMode, val)
+
+			setSearchSuggestions(autoRes.data)
+		} else {
+			setSearchSuggestions([])
+		}
 	}
 
 	return (
@@ -120,7 +122,7 @@ const Search: React.FC = () => {
 						{localSearchMode === searchType.channel && (
 							<>
 								{searchSuggestions.map((suggestion) => (
-									<li key={suggestion.id}>
+									<li key={suggestion.login}>
 										<Link
 											onClick={() => setSearchSuggestions([])}
 											to={`/${searchType.channel}/${suggestion.login}/${timePeriod}`}
@@ -135,7 +137,7 @@ const Search: React.FC = () => {
 						{localSearchMode === searchType.category && (
 							<>
 								{searchSuggestions.map((suggestion) => (
-									<li key={suggestion.id}>
+									<li key={suggestion.name}>
 										<Link
 											onClick={() => setSearchSuggestions([])}
 											to={`/${searchType.category}/${suggestion.name}/${timePeriod}`}
