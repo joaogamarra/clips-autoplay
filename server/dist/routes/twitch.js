@@ -29,7 +29,7 @@ router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, funct
     const channel = yield channel_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, channel, undefined, query);
     res.send(clips);
-    twitchSuggestions_1.channelIncreaseRanking(channel.login);
+    twitchSuggestions_1.channelIncreaseRanking(channel);
 }));
 router.get('/category/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = yield queryParsing_1.parseTwitchQuery(req);

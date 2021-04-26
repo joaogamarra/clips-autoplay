@@ -26,8 +26,19 @@ const categoriesAuto = (query) => __awaiter(void 0, void 0, void 0, function* ()
     return res;
 });
 exports.categoriesAuto = categoriesAuto;
-const channelIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    yield twitch_1.TwitchSearch.updateOne({ login: id }, { $inc: { rank: 1 } });
+const channelIncreaseRanking = (channel) => __awaiter(void 0, void 0, void 0, function* () {
+    const channelFind = yield twitch_1.TwitchSearch.find({ login: channel.login });
+    if (channelFind.length === 0) {
+        const newChannel = new twitch_1.TwitchSearch({
+            id: channel.id,
+            login: channel.login,
+            rank: 1,
+        });
+        newChannel.save();
+    }
+    else {
+        yield twitch_1.TwitchSearch.updateOne({ login: channel.login }, { $inc: { rank: 1 } });
+    }
 });
 exports.channelIncreaseRanking = channelIncreaseRanking;
 const categoryIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, function* () {

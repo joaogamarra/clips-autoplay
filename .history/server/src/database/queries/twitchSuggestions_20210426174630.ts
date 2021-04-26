@@ -20,8 +20,8 @@ const categoriesAuto = async (query: string) => {
 const channelIncreaseRanking = async (channel: TwitchChannel) => {
 	//check if channel is already in DB
 	const channelFind = await TwitchSearch.find({ login: channel.login })
+	console.log(channelFind)
 
-	//if not add new channel to DB, else just increase existing channel's rank
 	if (channelFind.length === 0) {
 		const newChannel = new TwitchSearch({
 			id: channel.id,
