@@ -25,10 +25,6 @@ const Search: React.FC = () => {
 	}, [localSearchMode, searchValue])
 
 	useEffect(() => {
-		updateSuggestions()
-	}, [updateSuggestions])
-
-	useEffect(() => {
 		if (params.searchValue) {
 			setSearchValue(params.searchValue)
 			setTimePeriod(params.searchTimePeriod)

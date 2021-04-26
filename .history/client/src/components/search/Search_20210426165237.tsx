@@ -24,9 +24,7 @@ const Search: React.FC = () => {
 		}
 	}, [localSearchMode, searchValue])
 
-	useEffect(() => {
-		updateSuggestions()
-	}, [updateSuggestions])
+	updateSuggestions()
 
 	useEffect(() => {
 		if (params.searchValue) {

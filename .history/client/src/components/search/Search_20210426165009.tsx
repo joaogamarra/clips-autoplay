@@ -25,16 +25,15 @@ const Search: React.FC = () => {
 	}, [localSearchMode, searchValue])
 
 	useEffect(() => {
-		updateSuggestions()
-	}, [updateSuggestions])
-
-	useEffect(() => {
+		console.log('effect')
 		if (params.searchValue) {
 			setSearchValue(params.searchValue)
 			setTimePeriod(params.searchTimePeriod)
 			setLocalSearchMode(params.searchMode)
 		}
-	}, [params])
+
+		updateSuggestions()
+	}, [updateSuggestions, params])
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
