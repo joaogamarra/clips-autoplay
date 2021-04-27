@@ -10,12 +10,12 @@ const Player: FC = () => {
 	const params = useParams<currentSearch>()
 
 	const firstLoad = useCallback(async () => {
-		console.log('first load')
 		const searchObj: currentSearch = {
 			searchMode: params.searchMode,
 			searchValue: params.searchValue,
 			searchTimePeriod: params.searchTimePeriod,
 		}
+		console.log(searchObj)
 		const data = await getClips(searchObj)
 
 		dispatch(setClips(data))

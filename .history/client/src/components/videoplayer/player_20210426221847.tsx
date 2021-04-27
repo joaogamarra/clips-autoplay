@@ -10,7 +10,7 @@ const Player: FC = () => {
 	const params = useParams<currentSearch>()
 
 	const firstLoad = useCallback(async () => {
-		console.log('first load')
+		console.log('firstLoad')
 		const searchObj: currentSearch = {
 			searchMode: params.searchMode,
 			searchValue: params.searchValue,
@@ -26,7 +26,8 @@ const Player: FC = () => {
 
 	useEffect(() => {
 		firstLoad()
-	}, [params, firstLoad])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	const nextClip = useCallback(
 		(direction?: string) => {

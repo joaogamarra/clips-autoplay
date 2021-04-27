@@ -10,7 +10,7 @@ const Player: FC = () => {
 	const params = useParams<currentSearch>()
 
 	const firstLoad = useCallback(async () => {
-		console.log('first load')
+		console.log('firstLoad')
 		const searchObj: currentSearch = {
 			searchMode: params.searchMode,
 			searchValue: params.searchValue,
@@ -23,10 +23,6 @@ const Player: FC = () => {
 		dispatch(setClipIndex(0))
 		dispatch(setSearchMode(searchObj))
 	}, [dispatch, params])
-
-	useEffect(() => {
-		firstLoad()
-	}, [params, firstLoad])
 
 	const nextClip = useCallback(
 		(direction?: string) => {

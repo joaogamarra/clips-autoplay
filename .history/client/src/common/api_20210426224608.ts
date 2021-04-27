@@ -11,7 +11,7 @@ export const getClips = async (currentSearch: currentSearch, after?: string) => 
 	const { data }: { data: TwitchClipsResponse } = await axios.get(query)
 
 	if (!after) {
-		addFavourite(currentSearch)
+		addFavourite(currentSearch.searchValue)
 	}
 
 	return data

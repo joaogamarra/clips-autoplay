@@ -10,7 +10,7 @@ const Player: FC = () => {
 	const params = useParams<currentSearch>()
 
 	const firstLoad = useCallback(async () => {
-		console.log('first load')
+		console.log('firstLoad')
 		const searchObj: currentSearch = {
 			searchMode: params.searchMode,
 			searchValue: params.searchValue,

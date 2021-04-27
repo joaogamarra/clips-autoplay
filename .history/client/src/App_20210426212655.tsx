@@ -13,8 +13,8 @@ const App: React.FC = () => {
 				</Route>
 
 				<Route path='/'>
-					<Favourites></Favourites>
 					<Search />
+					<Favourites></Favourites>
 				</Route>
 			</Switch>
 		</div>

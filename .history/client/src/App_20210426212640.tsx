@@ -1,5 +1,5 @@
 import { Route, Switch } from 'react-router'
-import Favourites from './components/favourites/Favourites'
+import Favourites from './components/favourites/favourites'
 import Search from './components/search/Search'
 import Player from './components/videoplayer/Player'
 
@@ -13,8 +13,8 @@ const App: React.FC = () => {
 				</Route>
 
 				<Route path='/'>
-					<Favourites></Favourites>
 					<Search />
+					<Favourites></Favourites>
 				</Route>
 			</Switch>
 		</div>

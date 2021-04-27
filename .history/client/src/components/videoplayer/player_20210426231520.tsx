@@ -26,7 +26,8 @@ const Player: FC = () => {
 
 	useEffect(() => {
 		firstLoad()
-	}, [params, firstLoad])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [params])
 
 	const nextClip = useCallback(
 		(direction?: string) => {
