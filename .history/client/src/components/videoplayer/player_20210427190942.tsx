@@ -67,9 +67,7 @@ const Player: FC = () => {
 				<>
 					<iframe
 						title='video-embed'
-						src={`${currentClip.embed_url}&parent=localhost&autoplay=true`}
-						width='600'
-						height='400'
+						src={`${currentClip.embed_url}&parent=localhost`}
 						allowFullScreen={true}
 					></iframe>
 					<br />
