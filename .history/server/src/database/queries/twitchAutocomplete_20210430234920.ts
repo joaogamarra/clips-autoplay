@@ -1,4 +1,4 @@
-import { TwitchChannel } from '../../types/twitch'
+import { TwitchChannel } from '@/types/twitch'
 import { TwitchCategoryAutoComplete, TwitchChannelAutoComplete } from '../models/twitch'
 
 const channelsAutoComplete = async (query: string) => {
