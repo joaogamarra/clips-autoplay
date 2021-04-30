@@ -23,7 +23,7 @@ const saveStreams = (token, after) => __awaiter(void 0, void 0, void 0, function
     if (res) {
         const data = res.data.data;
         data.forEach((stream) => {
-            const search = new twitch_1.TwitchSearch({
+            const search = new twitch_1.TwitchChannelAutoComplete({
                 id: stream.user_id,
                 login: stream.user_login,
                 rank: 0,

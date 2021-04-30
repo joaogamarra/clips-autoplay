@@ -3,10 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TwitchSearchCategory = exports.TwitchSearch = void 0;
+exports.TwitchCategoryAutoComplete = exports.TwitchChannelAutoComplete = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_unique_validator_1 = __importDefault(require("mongoose-unique-validator"));
-const twitchSearchSchema = new mongoose_1.default.Schema({
+const twitchChannelAutoCompleteSchema = new mongoose_1.default.Schema({
     id: Number,
     login: {
         type: String,
@@ -14,7 +14,7 @@ const twitchSearchSchema = new mongoose_1.default.Schema({
     },
     rank: Number,
 });
-const twitchSearchCategorySchema = new mongoose_1.default.Schema({
+const twitchCategoryAutoCompleteSchema = new mongoose_1.default.Schema({
     id: {
         type: String,
         unique: true,
@@ -22,8 +22,8 @@ const twitchSearchCategorySchema = new mongoose_1.default.Schema({
     name: String,
     rank: Number,
 });
-twitchSearchSchema.plugin(mongoose_unique_validator_1.default);
-twitchSearchCategorySchema.plugin(mongoose_unique_validator_1.default);
-exports.TwitchSearch = mongoose_1.default.model('twitchSearch', twitchSearchSchema);
-exports.TwitchSearchCategory = mongoose_1.default.model('twitchCategory', twitchSearchCategorySchema);
+twitchChannelAutoCompleteSchema.plugin(mongoose_unique_validator_1.default);
+twitchCategoryAutoCompleteSchema.plugin(mongoose_unique_validator_1.default);
+exports.TwitchChannelAutoComplete = mongoose_1.default.model('twitchChannelAutoComplete', twitchChannelAutoCompleteSchema);
+exports.TwitchCategoryAutoComplete = mongoose_1.default.model('twitchCategoryAutoComplete', twitchCategoryAutoCompleteSchema);
 //# sourceMappingURL=twitch.js.map

@@ -24,7 +24,7 @@ const saveCategories = (token, after) => __awaiter(void 0, void 0, void 0, funct
         const data = res.data.data;
         data.forEach((category) => {
             const nameParsed = category.name.toLowerCase();
-            const search = new twitch_1.TwitchSearchCategory({
+            const search = new twitch_1.TwitchCategoryAutoComplete({
                 id: category.id,
                 name: nameParsed,
                 rank: 0,

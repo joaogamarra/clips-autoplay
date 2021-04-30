@@ -12,7 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.categoriesDefault = exports.channelsDefault = exports.categoryIncreaseRanking = exports.channelIncreaseRanking = exports.categoriesAuto = exports.channelsAuto = void 0;
 const twitch_1 = require("../models/twitch");
 const channelsAuto = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield twitch_1.TwitchSearch.find({ login: new RegExp('^' + query) })
+    const res = yield twitch_1.twitchChannelAutoCompelete
+        .find({ login: new RegExp('^' + query) })
         .sort({ rank: -1 })
         .limit(10);
     return res;
@@ -20,16 +21,17 @@ const channelsAuto = (query) => __awaiter(void 0, void 0, void 0, function* () {
 exports.channelsAuto = channelsAuto;
 const categoriesAuto = (query) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(query);
-    const res = yield twitch_1.TwitchSearchCategory.find({ name: new RegExp('^' + query) })
+    const res = yield twitch_1.twitchCategoryAutoCompelete
+        .find({ name: new RegExp('^' + query) })
         .sort({ rank: -1 })
         .limit(10);
     return res;
 });
 exports.categoriesAuto = categoriesAuto;
 const channelIncreaseRanking = (channel) => __awaiter(void 0, void 0, void 0, function* () {
-    const channelFind = yield twitch_1.TwitchSearch.find({ login: channel.login });
+    const channelFind = yield TwitchSearch.find({ login: channel.login });
     if (channelFind.length === 0) {
-        const newChannel = new twitch_1.TwitchSearch({
+        const newChannel = new TwitchSearch({
             id: channel.id,
             login: channel.login,
             rank: 1,
@@ -37,21 +39,21 @@ const channelIncreaseRanking = (channel) => __awaiter(void 0, void 0, void 0, fu
         newChannel.save();
     }
     else {
-        yield twitch_1.TwitchSearch.updateOne({ login: channel.login }, { $inc: { rank: 1 } });
+        yield TwitchSearch.updateOne({ login: channel.login }, { $inc: { rank: 1 } });
     }
 });
 exports.channelIncreaseRanking = channelIncreaseRanking;
 const categoryIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const idParsed = id.toLowerCase();
-    yield twitch_1.TwitchSearchCategory.updateOne({ name: idParsed }, { $inc: { rank: 1 } });
+    yield TwitchSearchCategory.updateOne({ name: idParsed }, { $inc: { rank: 1 } });
 });
 exports.categoryIncreaseRanking = categoryIncreaseRanking;
 const channelsDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield twitch_1.TwitchSearch.find({}).sort({ rank: -1 }).limit(10);
+    return yield TwitchSearch.find({}).sort({ rank: -1 }).limit(10);
 });
 exports.channelsDefault = channelsDefault;
 const categoriesDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield twitch_1.TwitchSearchCategory.find({}).sort({ rank: -1 }).limit(10);
+    return yield TwitchSearchCategory.find({}).sort({ rank: -1 }).limit(10);
 });
 exports.categoriesDefault = categoriesDefault;
 //# sourceMappingURL=twitchSuggestions.js.map
