@@ -1,67 +1,70 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useHistory, useParams } from 'react-router-dom'
 import { getSuggestions } from 'src/common/api'
-import { apiTimePeriod, currentSearch, searchType } from 'src/types/search'
+import { apiTimePeriod, searchClips, searchType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
 
 const Search: FC = () => {
-	const params = useParams<currentSearch>()
-	const [searchValue, setSearchValue] = useState('')
-	const [timePeriod, setTimePeriod] = useState<apiTimePeriod>(apiTimePeriod.week)
-	const [localSearchMode, setLocalSearchMode] = useState<searchType>(searchType.channel)
+	const params = useParams<searchClips>()
+	const [localSearch, setLocalSearch] = useState<searchClips>({
+		mode: searchType.channel,
+		value: '',
+		timePeriod: apiTimePeriod.week,
+	})
+	let initialLoad = useRef(true)
+
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
 
 	const updateSuggestions = useCallback(async () => {
-		if (searchValue.length === 0) {
-			const suggestions: any = await getSuggestions(localSearchMode)
-
+		if (initialLoad && params.value) {
+			setLocalSearch(params)
+			const suggestions: any = await getSuggestions(params.mode, params.value)
 			setSearchSuggestions(suggestions.data)
+
+			initialLoad.current = false
 		} else {
-			const suggestions: any = await getSuggestions(localSearchMode, searchValue)
+			if (localSearch.value.length > 0) {
+				const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
 
-			setSearchSuggestions(suggestions.data)
+				setSearchSuggestions(suggestions.data)
+			} else {
+				const suggestions: any = await getSuggestions(localSearch.mode)
+				setSearchSuggestions(suggestions.data)
+			}
 		}
-	}, [localSearchMode, searchValue])
+	}, [localSearch, params])
 
 	useEffect(() => {
 		updateSuggestions()
 	}, [updateSuggestions])
 
-	useEffect(() => {
-		if (params.searchValue) {
-			setSearchValue(params.searchValue)
-			setTimePeriod(params.searchTimePeriod)
-			setLocalSearchMode(params.searchMode)
-		}
-	}, [params])
-
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
-		history.push(`/${localSearchMode}/${searchValue}/${timePeriod}`)
+		history.push(`/${localSearch.mode}/${localSearch.value}/${localSearch.timePeriod}`)
 	}
 
 	const handleSearchTypeChange = (e: React.FormEvent<HTMLSelectElement>) => {
 		const val = e.currentTarget.value as searchType
 
-		setLocalSearchMode(val)
+		setLocalSearch({ ...localSearch, mode: val })
 	}
 
 	const handleTimePeriodChange = (e: React.FormEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value as apiTimePeriod
 
-		setTimePeriod(val)
+		setLocalSearch({ ...localSearch, timePeriod: val })
 	}
 
 	const handleSearchChange = async (e: React.FormEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value
-		setSearchValue(val)
+		setLocalSearch({ ...localSearch, value: val })
 	}
 
 	return (
 		<>
 			<form>
-				<select value={localSearchMode} name='search-type' onChange={handleSearchTypeChange}>
+				<select value={localSearch.mode} name='search-type' onChange={handleSearchTypeChange}>
 					<option value={searchType.channel}>Channel</option>
 					<option value={searchType.category}>Category/Game</option>
 				</select>
@@ -69,7 +72,7 @@ const Search: FC = () => {
 					id='timePeriodDay'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.day}
+					checked={localSearch.timePeriod === apiTimePeriod.day}
 					value={apiTimePeriod.day}
 					onChange={handleTimePeriodChange}
 				/>
@@ -78,7 +81,7 @@ const Search: FC = () => {
 					id='timePeriodWeek'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.week}
+					checked={localSearch.timePeriod === apiTimePeriod.week}
 					value={apiTimePeriod.week}
 					onChange={handleTimePeriodChange}
 				/>
@@ -87,7 +90,7 @@ const Search: FC = () => {
 					id='timePeriodMonth'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.month}
+					checked={localSearch.timePeriod === apiTimePeriod.month}
 					value={apiTimePeriod.month}
 					onChange={handleTimePeriodChange}
 				/>
@@ -96,7 +99,7 @@ const Search: FC = () => {
 					id='timePeriodYear'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.year}
+					checked={localSearch.timePeriod === apiTimePeriod.year}
 					value={apiTimePeriod.year}
 					onChange={handleTimePeriodChange}
 				/>
@@ -106,43 +109,29 @@ const Search: FC = () => {
 					id='timePeriodAll'
 					type='radio'
 					name='timePeriod'
-					checked={timePeriod === apiTimePeriod.all}
+					checked={localSearch.timePeriod === apiTimePeriod.all}
 					value={apiTimePeriod.all}
 					onChange={handleTimePeriodChange}
 				/>
 				<label htmlFor='timePeriodAll'>All Time</label>
 				<br />
-				<input type='text' placeholder='Search...' value={searchValue} onChange={handleSearchChange} />
+				<input type='text' placeholder='Search...' value={localSearch.value} onChange={handleSearchChange} />
 				<button type='submit' onClick={formSubmit}>
 					Submit
 				</button>
 
 				{searchSuggestions.length > 0 && (
 					<ul>
-						{localSearchMode === searchType.channel && (
+						{localSearch.mode && (
 							<>
 								{searchSuggestions.map((suggestion) => (
 									<li key={suggestion.id}>
 										<Link
-											onClick={() => setSearchSuggestions([])}
-											to={`/${searchType.channel}/${suggestion.login}/${timePeriod}`}
+											to={`/${localSearch.mode}/${
+												localSearch.mode === searchType.channel ? suggestion.login : suggestion.name
+											}/${localSearch.timePeriod}`}
 										>
-											{suggestion.login}
-										</Link>
-									</li>
-								))}
-							</>
-						)}
-
-						{localSearchMode === searchType.category && (
-							<>
-								{searchSuggestions.map((suggestion) => (
-									<li key={suggestion.id}>
-										<Link
-											onClick={() => setSearchSuggestions([])}
-											to={`/${searchType.category}/${suggestion.name}/${timePeriod}`}
-										>
-											{suggestion.name}
+											{localSearch.mode === searchType.channel ? suggestion.login : suggestion.name}
 										</Link>
 									</li>
 								))}
