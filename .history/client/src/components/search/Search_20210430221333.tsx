@@ -67,7 +67,7 @@ const Search: FC = () => {
 				<select value={localSearch.mode} name='search-type' onChange={handleSearchTypeChange}>
 					<option value={searchType.channel}>Channel</option>
 					<option value={searchType.category}>Category/Game</option>
-					<option value={searchType.subreddit}>Reddit</option>
+					<option value={searchType.subreddit}>subReddit</option>
 				</select>
 				<input
 					id='timePeriodDay'

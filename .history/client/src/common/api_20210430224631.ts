@@ -8,13 +8,10 @@ export const getClips = async (search: searchClips, after?: string) => {
 	if (!after) addFavourite(search)
 
 	if (search.mode === searchType.subreddit) {
-		const data = await getSubredditClips(search, after)
-
-		console.log(data)
-
+		const data = getSubredditClips(search, after)
 		return data
 	} else {
-		const data = await getTwitchClips(search, after)
+		const data = getTwitchClips(search, after)
 
 		return data
 	}

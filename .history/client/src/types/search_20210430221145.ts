@@ -17,3 +17,8 @@ export enum apiTimePeriod {
 	year = 'year',
 	all = 'all',
 }
+
+export interface favouriteObj {
+	login: string
+	rank: number
+}

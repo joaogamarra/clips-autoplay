@@ -5,19 +5,17 @@ import { AutocompleteObj, TwitchClipsResponse } from 'src/types/twitch'
 import { addFavourite } from './localstorage'
 
 export const getClips = async (search: searchClips, after?: string) => {
-	if (!after) addFavourite(search)
-
-	if (search.mode === searchType.subreddit) {
-		const data = await getSubredditClips(search, after)
-
-		console.log(data)
-
-		return data
-	} else {
-		const data = await getTwitchClips(search, after)
+	if (search.mode === searchType.category || searchType.channel) {
+		const data = getTwitchClips(search, after)
 
 		return data
 	}
+
+	if (search.mode === searchType.subreddit) {
+		const data = getSubredditClips(search, after)
+	}
+
+	if (!after) addFavourite(search)
 }
 
 export const getSuggestions = async (searchMode: searchType, query?: string) => {
