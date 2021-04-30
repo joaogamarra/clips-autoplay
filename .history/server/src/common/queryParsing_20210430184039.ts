@@ -71,7 +71,9 @@ export const parseRedditQuery = (req: Request) => {
 
 	if (typeof req.query.timeperiod === 'string') {
 		timePeriod = parseTimePeriod(req.query.timeperiod)
-		timeQuery = `&t=${timePeriod}`
+		if (timePeriod != apiTimePeriod.all) {
+			timeQuery = convertTimePeriod(timePeriod)
+		}
 	}
 	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`
 

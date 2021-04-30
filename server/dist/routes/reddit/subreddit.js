@@ -12,20 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const subreddit_1 = __importDefault(require("../../services/reddit/subreddit"));
 const express_1 = __importDefault(require("express"));
-const category_1 = __importDefault(require("../..//services/twitch/category"));
+const subredditParsing_1 = require("../../common/subredditParsing");
 const queryParsing_1 = require("../../common/queryParsing");
-const twitchAutoComplete_1 = require("../../database/queries/twitchAutoComplete");
-const clips_1 = __importDefault(require("../../services/twitch/clips"));
-const token_1 = __importDefault(require("../../services/twitch/token"));
 const router = express_1.default.Router();
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = queryParsing_1.parseTwitchQuery(req);
-    const token = yield token_1.default();
-    const category = yield category_1.default(token, req.params.id);
-    const clips = yield clips_1.default(token, undefined, category, query);
-    res.send(clips);
-    twitchAutoComplete_1.categoryIncreaseRanking(category.name);
+    const query = queryParsing_1.parseRedditQuery(req);
+    const data = yield subreddit_1.default(req.params.id, query);
+    if (data) {
+        const dataParsed = subredditParsing_1.parseSubreddit(data);
+        res.send(dataParsed);
+    }
+    else {
+        res.status(404).end();
+    }
 }));
 exports.default = router;
-//# sourceMappingURL=category.js.map
+//# sourceMappingURL=subreddit.js.map

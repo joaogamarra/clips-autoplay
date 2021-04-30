@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertTimePeriod = exports.parseTimePeriod = exports.parseTwitchQuery = void 0;
+exports.parseRedditQuery = exports.convertTimePeriod = exports.parseTimePeriod = exports.parseTwitchQuery = void 0;
 const twitch_1 = require("../types/twitch");
 const parseTwitchQuery = (req) => {
     let query;
@@ -60,4 +60,19 @@ const convertTimePeriod = (timePeriod) => {
     return `&started_at=${startDate}&ended_at=${currentDateFormatted}`;
 };
 exports.convertTimePeriod = convertTimePeriod;
+const parseRedditQuery = (req) => {
+    let query;
+    let timePeriod = twitch_1.apiTimePeriod.all;
+    let after = '';
+    let timeQuery = '';
+    if (typeof req.query.timeperiod === 'string') {
+        timePeriod = exports.parseTimePeriod(req.query.timeperiod);
+        timeQuery = `&t=${timePeriod}`;
+    }
+    if (typeof req.query.after === 'string')
+        after = `&after=${req.query.after}`;
+    query = `${timeQuery}${after}`;
+    return query;
+};
+exports.parseRedditQuery = parseRedditQuery;
 //# sourceMappingURL=queryParsing.js.map
