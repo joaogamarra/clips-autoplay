@@ -1,5 +1,6 @@
 import { TwitchChannelAutoComplete } from '../../database/models/twitch'
 import { TwitchStream, TwitchToken } from '../../types/twitch'
+import getChannel from './channel'
 import getResponse from './service'
 
 export const saveStreams = async (token: TwitchToken, after?: string) => {
@@ -28,4 +29,10 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 	} else {
 		return false
 	}
+}
+
+export const saveAvatar = async () => {
+	const channels = await TwitchChannelAutoComplete.find({})
+
+	return channels
 }

@@ -12,6 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.saveStreams = void 0;
 const twitch_1 = require("../../database/models/twitch");
 const service_1 = __importDefault(require("./service"));
 const saveStreams = (token, after) => __awaiter(void 0, void 0, void 0, function* () {
@@ -25,8 +26,9 @@ const saveStreams = (token, after) => __awaiter(void 0, void 0, void 0, function
         data.forEach((stream) => {
             const search = new twitch_1.TwitchChannelAutoComplete({
                 id: stream.user_id,
-                login: stream.user_login,
+                name: stream.user_login,
                 rank: 0,
+                avatar: '',
             });
             search.save();
         });
@@ -36,5 +38,5 @@ const saveStreams = (token, after) => __awaiter(void 0, void 0, void 0, function
         return false;
     }
 });
-exports.default = saveStreams;
+exports.saveStreams = saveStreams;
 //# sourceMappingURL=channelSave.js.map

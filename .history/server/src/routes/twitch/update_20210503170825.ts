@@ -1,6 +1,6 @@
 import express from 'express'
-import saveCategories from '../../services/twitch/categorySave'
-import { saveStreams } from '../../services/twitch/channelSave'
+import saveCategories, { saveCategoriesAvatar } from '../../services/twitch/categorySave'
+import saveStreams from '../../services/twitch/channelSave'
 
 import getToken from '../../services/twitch/token'
 
@@ -35,6 +35,27 @@ router.get('/category', async (_, res) => {
 	const categoriesLoop = async () => {
 		if (after) {
 			const newCategories = await saveCategories(token, after)
+
+			after = newCategories.pagination.cursor
+
+			if (after) {
+				categoriesLoop()
+			}
+		}
+	}
+	categoriesLoop()
+
+	res.send(categories)
+})
+
+router.get('/categoryAvatar', async (_, res) => {
+	const token = await getToken()
+	const categories = await saveCategoriesAvatar(token)
+	let after = categories.pagination.cursor
+
+	const categoriesLoop = async () => {
+		if (after) {
+			const newCategories = await saveCategoriesAvatar(token, after)
 
 			after = newCategories.pagination.cursor
 

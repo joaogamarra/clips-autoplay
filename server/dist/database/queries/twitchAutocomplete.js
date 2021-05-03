@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.categoriesDefault = exports.channelsDefault = exports.categoryIncreaseRanking = exports.channelIncreaseRanking = exports.categoriesAutoComplete = exports.channelsAutoComplete = void 0;
 const twitch_1 = require("../models/twitch");
 const channelsAutoComplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield twitch_1.TwitchChannelAutoComplete.find({ login: new RegExp('^' + query) })
+    const res = yield twitch_1.TwitchChannelAutoComplete.find({ name: new RegExp('^' + query) })
         .sort({ rank: -1 })
         .limit(10);
     return res;
@@ -27,17 +27,17 @@ const categoriesAutoComplete = (query) => __awaiter(void 0, void 0, void 0, func
 });
 exports.categoriesAutoComplete = categoriesAutoComplete;
 const channelIncreaseRanking = (channel) => __awaiter(void 0, void 0, void 0, function* () {
-    const channelFind = yield twitch_1.TwitchChannelAutoComplete.find({ login: channel.login });
+    const channelFind = yield twitch_1.TwitchChannelAutoComplete.find({ name: channel.login });
     if (channelFind.length === 0) {
         const newChannel = new twitch_1.TwitchChannelAutoComplete({
             id: channel.id,
-            login: channel.login,
+            name: channel.login,
             rank: 1,
         });
         newChannel.save();
     }
     else {
-        yield twitch_1.TwitchChannelAutoComplete.updateOne({ login: channel.login }, { $inc: { rank: 1 } });
+        yield twitch_1.TwitchChannelAutoComplete.updateOne({ name: channel.login }, { $inc: { rank: 1 } });
     }
 });
 exports.channelIncreaseRanking = channelIncreaseRanking;

@@ -19,18 +19,18 @@ const categoriesAutoComplete = async (query: string) => {
 
 const channelIncreaseRanking = async (channel: TwitchChannel) => {
 	//check if channel is already in DB
-	const channelFind = await TwitchChannelAutoComplete.find({ name: channel.login })
+	const channelFind = await TwitchChannelAutoComplete.find({ name: channel.name })
 
 	//if not add new channel to DB, else just increase existing channel's rank
 	if (channelFind.length === 0) {
 		const newChannel = new TwitchChannelAutoComplete({
 			id: channel.id,
-			name: channel.login,
+			name: channel.name,
 			rank: 1,
 		})
 		newChannel.save()
 	} else {
-		await TwitchChannelAutoComplete.updateOne({ name: channel.login }, { $inc: { rank: 1 } })
+		await TwitchChannelAutoComplete.updateOne({ name: channel.name }, { $inc: { rank: 1 } })
 	}
 }
 

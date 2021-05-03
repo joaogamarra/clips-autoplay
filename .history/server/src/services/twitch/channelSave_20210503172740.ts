@@ -2,7 +2,7 @@ import { TwitchChannelAutoComplete } from '../../database/models/twitch'
 import { TwitchStream, TwitchToken } from '../../types/twitch'
 import getResponse from './service'
 
-export const saveStreams = async (token: TwitchToken, after?: string) => {
+const saveStreams = async (token: TwitchToken, after?: string) => {
 	const baseUrl = `https://api.twitch.tv/helix/streams?first=100`
 
 	let query = baseUrl
@@ -29,3 +29,5 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 		return false
 	}
 }
+
+export default saveStreams

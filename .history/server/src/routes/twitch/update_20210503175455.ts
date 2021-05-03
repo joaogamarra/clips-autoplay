@@ -1,6 +1,7 @@
+import { TwitchChannelAutoComplete } from '../../database/models/twitch'
 import express from 'express'
 import saveCategories from '../../services/twitch/categorySave'
-import { saveStreams } from '../../services/twitch/channelSave'
+import saveStreams from '../../services/twitch/channelSave'
 
 import getToken from '../../services/twitch/token'
 
@@ -25,6 +26,15 @@ router.get('/channel', async (_, res) => {
 	streamsLoop()
 
 	res.send(streams)
+})
+
+router.get('/rename', async () => {
+	TwitchChannelAutoComplete.update({}, { $rename: { login: 'name' } }, false, true, function (err) {
+		if (err) {
+			throw err
+		}
+		console.log('done!')
+	})
 })
 
 router.get('/category', async (_, res) => {

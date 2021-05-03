@@ -1,6 +1,6 @@
 import express from 'express'
-import saveCategories from '../../services/twitch/categorySave'
-import { saveStreams } from '../../services/twitch/channelSave'
+import saveCategories, { saveCategoriesAvatar } from '../../services/twitch/categorySave'
+import saveStreams from '../../services/twitch/channelSave'
 
 import getToken from '../../services/twitch/token'
 

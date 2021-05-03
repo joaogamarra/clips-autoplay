@@ -31,4 +31,30 @@ const saveCategories = async (token: TwitchToken, after?: string) => {
 	}
 }
 
+export const saveCategoriesAvatar = async (token: TwitchToken, after?: string) => {
+	const baseUrl = `https://api.twitch.tv/helix/games/top?first=100`
+
+	let query = baseUrl
+
+	if (after) query = `${baseUrl}&after=${after}`
+
+	const res = await getResponse(token, query)
+
+	if (res) {
+		const data = res.data.data
+
+		data.forEach((category: TwitchCategory) => {
+			TwitchCategoryAutoComplete.findOneAndUpdate(
+				{ id: category.id },
+				{ avatar: category.box_art_url },
+				{ strict: false }
+			)
+		})
+
+		return res.data
+	} else {
+		return false
+	}
+}
+
 export default saveCategories

@@ -1,6 +1,7 @@
+import { TwitchChannelAutoComplete } from '../../database/models/twitch'
 import express from 'express'
 import saveCategories from '../../services/twitch/categorySave'
-import { saveStreams } from '../../services/twitch/channelSave'
+import { saveStreams, saveAvatar } from '../../services/twitch/channelSave'
 
 import getToken from '../../services/twitch/token'
 
@@ -25,6 +26,12 @@ router.get('/channel', async (_, res) => {
 	streamsLoop()
 
 	res.send(streams)
+})
+
+router.get('/channelAvatar', async (_, res) => {
+	const channels = saveAvatar()
+
+	res.send(channels)
 })
 
 router.get('/category', async (_, res) => {

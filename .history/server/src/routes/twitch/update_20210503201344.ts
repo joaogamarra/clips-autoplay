@@ -1,6 +1,6 @@
 import express from 'express'
 import saveCategories from '../../services/twitch/categorySave'
-import { saveStreams } from '../../services/twitch/channelSave'
+import { saveStreams, saveAvatar } from '../../services/twitch/channelSave'
 
 import getToken from '../../services/twitch/token'
 
@@ -25,6 +25,15 @@ router.get('/channel', async (_, res) => {
 	streamsLoop()
 
 	res.send(streams)
+})
+
+router.get('/channelAvatar', async (_, res) => {
+	const token = await getToken()
+	await saveAvatar(token)
+
+	console.log('doone')
+
+	res.send('done')
 })
 
 router.get('/category', async (_, res) => {

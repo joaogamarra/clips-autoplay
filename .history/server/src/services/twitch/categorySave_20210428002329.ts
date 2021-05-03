@@ -20,7 +20,6 @@ const saveCategories = async (token: TwitchToken, after?: string) => {
 				id: category.id,
 				name: nameParsed,
 				rank: 0,
-				avatar: category.box_art_url,
 			})
 			search.save()
 		})

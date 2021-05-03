@@ -28,6 +28,7 @@ const saveCategories = (token, after) => __awaiter(void 0, void 0, void 0, funct
                 id: category.id,
                 name: nameParsed,
                 rank: 0,
+                avatar: category.box_art_url,
             });
             search.save();
         });

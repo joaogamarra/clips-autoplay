@@ -29,3 +29,10 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 		return false
 	}
 }
+
+export const saveAvatar = async () => {
+	const channels = await TwitchChannelAutoComplete.find({})
+	console.log(channels)
+
+	return channels
+}

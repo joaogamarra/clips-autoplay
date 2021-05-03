@@ -14,16 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const categorySave_1 = __importDefault(require("../../services/twitch/categorySave"));
-const channelSave_1 = __importDefault(require("../../services/twitch/channelSave"));
+const channelSave_1 = require("../../services/twitch/channelSave");
 const token_1 = __importDefault(require("../../services/twitch/token"));
 const router = express_1.default.Router();
 router.get('/channel', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = yield token_1.default();
-    const streams = yield channelSave_1.default(token);
+    const streams = yield channelSave_1.saveStreams(token);
     let after = streams.pagination.cursor;
     const streamsLoop = () => __awaiter(void 0, void 0, void 0, function* () {
         if (after) {
-            const newStreams = yield channelSave_1.default(token, after);
+            const newStreams = yield channelSave_1.saveStreams(token, after);
             after = newStreams.pagination.cursor;
             if (newStreams.data[0].viewer_count > 100) {
                 streamsLoop();

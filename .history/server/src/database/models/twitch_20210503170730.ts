@@ -3,12 +3,11 @@ import uniqueValidator from 'mongoose-unique-validator'
 
 const twitchChannelAutoCompleteSchema = new Mongoose.Schema({
 	id: Number,
-	name: {
+	login: {
 		type: String,
 		unique: true,
 	},
 	rank: Number,
-	avatar: String,
 })
 
 const twitchCategoryAutoCompleteSchema = new Mongoose.Schema({

@@ -8,11 +8,12 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_unique_validator_1 = __importDefault(require("mongoose-unique-validator"));
 const twitchChannelAutoCompleteSchema = new mongoose_1.default.Schema({
     id: Number,
-    login: {
+    name: {
         type: String,
         unique: true,
     },
     rank: Number,
+    avatar: String,
 });
 const twitchCategoryAutoCompleteSchema = new mongoose_1.default.Schema({
     id: {
@@ -21,6 +22,7 @@ const twitchCategoryAutoCompleteSchema = new mongoose_1.default.Schema({
     },
     name: String,
     rank: Number,
+    avatar: String,
 });
 twitchChannelAutoCompleteSchema.plugin(mongoose_unique_validator_1.default);
 twitchCategoryAutoCompleteSchema.plugin(mongoose_unique_validator_1.default);
