@@ -1,13 +1,16 @@
 import { TwitchCategory, TwitchChannel, TwitchToken } from '../../types/twitch'
 import getResponse from './service'
 
-const getClips = async (token: TwitchToken, channel?: TwitchChannel, category?: TwitchCategory) => {
+const getClips = async (
+	token: TwitchToken,
+	channel?: TwitchChannel,
+	category?: TwitchCategory,
+	query?: string
+) => {
 	let searchType = `broadcaster_id=${channel?.id}`
 	if (category) searchType = `game_id=${category?.id}`
 
-	const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}&first=20`
-
-	console.log(baseUrl)
+	const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=5`
 
 	const res = await getResponse(token, baseUrl)
 

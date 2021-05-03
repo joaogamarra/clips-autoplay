@@ -12,8 +12,6 @@ const getClips = async (
 
 	const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=5`
 
-	console.log(baseUrl)
-
 	const res = await getResponse(token, baseUrl)
 
 	if (res) {

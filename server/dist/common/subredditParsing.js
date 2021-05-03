@@ -12,10 +12,12 @@ const parseSubreddit = (data) => {
     if (data.after)
         parsedData.pagination.cursor = data.after;
     (_a = data.children) === null || _a === void 0 ? void 0 : _a.forEach((item) => {
-        const itemLink = exports.isVideo(item.data.url);
+        const itemLink = exports.isVideo(item.data.media.oembed.thumbnail_url);
         if (itemLink) {
             parsedData.data.push({
-                embed_url: itemLink,
+                title: item.data.title,
+                video_url: itemLink,
+                comments_url: item.data.permalink,
             });
         }
     });
@@ -23,11 +25,9 @@ const parseSubreddit = (data) => {
 };
 exports.parseSubreddit = parseSubreddit;
 const isVideo = (url) => {
-    const twitchAddress = 'https://clips.twitch.tv/' || 'http://clips.twitch.tv/';
-    const twitchEmbed = 'https://clips.twitch.tv/embed?clip=';
-    if (url.includes(twitchAddress)) {
-        const videoId = url.replace(twitchAddress, '');
-        return `${twitchEmbed}${videoId}`;
+    const twitchAddress = 'https://clips-media-assets2.twitch.tv' || 'http://clips-media-assets2.twitch.tv';
+    if (url && url.includes(twitchAddress)) {
+        return url.replace('-social', '').replace('-preview.jpg', '.mp4');
     }
     else {
         return false;

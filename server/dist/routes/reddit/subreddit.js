@@ -17,9 +17,9 @@ const express_1 = __importDefault(require("express"));
 const subredditParsing_1 = require("../../common/subredditParsing");
 const queryParsing_1 = require("../../common/queryParsing");
 const router = express_1.default.Router();
-router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/livestreamfail', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = queryParsing_1.parseRedditQuery(req);
-    const data = yield subreddit_1.default(req.params.id, query);
+    const data = yield subreddit_1.default(query);
     if (data) {
         const dataParsed = subredditParsing_1.parseSubreddit(data);
         res.send(dataParsed);

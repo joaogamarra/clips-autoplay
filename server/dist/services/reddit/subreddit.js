@@ -13,9 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const service_1 = __importDefault(require("./service"));
-const getSubreddit = (id, query) => __awaiter(void 0, void 0, void 0, function* () {
-    const baseUrl = `https://old.reddit.com/r/${id}/top.json?limit=30${query}`;
-    console.log(baseUrl);
+const getSubreddit = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const baseUrl = `https://old.reddit.com/r/livestreamfail/top.json?limit=30${query}`;
     const res = yield service_1.default(baseUrl);
     if (res) {
         return res.data.data;

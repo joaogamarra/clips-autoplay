@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const twitchClipsParsing_1 = require("../..//common/twitchClipsParsing");
 const express_1 = __importDefault(require("express"));
-const category_1 = __importDefault(require("../..//services/twitch/category"));
+const category_1 = __importDefault(require("../../services/twitch/category"));
 const queryParsing_1 = require("../../common/queryParsing");
 const twitchAutoComplete_1 = require("../../database/queries/twitchAutoComplete");
 const clips_1 = __importDefault(require("../../services/twitch/clips"));
@@ -24,7 +25,8 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const token = yield token_1.default();
     const category = yield category_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, undefined, category, query);
-    res.send(clips);
+    const parsedClips = twitchClipsParsing_1.parseTwitchClips(clips);
+    res.send(parsedClips);
     twitchAutoComplete_1.categoryIncreaseRanking(category.name);
 }));
 exports.default = router;

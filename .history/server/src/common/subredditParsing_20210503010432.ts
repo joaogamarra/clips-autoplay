@@ -28,7 +28,7 @@ export const isVideo = (url: string) => {
 	const twitchAddress = 'https://clips-media-assets2.twitch.tv' || 'http://clips-media-assets2.twitch.tv'
 
 	if (url && url.includes(twitchAddress)) {
-		return url.replace('-social', '').replace('-preview.jpg', '.mp4')
+		return url.replace('-social-preview.jpg', '.mp4')
 	} else {
 		return false
 	}
