@@ -21,15 +21,11 @@ export const getClips = async (search: searchClips, after?: string) => {
 }
 
 export const getSuggestions = async (searchMode: searchType, query?: string) => {
-	if (searchMode !== searchType.subreddit) {
-		let baseUrl = `http://localhost:4000/api/twitch/suggestions/${searchMode}/`
+	let baseUrl = `http://localhost:4000/api/twitch/suggestions/${searchMode}/`
 
-		if (query) baseUrl = `${baseUrl}${query}`
+	if (query) baseUrl = `${baseUrl}${query}`
 
-		const data: AutocompleteObj[] = await axios.get(baseUrl)
+	const data: AutocompleteObj[] = await axios.get(baseUrl)
 
-		return data
-	} else {
-		return false
-	}
+	return data
 }

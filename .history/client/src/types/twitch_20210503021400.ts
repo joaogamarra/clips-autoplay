@@ -1,7 +1,7 @@
 export interface ResponseClip {
 	title: string
 	video_url: string
-	comments_url: string
+	comment_url: string
 }
 
 export interface ResponseClips {

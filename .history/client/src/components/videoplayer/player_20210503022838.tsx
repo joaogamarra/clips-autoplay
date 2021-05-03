@@ -68,11 +68,6 @@ const Player: FC = () => {
 						onEnded={() => nextClip()}
 					></video>
 					<h4>{currentClip.title}</h4>
-					{currentClip.comments_url && (
-						<a href={`https://reddit.com${currentClip.comments_url}`} target='_blank' rel='noreferrer'>
-							Reddit Link
-						</a>
-					)}
 					<br />
 					{clips.data.length > 0 && clipIndex > 0 && (
 						<button onClick={() => nextClip('prev')}>Previous Clip</button>

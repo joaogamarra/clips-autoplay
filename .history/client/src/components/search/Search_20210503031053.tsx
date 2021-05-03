@@ -17,20 +17,20 @@ const Search: FC = () => {
 	const history = useHistory()
 
 	const updateSuggestions = useCallback(async () => {
-		if (initialLoad && params.mode) {
+		if (initialLoad && params.value) {
 			setLocalSearch(params)
 			const suggestions: any = await getSuggestions(params.mode, params.value)
-			suggestions && setSearchSuggestions(suggestions.data)
+			setSearchSuggestions(suggestions.data)
 
 			initialLoad.current = false
 		} else {
 			if (localSearch.value.length > 0) {
 				const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
 
-				suggestions && setSearchSuggestions(suggestions.data)
+				setSearchSuggestions(suggestions.data)
 			} else {
 				const suggestions: any = await getSuggestions(localSearch.mode)
-				suggestions && setSearchSuggestions(suggestions.data)
+				setSearchSuggestions(suggestions.data)
 			}
 		}
 	}, [localSearch, params])
@@ -41,7 +41,7 @@ const Search: FC = () => {
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
-		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${localSearch.value}`)
+		history.push(`/${localSearch.mode}/${localSearch.value}/${localSearch.timePeriod}`)
 	}
 
 	const handleSearchTypeChange = (e: React.FormEvent<HTMLSelectElement>) => {
@@ -128,16 +128,16 @@ const Search: FC = () => {
 					Submit
 				</button>
 
-				{searchSuggestions.length > 0 && localSearch.mode !== searchType.subreddit && (
+				{searchSuggestions.length > 0 && (
 					<ul>
 						{localSearch.mode && (
 							<>
 								{searchSuggestions.map((suggestion) => (
 									<li key={suggestion.id}>
 										<Link
-											to={`/${localSearch.mode}/${localSearch.timePeriod}/${
+											to={`/${localSearch.mode}/${
 												localSearch.mode === searchType.channel ? suggestion.login : suggestion.name
-											}`}
+											}/${localSearch.timePeriod}`}
 										>
 											{localSearch.mode === searchType.channel ? suggestion.login : suggestion.name}
 										</Link>

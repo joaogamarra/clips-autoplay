@@ -17,20 +17,22 @@ const Search: FC = () => {
 	const history = useHistory()
 
 	const updateSuggestions = useCallback(async () => {
-		if (initialLoad && params.mode) {
-			setLocalSearch(params)
-			const suggestions: any = await getSuggestions(params.mode, params.value)
-			suggestions && setSearchSuggestions(suggestions.data)
+		if (localSearch.mode !== searchType.subreddit) {
+			if (initialLoad && params.value) {
+				setLocalSearch(params)
+				const suggestions: any = await getSuggestions(params.mode, params.value)
+				setSearchSuggestions(suggestions.data)
 
-			initialLoad.current = false
-		} else {
-			if (localSearch.value.length > 0) {
-				const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
-
-				suggestions && setSearchSuggestions(suggestions.data)
+				initialLoad.current = false
 			} else {
-				const suggestions: any = await getSuggestions(localSearch.mode)
-				suggestions && setSearchSuggestions(suggestions.data)
+				if (localSearch.value.length > 0) {
+					const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
+
+					setSearchSuggestions(suggestions.data)
+				} else {
+					const suggestions: any = await getSuggestions(localSearch.mode)
+					setSearchSuggestions(suggestions.data)
+				}
 			}
 		}
 	}, [localSearch, params])
@@ -41,7 +43,7 @@ const Search: FC = () => {
 
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
-		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${localSearch.value}`)
+		history.push(`/${localSearch.mode}/${localSearch.value}/${localSearch.timePeriod}`)
 	}
 
 	const handleSearchTypeChange = (e: React.FormEvent<HTMLSelectElement>) => {
@@ -135,9 +137,9 @@ const Search: FC = () => {
 								{searchSuggestions.map((suggestion) => (
 									<li key={suggestion.id}>
 										<Link
-											to={`/${localSearch.mode}/${localSearch.timePeriod}/${
+											to={`/${localSearch.mode}/${
 												localSearch.mode === searchType.channel ? suggestion.login : suggestion.name
-											}`}
+											}/${localSearch.timePeriod}`}
 										>
 											{localSearch.mode === searchType.channel ? suggestion.login : suggestion.name}
 										</Link>

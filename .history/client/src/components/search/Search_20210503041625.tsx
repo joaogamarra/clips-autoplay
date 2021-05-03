@@ -17,20 +17,22 @@ const Search: FC = () => {
 	const history = useHistory()
 
 	const updateSuggestions = useCallback(async () => {
-		if (initialLoad && params.mode) {
-			setLocalSearch(params)
-			const suggestions: any = await getSuggestions(params.mode, params.value)
-			suggestions && setSearchSuggestions(suggestions.data)
+		if (localSearch.mode !== searchType.subreddit && params.mode !== searchType.subreddit) {
+			if (initialLoad && params.mode) {
+				setLocalSearch(params)
+				const suggestions: any = await getSuggestions(params.mode, params.value)
+				setSearchSuggestions(suggestions.data)
 
-			initialLoad.current = false
-		} else {
-			if (localSearch.value.length > 0) {
-				const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
-
-				suggestions && setSearchSuggestions(suggestions.data)
+				initialLoad.current = false
 			} else {
-				const suggestions: any = await getSuggestions(localSearch.mode)
-				suggestions && setSearchSuggestions(suggestions.data)
+				if (localSearch.value.length > 0) {
+					const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
+
+					setSearchSuggestions(suggestions.data)
+				} else {
+					const suggestions: any = await getSuggestions(localSearch.mode)
+					setSearchSuggestions(suggestions.data)
+				}
 			}
 		}
 	}, [localSearch, params])

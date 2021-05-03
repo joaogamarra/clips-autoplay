@@ -20,17 +20,17 @@ const Search: FC = () => {
 		if (initialLoad && params.mode) {
 			setLocalSearch(params)
 			const suggestions: any = await getSuggestions(params.mode, params.value)
-			suggestions && setSearchSuggestions(suggestions.data)
+			setSearchSuggestions(suggestions.data)
 
 			initialLoad.current = false
 		} else {
 			if (localSearch.value.length > 0) {
 				const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
 
-				suggestions && setSearchSuggestions(suggestions.data)
+				setSearchSuggestions(suggestions.data)
 			} else {
 				const suggestions: any = await getSuggestions(localSearch.mode)
-				suggestions && setSearchSuggestions(suggestions.data)
+				setSearchSuggestions(suggestions.data)
 			}
 		}
 	}, [localSearch, params])

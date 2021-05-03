@@ -69,7 +69,7 @@ const Player: FC = () => {
 					></video>
 					<h4>{currentClip.title}</h4>
 					{currentClip.comments_url && (
-						<a href={`https://reddit.com${currentClip.comments_url}`} target='_blank' rel='noreferrer'>
+						<a href={currentClip.comments_url} target='_blank' rel='noreferrer'>
 							Reddit Link
 						</a>
 					)}

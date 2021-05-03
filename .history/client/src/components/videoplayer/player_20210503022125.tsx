@@ -59,20 +59,8 @@ const Player: FC = () => {
 		<>
 			{currentClip.video_url && (
 				<>
-					<video
-						title='video-embed'
-						width={600}
-						src={currentClip.video_url}
-						autoPlay={true}
-						controls={true}
-						onEnded={() => nextClip()}
-					></video>
+					<video title='video-embed' width={600} src={currentClip.video_url} controls={true}></video>
 					<h4>{currentClip.title}</h4>
-					{currentClip.comments_url && (
-						<a href={`https://reddit.com${currentClip.comments_url}`} target='_blank' rel='noreferrer'>
-							Reddit Link
-						</a>
-					)}
 					<br />
 					{clips.data.length > 0 && clipIndex > 0 && (
 						<button onClick={() => nextClip('prev')}>Previous Clip</button>

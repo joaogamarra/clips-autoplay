@@ -30,6 +30,6 @@ export const getSuggestions = async (searchMode: searchType, query?: string) => 
 
 		return data
 	} else {
-		return false
+		return [{}]
 	}
 }

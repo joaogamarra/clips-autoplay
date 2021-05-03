@@ -18,10 +18,6 @@ const Player: FC = () => {
 		dispatch(setCurrentSearch(params))
 	}, [dispatch, params])
 
-	useEffect(() => {
-		firstLoad()
-	}, [params, firstLoad])
-
 	const nextClip = useCallback(
 		(direction?: string) => {
 			const clipsData = clips.data

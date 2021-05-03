@@ -11,6 +11,7 @@ const Player: FC = () => {
 
 	const firstLoad = useCallback(async () => {
 		const data = await getClips(params)
+		console.log('asdasf')
 
 		dispatch(setClips(data))
 		dispatch(setCurrentClip(data.data[0]))
