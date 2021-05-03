@@ -36,12 +36,14 @@ export const removeFavourite = (search: searchClips) => {
 	console.log(search)
 
 	const newFavourites = storedFavourites.filter((item: { search: searchClips }) => {
-		if (item.search.value === search.value && item.search.mode === search.mode) {
-			return false
-		}
+		console.log(item.search.value, search.value)
+		console.log(item.search.mode, search.mode)
+		console.log(item.search.value === search.value && item.search.mode === search.mode)
 
-		return true
+		return item.search.value !== search.value && item.search.mode !== search.mode
 	})
 
-	localStorage.setItem('favourites', JSON.stringify(newFavourites))
+	console.log(newFavourites)
+
+	//localStorage.setItem('favourites', JSON.stringify(newFavourites))
 }

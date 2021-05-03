@@ -18,7 +18,6 @@ const Favourites: FC = () => {
 
 	const handleRemove = (search: searchClips) => {
 		removeFavourite(search)
-		loadFavourites()
 	}
 
 	return (

@@ -43,5 +43,7 @@ export const removeFavourite = (search: searchClips) => {
 		return true
 	})
 
-	localStorage.setItem('favourites', JSON.stringify(newFavourites))
+	console.log(newFavourites)
+
+	//localStorage.setItem('favourites', JSON.stringify(newFavourites))
 }

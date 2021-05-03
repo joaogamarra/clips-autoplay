@@ -1,25 +1,16 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getFavourites, removeFavourite } from 'src/common/localstorage'
+import { getFavourites } from 'src/common/localstorage'
 import { apiTimePeriod, searchClips } from 'src/types/search'
 
 const Favourites: FC = () => {
 	const [favourites, setFavourites] = useState<{ search: searchClips; rank: number }[]>([])
 
-	const loadFavourites = useCallback(() => {
+	useEffect(() => {
 		const favouritesRes = getFavourites()
 
 		setFavourites(favouritesRes)
 	}, [])
-
-	useEffect(() => {
-		loadFavourites()
-	}, [loadFavourites])
-
-	const handleRemove = (search: searchClips) => {
-		removeFavourite(search)
-		loadFavourites()
-	}
 
 	return (
 		<>
@@ -30,7 +21,7 @@ const Favourites: FC = () => {
 						{favourites.map(({ search }) => (
 							<li key={search.value}>
 								<Link to={`/${search.mode}/${apiTimePeriod.week}/${search.value}`}>{search.value}</Link>
-								<button onClick={() => handleRemove(search)}>X</button>
+								<button>X</button>
 							</li>
 						))}
 					</ul>
