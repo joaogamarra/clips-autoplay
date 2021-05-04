@@ -1,0 +1,40 @@
+.favourites-container {
+	text-align: center;
+
+	.title-lg {
+		margin-bottom: 12px;
+		font-size: 36px;
+		font-weight: 200;
+		color: #9147ff;
+	}
+
+	.favourites-list {
+		display: flex;
+		justify-content: center;
+
+		.favourites-item {
+			position: relative;
+			padding-right: 15px;
+			margin: 10px;
+		}
+
+		a {
+			color: #818181;
+			text-decoration: none;
+		}
+
+		button {
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 0;
+			width: 15px;
+			height: 15px;
+			font-size: 9px;
+			background: none;
+			color: #eeeeee;
+			outline: none;
+			border: none;
+		}
+	}
+}

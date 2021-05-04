@@ -135,7 +135,7 @@ const Search: FC = () => {
 								{searchSuggestions.map((suggestion) => (
 									<li key={suggestion.id}>
 										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${suggestion.name}`}>
-											{suggestion.name}
+											{suggestion.name?.toLocaleUpperCase}
 										</Link>
 									</li>
 								))}

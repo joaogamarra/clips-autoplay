@@ -26,14 +26,12 @@ const Favourites: FC = () => {
 		<>
 			{favourites && (
 				<section className='favourites-container'>
-					<h5 className='title-lg'>Your Favourites</h5>
+					<h5 className='title-lg'>Your favourites</h5>
 					<ul className='favourites-list'>
 						{favourites.map(({ search }) => (
-							<li className='favourites-item' key={search.value}>
+							<li key={search.value}>
 								<Link to={`/${search.mode}/${apiTimePeriod.week}/${search.value}`}>{search.value}</Link>
-								<button title='Remove Favourite' onClick={() => handleRemove(search)}>
-									X
-								</button>
+								<button onClick={() => handleRemove(search)}>X</button>
 							</li>
 						))}
 					</ul>

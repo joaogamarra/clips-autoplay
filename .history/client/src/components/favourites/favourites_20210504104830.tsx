@@ -31,9 +31,7 @@ const Favourites: FC = () => {
 						{favourites.map(({ search }) => (
 							<li className='favourites-item' key={search.value}>
 								<Link to={`/${search.mode}/${apiTimePeriod.week}/${search.value}`}>{search.value}</Link>
-								<button title='Remove Favourite' onClick={() => handleRemove(search)}>
-									X
-								</button>
+								<button onClick={() => handleRemove(search)}>X</button>
 							</li>
 						))}
 					</ul>
