@@ -32,12 +32,10 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 }
 
 export const saveAvatar = async (token: TwitchToken) => {
-	const dbChannels = await TwitchChannelAutoComplete.find({}).sort({ id: 1 })
+	const dbChannels = await TwitchChannelAutoComplete.find({}).sort({ id: 1 }).limit(50)
 
-	const filteredChannels = dbChannels.filter((item: any) => item.avatar === undefined || item.avatar === '')
-
-	for (let i = 0; i * 100 < filteredChannels.length; i++) {
-		const slicedChannels = filteredChannels.slice(i * 100, i * 100 + 100)
+	for (let i = 0; i * 10 < dbChannels.length; i++) {
+		const slicedChannels = dbChannels.slice(i * 10, i * 10 + 10)
 		let query = ''
 		let firstLoop = true
 
@@ -53,9 +51,10 @@ export const saveAvatar = async (token: TwitchToken) => {
 		const resChannels = await getChannel(token, query)
 
 		resChannels.data.forEach(async (item: any) => {
+			console.log(item.login)
 			await TwitchChannelAutoComplete.updateOne({ name: item.login }, { avatar: item.profile_image_url })
 		})
 	}
 
-	return 'dooone'
+	return `done`
 }

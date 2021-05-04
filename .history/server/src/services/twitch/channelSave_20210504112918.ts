@@ -1,6 +1,5 @@
 import { TwitchChannelAutoComplete } from '../../database/models/twitch'
 import { TwitchStream, TwitchToken } from '../../types/twitch'
-import getChannel from './channel'
 import getResponse from './service'
 
 export const saveStreams = async (token: TwitchToken, after?: string) => {
@@ -32,30 +31,18 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 }
 
 export const saveAvatar = async (token: TwitchToken) => {
-	const dbChannels = await TwitchChannelAutoComplete.find({}).sort({ id: 1 })
-
-	const filteredChannels = dbChannels.filter((item: any) => item.avatar === undefined || item.avatar === '')
-
-	for (let i = 0; i * 100 < filteredChannels.length; i++) {
-		const slicedChannels = filteredChannels.slice(i * 100, i * 100 + 100)
-		let query = ''
-		let firstLoop = true
+	const dbChannels = await TwitchChannelAutoComplete.find({}).sort({ id: 1 }).limit(50)
+	const baseUrl = 'https://api.twitch.tv/helix/users?'
+	let query = ''
+	query = 'test'
+	console.log(query.concat('asfdgsd'))
+	for (let i = 0; i * 10 < dbChannels.length; i++) {
+		const slicedChannels = dbChannels.slice(i * 10, i * 10 + 10)
 
 		slicedChannels.forEach((item: any) => {
-			if (firstLoop) {
-				query += `${item.name}`
-				firstLoop = false
-			} else {
-				query += `&login=${item.name}`
-			}
-		})
-
-		const resChannels = await getChannel(token, query)
-
-		resChannels.data.forEach(async (item: any) => {
-			await TwitchChannelAutoComplete.updateOne({ name: item.login }, { avatar: item.profile_image_url })
+			query + `&login=${item.name}`
 		})
 	}
 
-	return 'dooone'
+	return `${baseUrl}${query}`
 }

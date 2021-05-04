@@ -30,7 +30,7 @@ router.get('/channel', async (_, res) => {
 router.get('/avatar', async (_, res) => {
 	const token = await getToken()
 
-	const channels = await saveAvatar(token)
+	const channels = saveAvatar(token)
 
 	res.send(channels)
 })

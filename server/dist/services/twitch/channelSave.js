@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.saveStreams = void 0;
+exports.saveAvatar = exports.saveStreams = void 0;
 const twitch_1 = require("../../database/models/twitch");
+const channel_1 = __importDefault(require("./channel"));
 const service_1 = __importDefault(require("./service"));
 const saveStreams = (token, after) => __awaiter(void 0, void 0, void 0, function* () {
     const baseUrl = `https://api.twitch.tv/helix/streams?first=100`;
@@ -39,4 +40,28 @@ const saveStreams = (token, after) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.saveStreams = saveStreams;
+const saveAvatar = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    const dbChannels = yield twitch_1.TwitchChannelAutoComplete.find({}).sort({ id: 1 });
+    const filteredChannels = dbChannels.filter((item) => item.avatar === undefined || item.avatar === '');
+    for (let i = 0; i * 100 < filteredChannels.length; i++) {
+        const slicedChannels = filteredChannels.slice(i * 100, i * 100 + 100);
+        let query = '';
+        let firstLoop = true;
+        slicedChannels.forEach((item) => {
+            if (firstLoop) {
+                query += `${item.name}`;
+                firstLoop = false;
+            }
+            else {
+                query += `&login=${item.name}`;
+            }
+        });
+        const resChannels = yield channel_1.default(token, query);
+        resChannels.data.forEach((item) => __awaiter(void 0, void 0, void 0, function* () {
+            yield twitch_1.TwitchChannelAutoComplete.updateOne({ name: item.login }, { avatar: item.profile_image_url });
+        }));
+    }
+    return 'dooone';
+});
+exports.saveAvatar = saveAvatar;
 //# sourceMappingURL=channelSave.js.map

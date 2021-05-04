@@ -1,4 +1,0 @@
-GET https://api.twitch.tv/helix/users?login=xqcow
-Content-Type: application/json
-Authorization: Bearer za31whot8h65cxn6t205x3l1ag5sot
-Client-Id: tctkc758owz1egz7tich6z98kyekli

@@ -17,7 +17,7 @@ const getChannel = (token, channel) => __awaiter(void 0, void 0, void 0, functio
     const baseUrl = `https://api.twitch.tv/helix/users?login=${channel}`;
     const res = yield service_1.default(token, baseUrl);
     if (res) {
-        return res.data.data[0];
+        return res.data;
     }
     else {
         return false;

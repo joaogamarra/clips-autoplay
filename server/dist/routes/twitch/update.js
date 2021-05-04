@@ -33,6 +33,11 @@ router.get('/channel', (_, res) => __awaiter(void 0, void 0, void 0, function* (
     streamsLoop();
     res.send(streams);
 }));
+router.get('/avatar', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = yield token_1.default();
+    const channels = yield channelSave_1.saveAvatar(token);
+    res.send(channels);
+}));
 router.get('/category', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = yield token_1.default();
     const categories = yield categorySave_1.default(token);

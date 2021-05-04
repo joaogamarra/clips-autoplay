@@ -34,7 +34,7 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 export const saveAvatar = async (token: TwitchToken) => {
 	const dbChannels = await TwitchChannelAutoComplete.find({}).sort({ id: 1 })
 
-	const filteredChannels = dbChannels.filter((item: any) => item.avatar === undefined || item.avatar === '')
+	const filteredChannels = dbChannels.filter((item: any) => item.avatar === undefined)
 
 	for (let i = 0; i * 100 < filteredChannels.length; i++) {
 		const slicedChannels = filteredChannels.slice(i * 100, i * 100 + 100)

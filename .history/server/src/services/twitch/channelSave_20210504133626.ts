@@ -34,10 +34,12 @@ export const saveStreams = async (token: TwitchToken, after?: string) => {
 export const saveAvatar = async (token: TwitchToken) => {
 	const dbChannels = await TwitchChannelAutoComplete.find({}).sort({ id: 1 })
 
-	const filteredChannels = dbChannels.filter((item: any) => item.avatar === undefined || item.avatar === '')
+	const filteredChannels = dbChannels.filter((item: any) => item.avatar === undefined)
 
-	for (let i = 0; i * 100 < filteredChannels.length; i++) {
-		const slicedChannels = filteredChannels.slice(i * 100, i * 100 + 100)
+	console.log(filteredChannels.length)
+
+	/*for (let i = 0; i * 100 < dbChannels.length; i++) {
+		const slicedChannels = dbChannels.slice(i * 100, i * 100 + 100)
 		let query = ''
 		let firstLoop = true
 
@@ -55,7 +57,7 @@ export const saveAvatar = async (token: TwitchToken) => {
 		resChannels.data.forEach(async (item: any) => {
 			await TwitchChannelAutoComplete.updateOne({ name: item.login }, { avatar: item.profile_image_url })
 		})
-	}
+	}*/
 
-	return 'dooone'
+	return filteredChannels
 }
