@@ -1,0 +1,17 @@
+.suggestions-container {
+	ul {
+		display: flex;
+
+		padding: 0;
+		margin: 0;
+	}
+
+	li {
+		list-style: none;
+	}
+
+	.channel-avatar-container {
+		display: flex;
+		flex-direction: column;
+	}
+}

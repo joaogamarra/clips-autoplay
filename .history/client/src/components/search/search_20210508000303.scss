@@ -1,0 +1,21 @@
+@import 'src/styles/variables.scss';
+.inputs-group {
+	display: flex;
+	flex-wrap: wrap;
+
+	.radio-custom {
+		margin-right: 24px;
+	}
+
+	.title-lg {
+		width: 100%;
+		font-size: 16px;
+		border-bottom: 1px solid $color-purple-main;
+	}
+}
+
+.search-container {
+	margin-top: 250px;
+	display: flex;
+	justify-content: center;
+}

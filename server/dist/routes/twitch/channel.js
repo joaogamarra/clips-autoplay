@@ -22,7 +22,6 @@ const token_1 = __importDefault(require("../../services/twitch/token"));
 const router = express_1.default.Router();
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = queryParsing_1.parseTwitchQuery(req);
-    console.log(query);
     const token = yield token_1.default();
     const channel = yield channel_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, channel, undefined, query);

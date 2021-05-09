@@ -1,0 +1,20 @@
+.inputs-group {
+	display: flex;
+	flex-wrap: wrap;
+
+	.radio-custom {
+		margin-right: 24px;
+	}
+
+	.title-lg {
+		width: 100%;
+		font-size: 18px;
+		font-weight: 400;
+	}
+}
+
+.search-container {
+	margin-top: 250px;
+	display: flex;
+	justify-content: center;
+}

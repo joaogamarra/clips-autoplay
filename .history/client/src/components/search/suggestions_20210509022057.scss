@@ -1,0 +1,22 @@
+.suggestions-container {
+	.title-lg {
+		font-size: 24px;
+		text-align: center;
+	}
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		margin: 0;
+	}
+
+	li {
+		list-style: none;
+	}
+
+	.channel-avatar-container {
+		display: flex;
+		flex-direction: column;
+	}
+}
