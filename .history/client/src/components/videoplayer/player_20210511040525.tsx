@@ -14,20 +14,20 @@ const Player: FC = () => {
 	const [transition, setTransition] = useState('loading')
 	const params = useParams<searchClips>()
 
+	const firstLoad = useCallback(async () => {
+		console.log('first load fn')
+		const data = await getClips(params)
+
+		dispatch(setClips(data))
+		dispatch(setCurrentClip(data.data[0]))
+		dispatch(setClipIndex(0))
+		dispatch(setCurrentSearch(params))
+	}, [dispatch, params])
+
 	useEffect(() => {
 		console.log('use effect call')
 		setTransition('loading')
-
-		const getdata = async () => {
-			dispatch(setClipIndex(0))
-			dispatch(setCurrentSearch(params))
-
-			const data = await getClips(params)
-			dispatch(setClips(data))
-			dispatch(setCurrentClip(data.data[0]))
-		}
-
-		getdata()
+		firstLoad()
 
 		return () => {
 			dispatch(
@@ -39,7 +39,7 @@ const Player: FC = () => {
 			)
 			setTransition('loading')
 		}
-	}, [dispatch, params])
+	}, [])
 
 	const nextClip = useCallback(
 		(direction?: string) => {
@@ -63,8 +63,7 @@ const Player: FC = () => {
 
 	useEffect(() => {
 		const clipsTotal = clips.data.length
-		console.log('total', clipsTotal)
-		console.log('index', clipIndex)
+
 		//Starts the Autoplay if the clips have been set and none has played yet
 		if (clipsTotal > 0 && clipIndex === -1) {
 			nextClip()
@@ -89,6 +88,7 @@ const Player: FC = () => {
 						controls={true}
 						onEnded={() => nextClip()}
 						onLoadedData={() => setTransition('')}
+						onPlaying={() => console.log('playing')}
 					></video>
 					<Loader visible={transition} />
 

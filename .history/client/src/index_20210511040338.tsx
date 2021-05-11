@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 
 import App from './App'
 import { reducer } from './state/reducer'
@@ -7,7 +8,9 @@ import { StateProvider } from './state/state'
 
 ReactDOM.render(
 	<StateProvider reducer={reducer}>
-		<App />
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
 	</StateProvider>,
 	document.getElementById('root')
 )

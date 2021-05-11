@@ -17,14 +17,12 @@ const Player: FC = () => {
 	useEffect(() => {
 		console.log('use effect call')
 		setTransition('loading')
-
 		const getdata = async () => {
-			dispatch(setClipIndex(0))
-			dispatch(setCurrentSearch(params))
-
 			const data = await getClips(params)
 			dispatch(setClips(data))
 			dispatch(setCurrentClip(data.data[0]))
+			dispatch(setClipIndex(0))
+			dispatch(setCurrentSearch(params))
 		}
 
 		getdata()
@@ -39,7 +37,7 @@ const Player: FC = () => {
 			)
 			setTransition('loading')
 		}
-	}, [dispatch, params])
+	}, [params])
 
 	const nextClip = useCallback(
 		(direction?: string) => {
@@ -63,8 +61,7 @@ const Player: FC = () => {
 
 	useEffect(() => {
 		const clipsTotal = clips.data.length
-		console.log('total', clipsTotal)
-		console.log('index', clipIndex)
+
 		//Starts the Autoplay if the clips have been set and none has played yet
 		if (clipsTotal > 0 && clipIndex === -1) {
 			nextClip()
@@ -89,6 +86,7 @@ const Player: FC = () => {
 						controls={true}
 						onEnded={() => nextClip()}
 						onLoadedData={() => setTransition('')}
+						onPlaying={() => console.log('playing')}
 					></video>
 					<Loader visible={transition} />
 

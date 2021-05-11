@@ -19,12 +19,11 @@ const Player: FC = () => {
 		setTransition('loading')
 
 		const getdata = async () => {
-			dispatch(setClipIndex(0))
-			dispatch(setCurrentSearch(params))
-
 			const data = await getClips(params)
 			dispatch(setClips(data))
 			dispatch(setCurrentClip(data.data[0]))
+			dispatch(setClipIndex(0))
+			dispatch(setCurrentSearch(params))
 		}
 
 		getdata()
