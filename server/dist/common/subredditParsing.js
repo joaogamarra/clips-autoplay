@@ -31,7 +31,10 @@ exports.parseSubreddit = parseSubreddit;
 const isVideo = (url) => {
     const twitchAddress = 'https://clips-media-assets2.twitch.tv' || 'http://clips-media-assets2.twitch.tv';
     if (url && url.includes(twitchAddress)) {
-        return url.replace('-social', '').replace('-preview.jpg', '.mp4');
+        return url
+            .replace('-social', '')
+            .replace('-preview.jpg', '.mp4')
+            .replace(twitchAddress, 'https://production.assets.clips.twitchcdn.net');
     }
     else {
         return false;
