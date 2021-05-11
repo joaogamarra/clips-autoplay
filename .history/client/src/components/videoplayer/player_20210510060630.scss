@@ -1,0 +1,11 @@
+@import 'src/styles/variables.scss';
+
+.player-container {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+
+	video {
+		max-height: 50vh;
+	}
+}

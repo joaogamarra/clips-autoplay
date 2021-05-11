@@ -1,0 +1,49 @@
+@import 'src/styles/variables.scss';
+
+.player-container {
+	position: relative;
+	margin-bottom: 36px;
+	width: auto;
+	text-align: center;
+
+	.title-lg {
+		margin-bottom: 12px;
+	}
+
+	video {
+		display: block;
+		margin: 0 auto 12px;
+		width: auto;
+		height: auto;
+		max-height: calc(100vh - 300px);
+	}
+
+	.buttons-container {
+		display: flex;
+		justify-content: center;
+	}
+
+	.btn-clips-control {
+		display: flex;
+		align-items: center;
+		margin: 0 12px;
+		padding: 12px 36px;
+		min-width: 160px;
+		background: $color-purple-main;
+		color: $color-main-white;
+		border-radius: 6px;
+		text-transform: uppercase;
+		font-size: 15px;
+		border: none;
+		outline: none;
+		cursor: pointer;
+
+		&:disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+		}
+
+		&:hover:not(:disabled) {
+		}
+	}
+}

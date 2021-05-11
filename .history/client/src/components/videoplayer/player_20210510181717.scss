@@ -1,0 +1,29 @@
+@import 'src/styles/variables.scss';
+
+.player-container {
+	position: relative;
+	margin-bottom: 36px;
+	width: auto;
+	text-align: center;
+
+	.title-lg {
+		margin-bottom: 12px;
+	}
+
+	video {
+		display: block;
+		margin: 0 auto 12px;
+		width: auto;
+		height: auto;
+		max-height: calc(100vh - 300px);
+	}
+
+	.btn-clips-control {
+		margin: 0 12px;
+		padding: 12px 36px;
+		background: $color-purple-main;
+		color: $color-main-white;
+		border: none;
+		outline: none;
+	}
+}

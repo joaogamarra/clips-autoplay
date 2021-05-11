@@ -1,0 +1,8 @@
+@import 'src/styles/variables.scss';
+
+.player-container {
+	video {
+		width: auto;
+		height: calc(100vh - 200px);
+	}
+}

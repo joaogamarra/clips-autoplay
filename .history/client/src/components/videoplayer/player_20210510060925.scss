@@ -1,0 +1,11 @@
+@import 'src/styles/variables.scss';
+
+.player-container {
+	text-align: center;
+	video {
+		width: auto;
+		height: auto;
+		max-width: 100%;
+		max-height: calc(100vh - 200px);
+	}
+}

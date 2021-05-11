@@ -1,0 +1,62 @@
+@import 'src/styles/variables.scss';
+.suggestion-anim-enter,
+.suggestion-anim-appear {
+	.suggestions-item {
+		opacity: 1 !important;
+	}
+}
+.suggestions-container {
+	.title-lg {
+		margin-bottom: 12px;
+		font-size: 21px;
+		font-weight: 400;
+		text-align: center;
+	}
+	.suggestions-list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 0;
+		margin: 0;
+
+		&:hover {
+			.channel-avatar {
+				filter: grayscale(80%);
+			}
+		}
+
+		.suggestions-item {
+			width: 20%;
+			list-style: none;
+			opacity: 0;
+
+			a {
+				display: block;
+				padding: 20px 12px;
+			}
+
+			&:hover {
+				.channel-avatar {
+					transform: scale(1.2);
+					filter: grayscale(0%);
+				}
+			}
+		}
+	}
+
+	.channel-avatar-container {
+		display: flex;
+		flex-direction: column;
+		text-align: center;
+
+		.channel-avatar {
+			width: 40px;
+			height: 40px;
+			margin-right: 0;
+			margin-bottom: 6px;
+			filter: grayscale(0%);
+
+			transition: all $fast-animation;
+		}
+	}
+}

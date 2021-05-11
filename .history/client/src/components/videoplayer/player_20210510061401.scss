@@ -1,0 +1,12 @@
+@import 'src/styles/variables.scss';
+
+.player-container {
+	position: relative;
+	width: auto;
+	height: auto;
+	max-height: calc(100vh - 200px);
+	video {
+		display: block;
+		margin: 0 auto 12px;
+	}
+}
