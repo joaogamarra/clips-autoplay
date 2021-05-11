@@ -65,7 +65,7 @@ export const convertTimePeriod = (timePeriod: apiTimePeriod) => {
 }
 
 export const parseSort = (sort: string) => {
-	if (sort === 'hot') return sortType.hot
+	if (sort === 'popular') return sortType.popular
 	if (sort === 'top') return sortType.top
 	if (sort === 'new') return sortType.new
 
@@ -77,7 +77,8 @@ export const parseRedditQuery = (req: Request) => {
 	let timePeriod: apiTimePeriod = apiTimePeriod.all
 	let after = ''
 	let timeQuery = ''
-	let sort = sortType.hot
+	let sort = sortType.popular
+	let sortQuery = `&order=${sort}`
 
 	if (typeof req.query.timeperiod === 'string') {
 		timePeriod = parseTimePeriod(req.query.timeperiod)

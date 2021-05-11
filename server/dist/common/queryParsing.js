@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseRedditQuery = exports.convertTimePeriod = exports.parseTimePeriod = exports.parseTwitchQuery = void 0;
+exports.parseRedditQuery = exports.parseSort = exports.convertTimePeriod = exports.parseTimePeriod = exports.parseTwitchQuery = void 0;
+const subreddit_1 = require("../types/subreddit");
 const twitch_1 = require("../types/twitch");
 const parseTwitchQuery = (req) => {
     let query;
@@ -60,18 +61,32 @@ const convertTimePeriod = (timePeriod) => {
     return `&started_at=${startDate}&ended_at=${currentDateFormatted}`;
 };
 exports.convertTimePeriod = convertTimePeriod;
+const parseSort = (sort) => {
+    if (sort === 'hot')
+        return subreddit_1.sortType.hot;
+    if (sort === 'top')
+        return subreddit_1.sortType.top;
+    if (sort === 'new')
+        return subreddit_1.sortType.new;
+    throw new Error('Bad Request: Sort');
+};
+exports.parseSort = parseSort;
 const parseRedditQuery = (req) => {
     let query;
     let timePeriod = twitch_1.apiTimePeriod.all;
     let after = '';
     let timeQuery = '';
+    let sort = subreddit_1.sortType.hot;
     if (typeof req.query.timeperiod === 'string') {
         timePeriod = exports.parseTimePeriod(req.query.timeperiod);
         timeQuery = `&t=${timePeriod}`;
     }
+    if (typeof req.query.sort === 'string') {
+        sort = exports.parseSort(req.query.sort);
+    }
     if (typeof req.query.after === 'string')
         after = `&after=${req.query.after}`;
-    query = `${timeQuery}${after}`;
+    query = `${sort}.json?limit=30${timeQuery}${after}`;
     return query;
 };
 exports.parseRedditQuery = parseRedditQuery;

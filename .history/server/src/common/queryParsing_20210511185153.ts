@@ -1,4 +1,4 @@
-import { sortType } from '../types/subreddit'
+import { orderType } from '@/types/subreddit'
 import { Request } from 'express'
 import { apiTimePeriod } from '../types/twitch'
 
@@ -64,31 +64,25 @@ export const convertTimePeriod = (timePeriod: apiTimePeriod) => {
 	return `&started_at=${startDate}&ended_at=${currentDateFormatted}`
 }
 
-export const parseSort = (sort: string) => {
-	if (sort === 'hot') return sortType.hot
-	if (sort === 'top') return sortType.top
-	if (sort === 'new') return sortType.new
-
-	throw new Error('Bad Request: Sort')
-}
-
 export const parseRedditQuery = (req: Request) => {
 	let query
 	let timePeriod: apiTimePeriod = apiTimePeriod.all
 	let after = ''
 	let timeQuery = ''
-	let sort = sortType.hot
+	let sort = sortType.popular
+	let sortQuery = `&order=${sort}`
 
 	if (typeof req.query.timeperiod === 'string') {
 		timePeriod = parseTimePeriod(req.query.timeperiod)
 		timeQuery = `&t=${timePeriod}`
 	}
 	if (typeof req.query.sort === 'string') {
-		sort = parseSort(req.query.sort)
+		sort = parseTimePeriod(req.query.timeperiod)
+		timeQuery = `&t=${timePeriod}`
 	}
 	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`
 
-	query = `${sort}.json?limit=30${timeQuery}${after}`
+	query = `${timeQuery}${after}`
 
 	return query
 }
