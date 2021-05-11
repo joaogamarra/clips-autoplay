@@ -1,8 +1,7 @@
 import getResponse from './service'
 
-const getSubreddit = async (id: string, query: string) => {
-	const baseUrl = `https://old.reddit.com/r/${id}/top.json?limit=30${query}`
-	console.log(baseUrl)
+const getSubreddit = async (query: string) => {
+	const baseUrl = `https://old.reddit.com/r/livestreamfail/top.json?limit=20${query}`
 
 	const res = await getResponse(baseUrl)
 

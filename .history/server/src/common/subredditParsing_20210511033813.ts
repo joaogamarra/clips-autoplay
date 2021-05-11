@@ -11,9 +11,9 @@ export const parseSubreddit = (data: any) => {
 	if (data.after) parsedData.pagination.cursor = data.after
 
 	data.children?.forEach((item: { data: any }) => {
-		const url = item.data?.media?.oembed?.thumbnail_url
+		const url = item.data.media.oembed.thumbnail_url
 		if (url) {
-			const itemLink = isVideo(url)
+			const itemLink = isVideo(item.data.media.oembed.thumbnail_url)
 
 			if (itemLink) {
 				parsedData.data.push({

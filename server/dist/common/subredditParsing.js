@@ -12,13 +12,17 @@ const parseSubreddit = (data) => {
     if (data.after)
         parsedData.pagination.cursor = data.after;
     (_a = data.children) === null || _a === void 0 ? void 0 : _a.forEach((item) => {
-        const itemLink = exports.isVideo(item.data.media.oembed.thumbnail_url);
-        if (itemLink) {
-            parsedData.data.push({
-                title: item.data.title,
-                video_url: itemLink,
-                comments_url: item.data.permalink,
-            });
+        var _a, _b, _c;
+        const url = (_c = (_b = (_a = item.data) === null || _a === void 0 ? void 0 : _a.media) === null || _b === void 0 ? void 0 : _b.oembed) === null || _c === void 0 ? void 0 : _c.thumbnail_url;
+        if (url) {
+            const itemLink = exports.isVideo(url);
+            if (itemLink) {
+                parsedData.data.push({
+                    title: item.data.title,
+                    video_url: itemLink,
+                    comments_url: item.data.permalink,
+                });
+            }
         }
     });
     return parsedData;
