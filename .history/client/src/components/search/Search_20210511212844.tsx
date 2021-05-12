@@ -56,7 +56,7 @@ const Search: FC = () => {
 		e.preventDefault()
 		let value = localSearch.value
 
-		if (localSearch.mode === searchType.subreddit) value = localSearch.sort
+		if (localSearch.mode === searchType.subreddit) value = 'livestreamfail'
 
 		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${value}`)
 	}
@@ -157,35 +157,33 @@ const Search: FC = () => {
 						checked={localSearch.timePeriod === apiTimePeriod.all}
 					/>
 				</div>
-				{localSearch.mode === searchType.subreddit && (
-					<div className='inputs-group'>
-						<h2 className='title-lg'>Sort by</h2>
-						<RadioCustom
-							id='sort-popular'
-							name='sort'
-							label='Popular Now'
-							value={sortType.hot}
-							onChange={handleSortChange}
-							checked={localSearch.sort === sortType.hot}
-						/>
-						<RadioCustom
-							id='sort-top'
-							name='sort'
-							label='Most Votes'
-							value={sortType.top}
-							onChange={handleSortChange}
-							checked={localSearch.sort === sortType.top}
-						/>
-						<RadioCustom
-							id='sort-new'
-							name='sort'
-							label='Most Recent'
-							value={sortType.new}
-							onChange={handleSortChange}
-							checked={localSearch.sort === sortType.new}
-						/>
-					</div>
-				)}
+				<div className='inputs-group'>
+					<h2 className='title-lg'>Sort by</h2>
+					<RadioCustom
+						id='sort-popular'
+						name='sort'
+						label='Popular Now'
+						value={sortType.hot}
+						onChange={handleSortChange}
+						checked={localSearch.sort === sortType.hot}
+					/>
+					<RadioCustom
+						id='sort-top'
+						name='sort'
+						label='Most Votes'
+						value={sortType.top}
+						onChange={handleSortChange}
+						checked={localSearch.sort === sortType.top}
+					/>
+					<RadioCustom
+						id='sort-new'
+						name='sort'
+						label='Most Recent'
+						value={sortType.new}
+						onChange={handleSortChange}
+						checked={localSearch.sort === sortType.new}
+					/>
+				</div>
 				{localSearch.mode !== searchType.subreddit && (
 					<input
 						className='input-main-search'

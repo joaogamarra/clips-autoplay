@@ -8,6 +8,7 @@ export interface searchClips {
 	mode: searchType
 	value: string
 	timePeriod: apiTimePeriod
+	sort: sortType
 }
 
 export enum apiTimePeriod {
@@ -16,4 +17,10 @@ export enum apiTimePeriod {
 	month = 'month',
 	year = 'year',
 	all = 'all',
+}
+
+export enum sortType {
+	new = 'new',
+	top = 'top',
+	hot = 'hot',
 }

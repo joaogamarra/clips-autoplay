@@ -56,7 +56,7 @@ const Search: FC = () => {
 		e.preventDefault()
 		let value = localSearch.value
 
-		if (localSearch.mode === searchType.subreddit) value = localSearch.sort
+		if (localSearch.mode === searchType.subreddit) value = 'livestreamfail'
 
 		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${value}`)
 	}

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react'
-import { apiTimePeriod, searchType } from 'src/types/search'
+import { apiTimePeriod, searchType, sortType } from 'src/types/search'
 import { Action, State } from 'src/types/state'
 
 const initialState: State = {
@@ -19,6 +19,7 @@ const initialState: State = {
 		mode: searchType.channel,
 		value: '',
 		timePeriod: apiTimePeriod.all,
+		sort: sortType.hot,
 	},
 }
 

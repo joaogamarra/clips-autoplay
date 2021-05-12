@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer } from 'react'
-import { apiTimePeriod, searchType } from 'src/types/search'
+import { apiTimePeriod, searchType, sortType } from 'src/types/search'
 import { Action, State } from 'src/types/state'
 
 const initialState: State = {
@@ -10,27 +10,16 @@ const initialState: State = {
 		},
 	},
 	currentClip: {
-		id: '',
-		url: '',
-		embed_url: '',
-		broadcaster_id: '',
-		broadcaster_name: '',
-		creator_id: '',
-		creator_name: '',
-		video_id: '',
-		game_id: '',
-		language: '',
 		title: '',
-		view_count: 0,
-		created_at: '',
-		thumbnail_url: '',
-		duration: 0,
+		video_url: '',
+		comments_url: '',
 	},
 	clipIndex: -1,
 	currentSearch: {
-		searchMode: searchType.channel,
-		searchValue: '',
-		searchTimePeriod: apiTimePeriod.all,
+		mode: searchType.channel,
+		value: '',
+		timePeriod: apiTimePeriod.all,
+		sort: sortType.hot,
 	},
 }
 

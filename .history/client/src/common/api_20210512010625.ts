@@ -8,7 +8,7 @@ export const getClips = async (search: searchClips, after?: string) => {
 	let query
 
 	if (search.mode === searchType.subreddit) {
-		query = `http://localhost:4000/api/${search.mode}/livestreamfail?timeperiod=${search.timePeriod}&sort=${search.value}`
+		query = `http://localhost:4000/api/${search.mode}/livestreamfail?timeperiod=${search.timePeriod}&sort=${search.sort}`
 	} else {
 		query = `http://localhost:4000/api/twitch/${search.mode}/${search.value}?timeperiod=${search.timePeriod}`
 	}
