@@ -5,7 +5,6 @@ import { setClipIndex, setClips, setCurrentClip, setCurrentSearch, updateClips }
 import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon } from '@primer/octicons-react'
-import redditLogo from '../../assets/logo-reddit.svg'
 
 import './player.scss'
 import Loader from '../common/loader/Loader'
@@ -76,60 +75,47 @@ const Player: FC = () => {
 
 	return (
 		<>
-			<div className='player-container'>
-				{currentClip.video_url && (
-					<>
-						<div className='video-controls'>
-							<h4 className='title-lg'>{currentClip.title}</h4>
+			{currentClip.video_url && (
+				<div className='player-container'>
+					<div className='video-controls'>
+						<h4 className='title-lg'>{currentClip.title}</h4>
 
-							<div className='right-container'>
-								{currentClip.comments_url && (
-									<a
-										className='link-comments'
-										href={`https://reddit.com${currentClip.comments_url}`}
-										target='_blank'
-										rel='noreferrer'
-										title='clip comments'
-									>
-										<img className='' width='25' src={redditLogo} alt='reddit logo' />
-									</a>
-								)}
-								<button
-									className='btn-clips-control btn-left'
-									onClick={() => nextClip('prev')}
-									disabled={clipIndex <= 0}
-								>
-									Previous
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
-								</button>
+						<div className='right-container'>
+							{currentClip.comments_url && (
+								<a href={`https://reddit.com${currentClip.comments_url}`} target='_blank' rel='noreferrer'>
+									Reddit Link
+								</a>
+							)}
+							<button
+								className='btn-clips-control btn-left'
+								onClick={() => nextClip('prev')}
+								disabled={clipIndex <= 0}
+							>
+								Previous
+								<ChevronRightIcon size={20} />
+							</button>
 
-								<button
-									className='btn-clips-control btn-right'
-									onClick={() => nextClip()}
-									disabled={clips.data.length < clipIndex + 1}
-								>
-									Next
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
-								</button>
-							</div>
+							<button
+								className='btn-clips-control btn-right'
+								onClick={() => nextClip()}
+								disabled={clips.data.length < clipIndex + 1}
+							>
+								Next
+								<ChevronRightIcon size={20} />
+							</button>
 						</div>
-
-						<video
-							className={transition}
-							src={currentClip.video_url}
-							autoPlay={true}
-							controls={true}
-							onEnded={() => nextClip()}
-							onLoadedData={() => setTransition('')}
-						></video>
-					</>
-				)}
-				<Loader visible={transition} />
-			</div>
+					</div>
+					<video
+						className={transition}
+						src={currentClip.video_url}
+						autoPlay={true}
+						controls={true}
+						onEnded={() => nextClip()}
+						onLoadedData={() => setTransition('')}
+					></video>
+					<Loader visible={transition} />
+				</div>
+			)}
 		</>
 	)
 }

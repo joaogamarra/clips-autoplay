@@ -85,13 +85,12 @@ const Player: FC = () => {
 							<div className='right-container'>
 								{currentClip.comments_url && (
 									<a
-										className='link-comments'
 										href={`https://reddit.com${currentClip.comments_url}`}
 										target='_blank'
 										rel='noreferrer'
 										title='clip comments'
 									>
-										<img className='' width='25' src={redditLogo} alt='reddit logo' />
+										<img src={redditLogo} alt='reddit logo' />
 									</a>
 								)}
 								<button
@@ -100,9 +99,7 @@ const Player: FC = () => {
 									disabled={clipIndex <= 0}
 								>
 									Previous
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
+									<ChevronRightIcon size={20} />
 								</button>
 
 								<button
@@ -111,9 +108,7 @@ const Player: FC = () => {
 									disabled={clips.data.length < clipIndex + 1}
 								>
 									Next
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
+									<ChevronRightIcon size={20} />
 								</button>
 							</div>
 						</div>

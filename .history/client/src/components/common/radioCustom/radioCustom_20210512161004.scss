@@ -22,7 +22,6 @@
 			border-radius: 50%;
 			box-shadow: inset 0px 0px 0px 2px $color-purple-main;
 			transition: box-shadow $faster-animation;
-			pointer-events: none;
 		}
 
 		&:checked {

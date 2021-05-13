@@ -111,9 +111,7 @@ const Player: FC = () => {
 									disabled={clips.data.length < clipIndex + 1}
 								>
 									Next
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
+									<ChevronRightIcon size={20} />
 								</button>
 							</div>
 						</div>

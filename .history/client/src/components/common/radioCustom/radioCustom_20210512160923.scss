@@ -2,6 +2,7 @@
 
 .radio-custom {
 	display: flex;
+	cursor: pointer;
 	input {
 		position: relative;
 		margin: 0;
@@ -15,14 +16,13 @@
 		&:before {
 			content: '';
 			position: absolute;
-			top: 3px;
+			top: 4px;
 			left: 0;
 			width: 16px;
 			height: 16px;
 			border-radius: 50%;
 			box-shadow: inset 0px 0px 0px 2px $color-purple-main;
 			transition: box-shadow $faster-animation;
-			pointer-events: none;
 		}
 
 		&:checked {

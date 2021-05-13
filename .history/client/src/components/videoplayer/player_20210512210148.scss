@@ -15,8 +15,6 @@
 		background: rgba($color-purple-main, 0.2);
 
 		.title-lg {
-			display: flex;
-			align-items: center;
 			padding: 6px 0;
 			font-weight: 400;
 		}
@@ -70,16 +68,8 @@
 		cursor: pointer;
 		overflow: hidden;
 
-		.icon-container {
-			display: block;
-			width: 20px;
-			height: 20px;
-		}
-
 		svg {
 			position: relative;
-			width: 20px;
-			height: 20px;
 		}
 
 		&.btn-left {

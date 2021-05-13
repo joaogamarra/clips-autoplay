@@ -6,18 +6,16 @@
 	width: 100%;
 	max-width: 1200px;
 
+	background: rgba($color-purple-main, 0.2);
+
 	.video-controls {
 		display: flex;
 		justify-content: space-between;
-		align-items: stretch;
+		align-items: center;
 		padding: 0 0 0 12px;
-		border-bottom: 1px solid $color-main-black;
-		background: rgba($color-purple-main, 0.2);
+		border-bottom: 1px solid $color-main-white;
 
 		.title-lg {
-			display: flex;
-			align-items: center;
-			padding: 6px 0;
 			font-weight: 400;
 		}
 	}
@@ -36,59 +34,33 @@
 
 	.loader {
 		position: absolute;
-		top: 300px;
+		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 	}
 
 	.right-container {
-		position: relative;
 		display: flex;
-		align-items: stretch;
 	}
 
-	.link-comments {
-		display: flex;
-		align-items: center;
-
-		height: 100%;
-		padding: 0 12px;
-	}
 	.btn-clips-control {
 		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-left: 2px;
+		margin-left: 1px;
 		padding: 12px 36px;
-		background: rgba($color-main-black, 0.5);
+		background: rgba($color-main-white, 0.3);
 		color: $color-main-white;
 		text-transform: uppercase;
-		font-size: 14px;
+		font-size: 15px;
 		border: none;
 		outline: none;
 		cursor: pointer;
 		overflow: hidden;
 
-		.icon-container {
-			display: block;
-			width: 20px;
-			height: 20px;
-		}
-
-		svg {
-			position: relative;
-			width: 20px;
-			height: 20px;
-		}
-
 		&.btn-left {
 			display: flex;
-			flex-direction: row-reverse;
-
-			svg {
-				transform: rotate(180deg);
-			}
 		}
 
 		&:disabled {
@@ -97,23 +69,9 @@
 		}
 
 		&:hover:not(:disabled) {
-			background: rgba($color-purple-main, 0.2);
 			svg {
-				animation: controlhover 300ms;
+				top: 50%;
 			}
 		}
-	}
-}
-
-@keyframes controlhover {
-	0%,
-	100% {
-		top: 0;
-	}
-	50% {
-		top: 150%;
-	}
-	51% {
-		top: -150%;
 	}
 }

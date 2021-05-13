@@ -45,6 +45,7 @@
 		position: relative;
 		display: flex;
 		align-items: stretch;
+		justify-content: flex-start;
 	}
 
 	.link-comments {
@@ -69,12 +70,6 @@
 		outline: none;
 		cursor: pointer;
 		overflow: hidden;
-
-		.icon-container {
-			display: block;
-			width: 20px;
-			height: 20px;
-		}
 
 		svg {
 			position: relative;

@@ -91,7 +91,7 @@ const Player: FC = () => {
 										rel='noreferrer'
 										title='clip comments'
 									>
-										<img className='' width='25' src={redditLogo} alt='reddit logo' />
+										<img className='' width='30' src={redditLogo} alt='reddit logo' />
 									</a>
 								)}
 								<button
@@ -100,9 +100,7 @@ const Player: FC = () => {
 									disabled={clipIndex <= 0}
 								>
 									Previous
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
+									<ChevronRightIcon size={20} />
 								</button>
 
 								<button
@@ -111,9 +109,7 @@ const Player: FC = () => {
 									disabled={clips.data.length < clipIndex + 1}
 								>
 									Next
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
+									<ChevronRightIcon size={20} />
 								</button>
 							</div>
 						</div>
