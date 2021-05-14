@@ -1,0 +1,4 @@
+GET https://api.twitch.tv/helix/users?login=3y6dm5l53mk5qltlrta2fnmxao55mc
+Content-Type: application/json
+Authorization: Bearer pyacj50z9rtrc0gyfttlf6i1xz031g
+Client-Id: tctkc758owz1egz7tich6z98kyekli

@@ -15,14 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const baseUrl = `https://id.twitch.tv/oauth2/token?client_id=${process.env.TWITCH_CLIENT_ID}&client_secret=${process.env.TWITCH_SECRET}&grant_type=client_credentials`;
 const getToken = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const res = yield axios_1.default.post(baseUrl);
-        return res.data;
-    }
-    catch (e) {
-        console.log(e);
-        return false;
-    }
+    const res = yield axios_1.default.post(baseUrl);
+    return res.data;
 });
 exports.default = getToken;
 //# sourceMappingURL=token.js.map

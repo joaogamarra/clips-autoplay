@@ -1,0 +1,3 @@
+
+GET http://localhost:4000/api/twitch/channel/ludwigasfasg
+Content-Type: application/json

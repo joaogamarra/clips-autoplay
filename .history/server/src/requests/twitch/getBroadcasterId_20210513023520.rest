@@ -1,0 +1,4 @@
+GET https://api.twitch.tv/helix/users?login=saeldbhryn
+Content-Type: application/json
+Authorization: Bearer 3y6dm5l53mk5qltlrta2fnmxao55mc
+Client-Id: tctkc758owz1egz7tich6z98kyekli

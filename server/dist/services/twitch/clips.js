@@ -20,10 +20,16 @@ const getClips = (token, channel, category, query) => __awaiter(void 0, void 0, 
     const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=5`;
     const res = yield service_1.default(token, baseUrl);
     if (res) {
-        return res.data;
+        const data = res.data;
+        if (data && data.data.length > 0) {
+            return data;
+        }
+        else {
+            throw new Error('no clips');
+        }
     }
     else {
-        return false;
+        throw new Error('no clips');
     }
 });
 exports.default = getClips;

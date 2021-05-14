@@ -25,7 +25,7 @@ router.get('/livestreamfail', (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.send(dataParsed);
     }
     else {
-        res.status(404).end();
+        throw new Error('not found');
     }
 }));
 exports.default = router;

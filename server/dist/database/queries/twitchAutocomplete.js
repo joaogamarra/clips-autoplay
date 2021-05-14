@@ -19,7 +19,6 @@ const channelsAutoComplete = (query) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.channelsAutoComplete = channelsAutoComplete;
 const categoriesAutoComplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(query);
     const res = yield twitch_1.TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query) })
         .sort({ rank: -1 })
         .limit(10);

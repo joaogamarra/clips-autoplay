@@ -17,10 +17,16 @@ const getChannel = (token, channel) => __awaiter(void 0, void 0, void 0, functio
     const baseUrl = `https://api.twitch.tv/helix/users?login=${channel}`;
     const res = yield service_1.default(token, baseUrl);
     if (res) {
-        return res.data.data[0];
+        const data = res.data.data[0];
+        if (data) {
+            return data;
+        }
+        else {
+            throw new Error('not found');
+        }
     }
     else {
-        return false;
+        throw new Error('not found');
     }
 });
 exports.default = getChannel;
