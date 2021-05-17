@@ -69,7 +69,7 @@ const Player: FC = () => {
 	const loadMoreClips = useCallback(async () => {
 		const after = clips.pagination.cursor
 		if (after !== '' && !loadingClips) {
-			console.log('loading new clips')
+			setLoadingClips(true)
 			const data = await getClips(currentSearch, after)
 
 			if ('error' in data) {
@@ -89,7 +89,6 @@ const Player: FC = () => {
 		}
 
 		//When there are clips and the currentClip is reaching the last fetch more
-		//------Todo - Increase Margin before deploy
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
 			loadMoreClips()
 		}

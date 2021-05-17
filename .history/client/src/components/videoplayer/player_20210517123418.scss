@@ -116,12 +116,12 @@
 	}
 
 	p {
-		margin-bottom: 48px;
+		margin-bottom: 24px;
 	}
+}
 
-	.button-generic {
-		display: inline-block;
-	}
+.button-generic {
+	background-color: $color-purple-main;
 }
 
 @keyframes controlhover {

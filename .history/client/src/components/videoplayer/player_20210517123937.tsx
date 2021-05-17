@@ -16,7 +16,6 @@ const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
 	const [transition, setTransition] = useState('loading')
 	const [error, setError] = useState(false)
-	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
 
 	useEffect(() => {
@@ -55,31 +54,25 @@ const Player: FC = () => {
 		(direction?: string) => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+			setTransition('loading')
 
-			if (newClipIndex <= clips.data.length) {
-				setTransition('loading')
-
-				dispatch(setCurrentClip(clipsData[newClipIndex]))
-				dispatch(setClipIndex(newClipIndex))
-			}
+			dispatch(setCurrentClip(clipsData[newClipIndex]))
+			dispatch(setClipIndex(newClipIndex))
 		},
 		[clipIndex, clips, dispatch]
 	)
 
 	const loadMoreClips = useCallback(async () => {
 		const after = clips.pagination.cursor
-		if (after !== '' && !loadingClips) {
-			console.log('loading new clips')
-			const data = await getClips(currentSearch, after)
 
-			if ('error' in data) {
-				console.log(data.error)
-			} else {
-				dispatch(updateClips(data))
-				setLoadingClips(true)
-			}
+		const data = await getClips(currentSearch, after)
+
+		if ('error' in data) {
+			console.log(data.error)
+		} else {
+			dispatch(updateClips(data))
 		}
-	}, [clips.pagination.cursor, currentSearch, dispatch, loadingClips])
+	}, [clips, currentSearch, dispatch])
 
 	useEffect(() => {
 		const clipsTotal = clips.data.length
@@ -89,7 +82,6 @@ const Player: FC = () => {
 		}
 
 		//When there are clips and the currentClip is reaching the last fetch more
-		//------Todo - Increase Margin before deploy
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
 			loadMoreClips()
 		}
@@ -129,7 +121,7 @@ const Player: FC = () => {
 								<button
 									className='btn-clips-control btn-right'
 									onClick={() => nextClip()}
-									disabled={clips.data.length <= clipIndex + 1}
+									disabled={clips.data.length < clipIndex + 1}
 								>
 									Next
 									<i className='icon-container'>

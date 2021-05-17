@@ -17,13 +17,8 @@ export const getClips = async (search: searchClips, after?: string) => {
 		if (!after) addFavourite(search)
 
 		return data
-	} catch ({ response }) {
-		return {
-			error: {
-				status: response.status,
-				message: response.statusText,
-			},
-		}
+	} catch (error) {
+		console.log(error.response)
 	}
 }
 

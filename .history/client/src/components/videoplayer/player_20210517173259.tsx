@@ -56,7 +56,9 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
-			if (newClipIndex <= clips.data.length) {
+			console.log(newClipIndex, clips.data.length)
+
+			if (newClipIndex < clips.data.length) {
 				setTransition('loading')
 
 				dispatch(setCurrentClip(clipsData[newClipIndex]))
@@ -70,6 +72,7 @@ const Player: FC = () => {
 		const after = clips.pagination.cursor
 		if (after !== '' && !loadingClips) {
 			console.log('loading new clips')
+			setLoadingClips(true)
 			const data = await getClips(currentSearch, after)
 
 			if ('error' in data) {
@@ -89,7 +92,6 @@ const Player: FC = () => {
 		}
 
 		//When there are clips and the currentClip is reaching the last fetch more
-		//------Todo - Increase Margin before deploy
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
 			loadMoreClips()
 		}
@@ -129,7 +131,7 @@ const Player: FC = () => {
 								<button
 									className='btn-clips-control btn-right'
 									onClick={() => nextClip()}
-									disabled={clips.data.length <= clipIndex + 1}
+									disabled={clips.data.length < clipIndex + 1}
 								>
 									Next
 									<i className='icon-container'>

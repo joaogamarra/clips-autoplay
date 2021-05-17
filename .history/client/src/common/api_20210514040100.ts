@@ -21,7 +21,7 @@ export const getClips = async (search: searchClips, after?: string) => {
 		return {
 			error: {
 				status: response.status,
-				message: response.statusText,
+				message: response.message,
 			},
 		}
 	}

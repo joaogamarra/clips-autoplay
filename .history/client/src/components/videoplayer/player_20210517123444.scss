@@ -118,10 +118,11 @@
 	p {
 		margin-bottom: 48px;
 	}
+}
 
-	.button-generic {
-		display: inline-block;
-	}
+.button-generic {
+	padding: 12px 24px;
+	background-color: $color-purple-main;
 }
 
 @keyframes controlhover {

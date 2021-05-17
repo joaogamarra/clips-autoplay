@@ -56,6 +56,8 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
+			console.log(newClipIndex, clips.data.length - 1)
+
 			if (newClipIndex <= clips.data.length) {
 				setTransition('loading')
 
@@ -70,6 +72,7 @@ const Player: FC = () => {
 		const after = clips.pagination.cursor
 		if (after !== '' && !loadingClips) {
 			console.log('loading new clips')
+			setLoadingClips(true)
 			const data = await getClips(currentSearch, after)
 
 			if ('error' in data) {
@@ -89,7 +92,6 @@ const Player: FC = () => {
 		}
 
 		//When there are clips and the currentClip is reaching the last fetch more
-		//------Todo - Increase Margin before deploy
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
 			loadMoreClips()
 		}

@@ -35,8 +35,7 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 				</ul>
 			) : (
 				<p className='no-suggestions'>
-					No suggestions found but you can still search using the button since not every user is in our
-					database.
+					No suggestions found but you can still search since not every user is in our database
 				</p>
 			)}
 		</section>

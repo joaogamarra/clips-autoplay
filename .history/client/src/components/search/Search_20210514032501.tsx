@@ -5,7 +5,6 @@ import { apiTimePeriod, searchClips, searchType, sortType } from 'src/types/sear
 import { AutocompleteObj } from 'src/types/twitch'
 import RadioCustom from '../common/radioCustom/RadioCustom'
 import './search.scss'
-import 'src/styles/button-generic.scss'
 import Suggestions from './Suggestions'
 
 const Search: FC = () => {
@@ -202,7 +201,7 @@ const Search: FC = () => {
 				)}
 				<button
 					type='submit'
-					className='button-generic'
+					className='btn-submit'
 					onClick={formSubmit}
 					disabled={localSearch.value === '' && localSearch.mode !== searchType.subreddit}
 				>

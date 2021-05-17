@@ -4,6 +4,7 @@ import { AutocompleteObj, ResponseClips } from 'src/types/twitch'
 import { addFavourite } from './localstorage'
 
 export const getClips = async (search: searchClips, after?: string) => {
+	if (!after) addFavourite(search)
 	let query
 
 	if (search.mode === searchType.subreddit) {
@@ -14,16 +15,9 @@ export const getClips = async (search: searchClips, after?: string) => {
 	if (after) query = `${query}&after=${after}`
 	try {
 		const { data }: { data: ResponseClips } = await axios.get(query)
-		if (!after) addFavourite(search)
-
 		return data
-	} catch ({ response }) {
-		return {
-			error: {
-				status: response.status,
-				message: response.statusText,
-			},
-		}
+	} catch (error) {
+		console.log(error.response)
 	}
 }
 
