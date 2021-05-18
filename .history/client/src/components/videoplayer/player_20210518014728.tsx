@@ -56,6 +56,8 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
+			console.log(clipsData[clipIndex].title)
+
 			//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
 			if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
 				nextClip()

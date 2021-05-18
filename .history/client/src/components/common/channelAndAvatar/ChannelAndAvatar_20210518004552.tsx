@@ -12,7 +12,7 @@ const ChannelAndAvatar: FC<Props> = ({ src, name }) => {
 		'https://static-cdn.jtvnw.net/user-default-pictures-uv/cdd517fe-def4-11e9-948e-784f43822e80-profile_image-70x70.png'
 
 	const errorHandler = (e: any) => {
-		e.target.src = defaultAvatar
+		console.log(e)
 	}
 
 	return (

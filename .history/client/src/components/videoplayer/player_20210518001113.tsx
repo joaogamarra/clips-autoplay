@@ -153,7 +153,6 @@ const Player: FC = () => {
 							controls={true}
 							onEnded={() => nextClip()}
 							onLoadedData={() => setTransition('')}
-							onError={() => nextClip()}
 						></video>
 					</>
 				)}

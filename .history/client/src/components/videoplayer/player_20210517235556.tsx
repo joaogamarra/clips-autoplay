@@ -56,16 +56,11 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
-			//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
-			if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
-				nextClip()
-			} else {
-				if (newClipIndex <= clips.data.length) {
-					setTransition('loading')
+			if (newClipIndex <= clips.data.length) {
+				setTransition('loading')
 
-					dispatch(setCurrentClip(clipsData[newClipIndex]))
-					dispatch(setClipIndex(newClipIndex))
-				}
+				dispatch(setCurrentClip(clipsData[newClipIndex]))
+				dispatch(setClipIndex(newClipIndex))
 			}
 		},
 		[clipIndex, clips, dispatch]
@@ -97,6 +92,7 @@ const Player: FC = () => {
 
 		//When there are clips and the currentClip is reaching the last fetch more
 		//------Todo - Increase Margin before deploy
+		console.log(clipsTotal)
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
 			loadMoreClips()
 		}
@@ -153,7 +149,6 @@ const Player: FC = () => {
 							controls={true}
 							onEnded={() => nextClip()}
 							onLoadedData={() => setTransition('')}
-							onError={() => nextClip()}
 						></video>
 					</>
 				)}

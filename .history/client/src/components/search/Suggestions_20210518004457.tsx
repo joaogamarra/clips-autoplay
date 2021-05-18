@@ -18,8 +18,8 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 				<ul className='suggestions-list'>
 					{localSearch.mode && (
 						<>
-							{suggestions.map(({ avatar, name }) => (
-								<li className='suggestions-item' key={name}>
+							{suggestions.map(({ avatar, name, id }, index) => (
+								<li className='suggestions-item' key={id}>
 									<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}`}>
 										<ChannelAndAvatar src={avatar} name={name} />
 									</Link>
