@@ -11,17 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.categoriesDefault = exports.channelsDefault = exports.categoryIncreaseRanking = exports.channelIncreaseRanking = exports.categoriesAutoComplete = exports.channelsAutoComplete = void 0;
 const twitch_1 = require("../models/twitch");
+const channelsLimit = 8;
 const channelsAutoComplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield twitch_1.TwitchChannelAutoComplete.find({ name: new RegExp('^' + query) })
         .sort({ rank: -1 })
-        .limit(10);
+        .limit(channelsLimit);
     return res;
 });
 exports.channelsAutoComplete = channelsAutoComplete;
 const categoriesAutoComplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const res = yield twitch_1.TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query) })
         .sort({ rank: -1 })
-        .limit(10);
+        .limit(channelsLimit);
     return res;
 });
 exports.categoriesAutoComplete = categoriesAutoComplete;
@@ -46,11 +47,11 @@ const categoryIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.categoryIncreaseRanking = categoryIncreaseRanking;
 const channelsDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield twitch_1.TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(10);
+    return yield twitch_1.TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit);
 });
 exports.channelsDefault = channelsDefault;
 const categoriesDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield twitch_1.TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(10);
+    return yield twitch_1.TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit);
 });
 exports.categoriesDefault = categoriesDefault;
 //# sourceMappingURL=twitchAutoComplete.js.map
