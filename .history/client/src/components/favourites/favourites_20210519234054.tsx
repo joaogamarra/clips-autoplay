@@ -47,7 +47,7 @@ const Favourites: FC = () => {
 				<aside className={`favourites-bar ${favouritesVisible === true ? 'is-visible' : ''}`}>
 					<div className='favourites-container'>
 						<h5 className='title-lg'>
-							<Link to='/' title='Homepage' onClick={handleFavouriteClick}>
+							<Link to='/' title='Homepage'>
 								<HomeFillIcon size={30} className='sidebar-icon' />
 								<span className='title-text'>Homepage</span>
 							</Link>

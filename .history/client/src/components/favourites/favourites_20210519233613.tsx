@@ -31,11 +31,6 @@ const Favourites: FC = () => {
 		})
 	}, [])
 
-	const handleFavouriteClick = () => {
-		setFavouritesVisible(false)
-		document.querySelector('.favourites-bar')?.scrollTo({ top: 0 })
-	}
-
 	const handleRemove = (search: searchClips) => {
 		removeFavourite(search)
 		loadFavourites()
@@ -47,7 +42,7 @@ const Favourites: FC = () => {
 				<aside className={`favourites-bar ${favouritesVisible === true ? 'is-visible' : ''}`}>
 					<div className='favourites-container'>
 						<h5 className='title-lg'>
-							<Link to='/' title='Homepage' onClick={handleFavouriteClick}>
+							<Link to='/' title='Homepage'>
 								<HomeFillIcon size={30} className='sidebar-icon' />
 								<span className='title-text'>Homepage</span>
 							</Link>
@@ -65,7 +60,7 @@ const Favourites: FC = () => {
 									<li className='favourites-item' key={search.value}>
 										<Link
 											to={`/${search.mode}/${apiTimePeriod.day}/${search.value}`}
-											onClick={handleFavouriteClick}
+											onClick={() => setFavouritesVisible(false)}
 										>
 											<ChannelAndAvatar src={avatar} name={search.value} />
 										</Link>

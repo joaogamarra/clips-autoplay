@@ -9,15 +9,13 @@
 	z-index: 100;
 	background: $color-main-black;
 	box-shadow: 1px 0px 5px 1px rgba(0, 0, 0, 0.41);
-	overflow: hidden;
+	overflow: auto;
 	transform: translateY(calc(54px - 100vh));
 	transition: transform 200ms ease-in-out;
-	scroll-behavior: smooth;
+
 	@media only screen and (max-width: $screen-xs) {
 		&.is-visible {
 			transform: translateY(0);
-			overflow-y: auto;
-			overflow-x: hidden;
 
 			.favourites-container {
 				transform: translateY(0);
@@ -31,8 +29,6 @@
 
 		&.is-visible {
 			transform: translateX(0);
-			overflow-y: auto;
-			overflow-x: hidden;
 
 			.favourites-container {
 				transform: translateX(0);
@@ -57,6 +53,7 @@
 .favourites-container {
 	display: flex;
 	flex-wrap: wrap;
+	padding-top: 6px;
 	width: 100%;
 	transform: translateY(calc(100vh - 54px));
 	position: absolute;
@@ -72,7 +69,6 @@
 		margin-top: 0;
 		margin-bottom: 12px;
 		width: 50%;
-		height: 54px;
 		text-align: left;
 		font-size: 16px;
 		font-weight: 600;
@@ -147,14 +143,6 @@
 			width: auto;
 			margin-bottom: 6px;
 		}
-	}
-
-	@media only screen and (min-width: $screen-sm) {
-		padding-top: 48px;
-
-		.title-lg {
-			margin-bottom: 24px;
-		}
 
 		.favourites-list {
 			&:hover {
@@ -180,5 +168,9 @@
 				}
 			}
 		}
+	}
+
+	@media only screen and (min-width: $screen-sm) {
+		padding-top: 48px;
 	}
 }

@@ -10,6 +10,10 @@ const Favourites: FC = () => {
 	const [favourites, setFavourites] = useState<{ search: searchClips; rank: number; avatar: string }[]>([])
 	const [favouritesVisible, setFavouritesVisible] = useState(false)
 
+	document.querySelector('body')?.addEventListener('click', (e) => {
+		console.log(e)
+	})
+
 	const loadFavourites = useCallback(() => {
 		const favouritesRes = getFavourites()
 
@@ -19,22 +23,6 @@ const Favourites: FC = () => {
 	useEffect(() => {
 		loadFavourites()
 	}, [loadFavourites])
-
-	useEffect(() => {
-		document.querySelector('body')?.addEventListener('click', (e) => {
-			const target = e.target as Element
-
-			if (!target.closest('.favourites-container')) {
-				setFavouritesVisible(false)
-				document.querySelector('.favourites-bar')?.scrollTo({ top: 0 })
-			}
-		})
-	}, [])
-
-	const handleFavouriteClick = () => {
-		setFavouritesVisible(false)
-		document.querySelector('.favourites-bar')?.scrollTo({ top: 0 })
-	}
 
 	const handleRemove = (search: searchClips) => {
 		removeFavourite(search)
@@ -47,7 +35,7 @@ const Favourites: FC = () => {
 				<aside className={`favourites-bar ${favouritesVisible === true ? 'is-visible' : ''}`}>
 					<div className='favourites-container'>
 						<h5 className='title-lg'>
-							<Link to='/' title='Homepage' onClick={handleFavouriteClick}>
+							<Link to='/' title='Homepage'>
 								<HomeFillIcon size={30} className='sidebar-icon' />
 								<span className='title-text'>Homepage</span>
 							</Link>
@@ -64,8 +52,8 @@ const Favourites: FC = () => {
 								{favourites.map(({ search, avatar }) => (
 									<li className='favourites-item' key={search.value}>
 										<Link
-											to={`/${search.mode}/${apiTimePeriod.day}/${search.value}`}
-											onClick={handleFavouriteClick}
+											to={`/${search.mode}/${apiTimePeriod.week}/${search.value}`}
+											onClick={() => setFavouritesVisible(false)}
 										>
 											<ChannelAndAvatar src={avatar} name={search.value} />
 										</Link>

@@ -9,15 +9,13 @@
 	z-index: 100;
 	background: $color-main-black;
 	box-shadow: 1px 0px 5px 1px rgba(0, 0, 0, 0.41);
-	overflow: hidden;
+	overflow: auto;
 	transform: translateY(calc(54px - 100vh));
 	transition: transform 200ms ease-in-out;
-	scroll-behavior: smooth;
+
 	@media only screen and (max-width: $screen-xs) {
 		&.is-visible {
 			transform: translateY(0);
-			overflow-y: auto;
-			overflow-x: hidden;
 
 			.favourites-container {
 				transform: translateY(0);
@@ -25,22 +23,7 @@
 		}
 	}
 
-	@media only screen and (min-width: $screen-xs) and (max-width: $screen-sm) {
-		width: $open-favourites-width;
-		transform: translateX($closed-favourites-width - $open-favourites-width);
-
-		&.is-visible {
-			transform: translateX(0);
-			overflow-y: auto;
-			overflow-x: hidden;
-
-			.favourites-container {
-				transform: translateX(0);
-			}
-		}
-	}
-
-	@media only screen and (min-width: $screen-sm) {
+	@media only screen and (min-width: $screen-xs) {
 		width: $open-favourites-width;
 		transform: translateX($closed-favourites-width - $open-favourites-width);
 
@@ -57,12 +40,15 @@
 .favourites-container {
 	display: flex;
 	flex-wrap: wrap;
+	padding-top: 6px;
 	width: 100%;
 	transform: translateY(calc(100vh - 54px));
 	position: absolute;
 	top: 0;
 	left: 0;
+
 	height: 100%;
+
 	transition: transform $faster-animation;
 
 	.title-lg {
@@ -72,8 +58,6 @@
 		margin-top: 0;
 		margin-bottom: 12px;
 		width: 50%;
-		height: 54px;
-		text-align: left;
 		font-size: 16px;
 		font-weight: 600;
 		letter-spacing: 1.2px;
@@ -139,20 +123,12 @@
 
 	@media only screen and (min-width: $screen-xs) {
 		display: block;
-		padding-top: 12px;
+		padding-top: 48px;
 		width: $open-favourites-width;
 		transform: translateX($open-favourites-width - $closed-favourites-width);
 
 		.title-lg {
 			width: auto;
-			margin-bottom: 6px;
-		}
-	}
-
-	@media only screen and (min-width: $screen-sm) {
-		padding-top: 48px;
-
-		.title-lg {
 			margin-bottom: 24px;
 		}
 
