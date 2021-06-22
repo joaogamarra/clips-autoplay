@@ -12,6 +12,8 @@ const router = express.Router()
 router.get('/channel', async (_, res) => {
 	const suggestions = await channelsDefault()
 
+	console.log(suggestions)
+
 	res.send(suggestions)
 })
 

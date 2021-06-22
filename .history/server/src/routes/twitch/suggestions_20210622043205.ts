@@ -12,6 +12,8 @@ const router = express.Router()
 router.get('/channel', async (_, res) => {
 	const suggestions = await channelsDefault()
 
+	console.log(suggestions)
+
 	res.send(suggestions)
 })
 
@@ -22,7 +24,6 @@ router.get('/channel/:id', async (req, res) => {
 })
 
 router.get('/category', async (_, res) => {
-	console.log('hey')
 	const suggestions = await categoriesDefault()
 
 	res.send(suggestions)

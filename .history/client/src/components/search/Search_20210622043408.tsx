@@ -1,20 +1,20 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
-import { Link, useHistory, useParams } from 'react-router-dom'
+import React, { FC, useCallback, useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { getSuggestions } from 'src/common/api'
-import { apiTimePeriod, searchClips, searchType } from 'src/types/search'
+import { apiTimePeriod, searchClips, searchType, sortType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
-import ChannelAndAvatar from '../common/channelAndAvatar/ChannelAndAvatar'
 import RadioCustom from '../common/radioCustom/RadioCustom'
 import './search.scss'
+import 'src/styles/button-generic.scss'
+import Suggestions from './Suggestions'
 
 const Search: FC = () => {
-	const params = useParams<searchClips>()
 	const [localSearch, setLocalSearch] = useState<searchClips>({
 		mode: searchType.channel,
 		value: '',
-		timePeriod: apiTimePeriod.week,
+		timePeriod: apiTimePeriod.day,
+		sort: sortType.hot,
 	})
-	let initialLoad = useRef(true)
 
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
 	const [channelSuggestions, setChannelSuggestions] = useState<AutocompleteObj[]>([])
@@ -22,41 +22,36 @@ const Search: FC = () => {
 	const history = useHistory()
 
 	const updateSuggestions = useCallback(async () => {
-		console.log(initialLoad)
-		if (initialLoad.current && params.mode) {
-			setLocalSearch(params)
-			const suggestions: any = await getSuggestions(params.mode, params.value)
+		if (localSearch.value.length > 0 && localSearch.mode !== searchType.subreddit) {
+			const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
+
 			suggestions && setSearchSuggestions(suggestions)
-
-			initialLoad.current = false
 		} else {
-			if (localSearch.value.length > 0) {
-				const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
-
-				suggestions && setSearchSuggestions(suggestions)
-			} else {
-				if (localSearch.mode === searchType.channel) {
-					if (channelSuggestions.length > 0) {
-						setSearchSuggestions(channelSuggestions)
-					} else {
-						const suggestions: any = await getSuggestions(localSearch.mode)
-						suggestions && setSearchSuggestions(suggestions)
-						suggestions && setChannelSuggestions(suggestions)
+			if (localSearch.mode === searchType.channel) {
+				if (channelSuggestions.length > 0) {
+					setSearchSuggestions(channelSuggestions)
+				} else {
+					const suggestions: any = await getSuggestions(localSearch.mode)
+					if (suggestions.length > 0) {
+						setSearchSuggestions(suggestions)
+						setChannelSuggestions(suggestions)
 					}
 				}
+			}
 
-				if (localSearch.mode === searchType.category) {
-					if (categorySuggestions.length > 0) {
-						setSearchSuggestions(categorySuggestions)
-					} else {
-						const suggestions: any = await getSuggestions(localSearch.mode)
-						suggestions && setSearchSuggestions(suggestions)
-						suggestions && setCategorySuggestions(suggestions)
+			if (localSearch.mode === searchType.category) {
+				if (categorySuggestions.length > 0) {
+					setSearchSuggestions(categorySuggestions)
+				} else {
+					const suggestions: any = await getSuggestions(localSearch.mode)
+					if (suggestions.length > 0) {
+						setSearchSuggestions(suggestions)
+						setCategorySuggestions(suggestions)
 					}
 				}
 			}
 		}
-	}, [categorySuggestions, channelSuggestions, localSearch.mode, localSearch.value, params])
+	}, [categorySuggestions, channelSuggestions, localSearch.mode, localSearch.value])
 
 	useEffect(() => {
 		updateSuggestions()
@@ -66,9 +61,9 @@ const Search: FC = () => {
 		e.preventDefault()
 		let value = localSearch.value
 
-		if (localSearch.mode === searchType.subreddit) value = 'livestreamfail'
+		if (localSearch.mode === searchType.subreddit) value = localSearch.sort
 
-		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${localSearch.value}/${value}`)
+		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${value}`)
 	}
 
 	const handleSearchTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +81,12 @@ const Search: FC = () => {
 	const handleSearchChange = async (e: React.FormEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value
 		setLocalSearch({ ...localSearch, value: val })
+	}
+
+	const handleSortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const val = e.currentTarget.value as sortType
+
+		setLocalSearch({ ...localSearch, sort: val })
 	}
 
 	return (
@@ -118,13 +119,12 @@ const Search: FC = () => {
 						checked={localSearch.mode === searchType.subreddit}
 					/>
 				</div>
-				<br></br>
 				<div className='inputs-group'>
 					<h2 className='title-lg'>Filter by Time</h2>
 					<RadioCustom
 						id='timePeriod-day'
 						name='timePeriod'
-						label='Last Day'
+						label='Day'
 						value={apiTimePeriod.day}
 						onChange={handleTimePeriodChange}
 						checked={localSearch.timePeriod === apiTimePeriod.day}
@@ -132,7 +132,7 @@ const Search: FC = () => {
 					<RadioCustom
 						id='timePeriod-week'
 						name='timePeriod'
-						label='Last Week'
+						label='Week'
 						value={apiTimePeriod.week}
 						onChange={handleTimePeriodChange}
 						checked={localSearch.timePeriod === apiTimePeriod.week}
@@ -140,7 +140,7 @@ const Search: FC = () => {
 					<RadioCustom
 						id='timePeriod-month'
 						name='timePeriod'
-						label='Last Month'
+						label='Month'
 						value={apiTimePeriod.month}
 						onChange={handleTimePeriodChange}
 						checked={localSearch.timePeriod === apiTimePeriod.month}
@@ -148,7 +148,7 @@ const Search: FC = () => {
 					<RadioCustom
 						id='timePeriod-year'
 						name='timePeriod'
-						label='Last Year'
+						label='Year'
 						value={apiTimePeriod.year}
 						onChange={handleTimePeriodChange}
 						checked={localSearch.timePeriod === apiTimePeriod.year}
@@ -156,21 +156,49 @@ const Search: FC = () => {
 					<RadioCustom
 						id='timePeriod-all'
 						name='timePeriod'
-						label='All Time'
+						label='All'
 						value={apiTimePeriod.all}
 						onChange={handleTimePeriodChange}
 						checked={localSearch.timePeriod === apiTimePeriod.all}
 					/>
 				</div>
-				<br />
+				{localSearch.mode === searchType.subreddit && (
+					<div className='inputs-group'>
+						<h2 className='title-lg'>Sort by</h2>
+						<RadioCustom
+							id='sort-popular'
+							name='sort'
+							label='Popular Now'
+							value={sortType.hot}
+							onChange={handleSortChange}
+							checked={localSearch.sort === sortType.hot}
+						/>
+						<RadioCustom
+							id='sort-top'
+							name='sort'
+							label='Most Votes'
+							value={sortType.top}
+							onChange={handleSortChange}
+							checked={localSearch.sort === sortType.top}
+						/>
+						<RadioCustom
+							id='sort-new'
+							name='sort'
+							label='Most Recent'
+							value={sortType.new}
+							onChange={handleSortChange}
+							checked={localSearch.sort === sortType.new}
+						/>
+					</div>
+				)}
 				{localSearch.mode !== searchType.subreddit && (
 					<input
 						className='input-main-search'
 						type='text'
 						placeholder={
 							localSearch.mode === searchType.channel
-								? 'Insert the Channel name'
-								: 'Insert the Category/Game name'
+								? 'Insert the channel name'
+								: 'Insert the category/game name'
 						}
 						value={localSearch.value}
 						onChange={handleSearchChange}
@@ -178,30 +206,15 @@ const Search: FC = () => {
 				)}
 				<button
 					type='submit'
-					className='btn-submit'
+					className='button-generic'
 					onClick={formSubmit}
 					disabled={localSearch.value === '' && localSearch.mode !== searchType.subreddit}
 				>
 					Search
 				</button>
 
-				{searchSuggestions.length > 0 && localSearch.mode !== searchType.subreddit && (
-					<section className='suggestions-container'>
-						<h2 className='title-lg'>Suggestions</h2>
-						<ul>
-							{localSearch.mode && (
-								<>
-									{searchSuggestions.map((suggestion) => (
-										<li key={suggestion.id}>
-											<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${suggestion.name}`}>
-												<ChannelAndAvatar src={suggestion.avatar} name={suggestion.name} />
-											</Link>
-										</li>
-									))}
-								</>
-							)}
-						</ul>
-					</section>
+				{localSearch.mode !== searchType.subreddit && (
+					<Suggestions suggestions={searchSuggestions} localSearch={localSearch} />
 				)}
 			</form>
 		</div>

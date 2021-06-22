@@ -17,6 +17,7 @@ const twitchAutoComplete_1 = require("../../database/queries/twitchAutoComplete"
 const router = express_1.default.Router();
 router.get('/channel', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
     const suggestions = yield twitchAutoComplete_1.channelsDefault();
+    console.log(suggestions);
     res.send(suggestions);
 }));
 router.get('/channel/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

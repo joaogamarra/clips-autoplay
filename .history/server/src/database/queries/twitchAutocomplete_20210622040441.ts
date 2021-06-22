@@ -1,17 +1,20 @@
 import { TwitchChannel } from '../../types/twitch'
 import { TwitchCategoryAutoComplete, TwitchChannelAutoComplete } from '../models/twitch'
 
+const channelsLimit = 8
+
 const channelsAutoComplete = async (query: string) => {
 	const res = await TwitchChannelAutoComplete.find({ name: new RegExp('^' + query) })
 		.sort({ rank: -1 })
-		.limit(10)
+		.limit(channelsLimit)
+	console.log(res)
 	return res
 }
 
 const categoriesAutoComplete = async (query: string) => {
 	const res = await TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query) })
 		.sort({ rank: -1 })
-		.limit(10)
+		.limit(channelsLimit)
 
 	return res
 }
@@ -39,11 +42,11 @@ const categoryIncreaseRanking = async (id: string) => {
 }
 
 const channelsDefault = async () => {
-	return await TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(10)
+	return await TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit)
 }
 
 const categoriesDefault = async () => {
-	return await TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(10)
+	return await TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit)
 }
 
 export {

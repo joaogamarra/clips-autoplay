@@ -32,8 +32,10 @@ const Search: FC = () => {
 					setSearchSuggestions(channelSuggestions)
 				} else {
 					const suggestions: any = await getSuggestions(localSearch.mode)
-					suggestions && setSearchSuggestions(suggestions)
-					suggestions && setChannelSuggestions(suggestions)
+					if (suggestions.length > 0) {
+						setSearchSuggestions(suggestions)
+						setChannelSuggestions(suggestions)
+					}
 				}
 			}
 
@@ -42,8 +44,10 @@ const Search: FC = () => {
 					setSearchSuggestions(categorySuggestions)
 				} else {
 					const suggestions: any = await getSuggestions(localSearch.mode)
-					suggestions && setSearchSuggestions(suggestions)
-					suggestions && setCategorySuggestions(suggestions)
+					if (suggestions.length > 0) {
+						setSearchSuggestions(suggestions)
+						setCategorySuggestions(suggestions)
+					}
 				}
 			}
 		}
