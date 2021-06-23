@@ -11,21 +11,11 @@ const app = express()
 app.use(cors())
 initRoutes(app)
 app.use(express.json())
-app.use(express.static(path.resolve(__dirname, '../../client/build')))
+app.use(express.static(path.resolve(__dirname, '../../../client/build')))
 
 app.get('*', (_req, res) => {
 	console.log(path.resolve(__dirname))
 	res.sendFile(path.resolve(__dirname, '../../client/build', 'index.html'))
-})
-
-app.use((error: Error, _req: Request, res: Response, _next: NextFunction) => {
-	if (error.message === 'not found' || error.message === 'no clips') {
-		res.status(404)
-		res.json({ error: error.message })
-	} else {
-		res.status(500)
-		res.json({ error: 'internal server error' })
-	}
 })
 
 const PORT = 4000

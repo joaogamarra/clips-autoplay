@@ -1,11 +1,12 @@
+@import 'src/styles/fonts.scss';
 @import 'src/styles/variables.scss';
 body {
 	font-family: 'Inter', sans-serif;
-	padding: 54px 12px;
+	padding: 50px 12px;
 	background: $color-main-black;
 	color: $color-main-white;
 
-	@media only screen and (min-width: $screen-sm) {
+	@media only screen and (min-width: $screen-xs) {
 		padding: 1px 24px 0 $closed-favourites-width + 24px;
 	}
 }

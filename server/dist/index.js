@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
+const path_1 = __importDefault(require("path"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 require("express-async-errors");
@@ -13,6 +14,11 @@ const app = express_1.default();
 app.use(cors_1.default());
 routes_1.default(app);
 app.use(express_1.default.json());
+app.use(express_1.default.static(path_1.default.resolve(__dirname, '../../client/build')));
+app.get('*', (_req, res) => {
+    console.log(path_1.default.resolve(__dirname));
+    res.sendFile(path_1.default.resolve(__dirname, '../../client/build', 'index.html'));
+});
 app.use((error, _req, res, _next) => {
     if (error.message === 'not found' || error.message === 'no clips') {
         res.status(404);
