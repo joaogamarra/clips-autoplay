@@ -1,4 +1,4 @@
 {
-	"appService.defaultWebAppToDeploy": "",
+	"appService.defaultWebAppToDeploy": "/subscriptions/1cb568a0-74cf-49ad-99e2-b646b95882c6/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/clips-autoplay",
 	"appService.deploySubpath": "."
 }

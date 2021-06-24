@@ -1,6 +1,6 @@
 require('dotenv').config()
 import path from 'path'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import 'express-async-errors'
 
@@ -11,10 +11,11 @@ const app = express()
 app.use(cors())
 initRoutes(app)
 app.use(express.json())
-app.use(express.static(path.resolve(__dirname, '../build')))
+app.use(express.static(path.resolve(__dirname, '../../client/build')))
 
 app.get('*', (_req, res) => {
-	res.sendFile(path.resolve(__dirname, '../build', 'index.html'))
+	console.log(path.resolve(__dirname))
+	res.sendFile(path.resolve(__dirname, '../../client/build', 'index.html'))
 })
 
 const PORT = process.env.PORT || 4000

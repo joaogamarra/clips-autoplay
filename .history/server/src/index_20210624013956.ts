@@ -1,6 +1,6 @@
 require('dotenv').config()
 import path from 'path'
-import express from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import 'express-async-errors'
 
@@ -14,6 +14,7 @@ app.use(express.json())
 app.use(express.static(path.resolve(__dirname, '../build')))
 
 app.get('*', (_req, res) => {
+	console.log(path.resolve(__dirname))
 	res.sendFile(path.resolve(__dirname, '../build', 'index.html'))
 })
 
