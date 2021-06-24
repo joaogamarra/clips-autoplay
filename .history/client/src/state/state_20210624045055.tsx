@@ -21,7 +21,7 @@ const initialState: State = {
 		timePeriod: apiTimePeriod.all,
 		sort: sortType.hot,
 	},
-	favourites: [],
+	favourites: {},
 }
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([initialState, () => initialState])

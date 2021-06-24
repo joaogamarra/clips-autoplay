@@ -1,26 +1,20 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getFavourites, removeFavourite } from 'src/common/localstorage'
 import { apiTimePeriod, searchClips } from 'src/types/search'
 import './favourites.scss'
 import { HeartFillIcon, XCircleFillIcon, HomeFillIcon } from '@primer/octicons-react'
 import ChannelAndAvatar from '../common/channelAndAvatar/ChannelAndAvatar'
-import { useStateValue } from 'src/state/state'
-import { setFavourites } from 'src/state/reducer'
 
 const Favourites: FC = () => {
-	const [{ favourites }, dispatch] = useStateValue()
+	const [favourites, setFavourites] = useState<{ search: searchClips; rank: number; avatar: string }[]>([])
 	const [favouritesVisible, setFavouritesVisible] = useState(false)
 
-	const loadFavourites = useCallback(() => {
+	useEffect(() => {
 		const favouritesRes = getFavourites()
 
-		dispatch(setFavourites(favouritesRes))
-	}, [dispatch])
-
-	useEffect(() => {
-		loadFavourites()
-	}, [loadFavourites])
+		setFavourites(favouritesRes)
+	}, [])
 
 	useEffect(() => {
 		document.querySelector('body')?.addEventListener('click', (e) => {

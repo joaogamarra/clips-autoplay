@@ -5,18 +5,16 @@ import { apiTimePeriod, searchClips } from 'src/types/search'
 import './favourites.scss'
 import { HeartFillIcon, XCircleFillIcon, HomeFillIcon } from '@primer/octicons-react'
 import ChannelAndAvatar from '../common/channelAndAvatar/ChannelAndAvatar'
-import { useStateValue } from 'src/state/state'
-import { setFavourites } from 'src/state/reducer'
 
 const Favourites: FC = () => {
-	const [{ favourites }, dispatch] = useStateValue()
+	const [favourites, setFavourites] = useState<{}[]>([])
 	const [favouritesVisible, setFavouritesVisible] = useState(false)
 
 	const loadFavourites = useCallback(() => {
 		const favouritesRes = getFavourites()
 
-		dispatch(setFavourites(favouritesRes))
-	}, [dispatch])
+		setFavourites(favouritesRes)
+	}, [])
 
 	useEffect(() => {
 		loadFavourites()

@@ -1,12 +1,12 @@
 import { searchClips } from './search'
-import { ResponseClip, ResponseClips, favouritesType } from './twitch'
+import { ResponseClip, ResponseClips } from './twitch'
 
 export type State = {
 	clips: ResponseClips
 	currentClip: ResponseClip
 	clipIndex: number
 	currentSearch: searchClips
-	favourites: favouritesType[]
+	favourites: favouritesType
 }
 
 export type Action =
@@ -29,8 +29,4 @@ export type Action =
 	| {
 			type: 'SET_CURRENT_SEARCH'
 			payload: searchClips
-	  }
-	| {
-			type: 'SET_FAVOURITES'
-			payload: favouritesType[]
 	  }

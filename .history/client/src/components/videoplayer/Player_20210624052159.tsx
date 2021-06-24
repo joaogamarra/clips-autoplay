@@ -42,10 +42,6 @@ const Player: FC = () => {
 			} else {
 				dispatch(setClips(data))
 				dispatch(setCurrentClip(data.data[0]))
-				await addFavourite(params)
-				const favouritesRes = await getFavourites()
-
-				dispatch(setFavourites(favouritesRes))
 			}
 		}
 
