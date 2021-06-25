@@ -7,17 +7,15 @@ body {
 	background: $color-main-black;
 	color: $color-main-white;
 
-	@media only screen and (min-width: $screen-xs) {
-		&::before {
-			background: url('/assets/kappa.png') no-repeat left -110px top,
-				url('/assets/notlikethis.png') no-repeat bottom -20px left 50px,
-				url('/assets/lul.png') no-repeat bottom -20px right;
-			content: '';
-			position: absolute;
-			width: 100vw;
-			height: 100vh;
-			opacity: 0.03;
-		}
+	&::before {
+		background: url('/assets/kappa.png') no-repeat left -110px top,
+			url('/assets/notlikethis.png') no-repeat bottom -20px left 50px,
+			url('/assets/lul.png') no-repeat bottom -20px right;
+		content: '';
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		opacity: 0;
 	}
 }
 
