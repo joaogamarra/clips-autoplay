@@ -9,6 +9,7 @@ import ReactGA from 'react-ga'
 const App: React.FC = () => {
 	ReactGA.initialize('UA-200630534-1')
 	ReactGA.pageview(window.location.pathname + window.location.search)
+	console.log(window.location.pathname + window.location.search)
 	return (
 		<>
 			<Favourites />
