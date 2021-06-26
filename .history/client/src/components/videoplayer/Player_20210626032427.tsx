@@ -13,7 +13,6 @@ import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon, XIcon } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
-import ReactGA from 'react-ga'
 
 import './player.scss'
 import 'src/styles/button-generic.scss'
@@ -28,9 +27,7 @@ const Player: FC = () => {
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
 
-	useEffect(() => {
-		ReactGA.pageview(window.location.pathname + window.location.search)
-	}, [params])
+	ReactGA.pageview(window.location.pathname + window.location.search)
 
 	useEffect(() => {
 		setTransition('loading')

@@ -5,14 +5,10 @@ import Player from './components/videoplayer/Player'
 import './styles/App.scss'
 import LogoMain from './components/logoMain/LogoMain'
 import ReactGA from 'react-ga'
-import { createBrowserHistory } from 'history'
 import { useEffect } from 'react'
 
-ReactGA.initialize('UA-200630534-1')
-const browserHistory = createBrowserHistory()
-
-browserHistory.listen((location, action) => {
-	ReactGA.pageview(location.pathname + location.search)
+ReactGA.initialize('UA-200630534-1', {
+	debug: true,
 })
 
 const App: React.FC = () => {

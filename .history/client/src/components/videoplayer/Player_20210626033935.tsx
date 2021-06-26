@@ -30,7 +30,7 @@ const Player: FC = () => {
 
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search)
-	}, [params])
+	}, [])
 
 	useEffect(() => {
 		setTransition('loading')

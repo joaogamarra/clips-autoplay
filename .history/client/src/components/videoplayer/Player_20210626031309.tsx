@@ -29,11 +29,9 @@ const Player: FC = () => {
 	const params = useParams<searchClips>()
 
 	useEffect(() => {
-		ReactGA.pageview(window.location.pathname + window.location.search)
-	}, [params])
-
-	useEffect(() => {
 		setTransition('loading')
+
+		ReactGA.pageview(window.location.pathname + window.location.search)
 
 		const getdata = async () => {
 			dispatch(setClipIndex(0))

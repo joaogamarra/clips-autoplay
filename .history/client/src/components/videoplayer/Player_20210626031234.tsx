@@ -28,9 +28,7 @@ const Player: FC = () => {
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
 
-	useEffect(() => {
-		ReactGA.pageview(window.location.pathname + window.location.search)
-	}, [params])
+	ReactGA.pageview(window.location.pathname + window.location.search)
 
 	useEffect(() => {
 		setTransition('loading')

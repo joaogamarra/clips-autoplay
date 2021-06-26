@@ -8,11 +8,14 @@ import ReactGA from 'react-ga'
 import { createBrowserHistory } from 'history'
 import { useEffect } from 'react'
 
-ReactGA.initialize('UA-200630534-1')
+ReactGA.initialize('UA-200630534-1', {
+	debug: true,
+})
 const browserHistory = createBrowserHistory()
-
 browserHistory.listen((location, action) => {
 	ReactGA.pageview(location.pathname + location.search)
+
+	console.log(location.pathname)
 })
 
 const App: React.FC = () => {
