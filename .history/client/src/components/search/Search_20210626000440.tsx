@@ -92,7 +92,7 @@ const Search: FC = () => {
 	return (
 		<div className='search-container'>
 			<h2 className='text-intro'>
-				Watch the best Twitch Clips from your favourite content creators without interruptions
+				Watch the best Twitch Clips with autoplay from you favourite Streamers or Games
 			</h2>
 			<form>
 				<div className='inputs-group'>

@@ -12,7 +12,6 @@ import {
 import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon, XIcon } from '@primer/octicons-react'
-import redditLogo from '../../assets/logo-reddit.svg'
 
 import './player.scss'
 import 'src/styles/button-generic.scss'
@@ -131,7 +130,7 @@ const Player: FC = () => {
 										rel='noreferrer'
 										title='clip comments'
 									>
-										<img className='' width='25' src={redditLogo} alt='reddit logo' />
+										<img className='' width='25' src='/assets/logo-reddit.svg' alt='reddit logo' />
 									</a>
 								)}
 								<button
