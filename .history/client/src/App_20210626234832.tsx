@@ -1,5 +1,5 @@
 import { Route, Switch } from 'react-router'
-import Sidebar from './components/sidebar/Sidebar'
+import Favourites from './components/favourites/Favourites'
 import Search from './components/search/Search'
 import Player from './components/videoplayer/Player'
 import './styles/App.scss'
@@ -21,7 +21,7 @@ const App: React.FC = () => {
 	}, [])
 	return (
 		<>
-			<Sidebar />
+			<Favourites />
 			<main className='main-content'>
 				<LogoMain />
 				<Switch>
