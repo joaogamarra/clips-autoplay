@@ -6,9 +6,9 @@ export const getClips = async (search: searchClips, after?: string) => {
 	let query
 
 	if (search.mode === searchType.subreddit) {
-		query = `${process.env.REACT_APP_API_URI}/api/${search.mode}/livestreamfail?timeperiod=${search.timePeriod}&sort=${search.value}`
+		query = `${process.env.API_URI}/api/${search.mode}/livestreamfail?timeperiod=${search.timePeriod}&sort=${search.value}`
 	} else {
-		query = `${process.env.REACT_APP_API_URI}/api/twitch/${search.mode}/${search.value}?timeperiod=${search.timePeriod}`
+		query = `${process.env.API_URI}/api/twitch/${search.mode}/${search.value}?timeperiod=${search.timePeriod}`
 	}
 	if (after) query = `${query}&after=${after}`
 	try {
@@ -27,7 +27,7 @@ export const getClips = async (search: searchClips, after?: string) => {
 
 export const getSuggestions = async (searchMode: searchType, query?: string) => {
 	if (searchMode !== searchType.subreddit) {
-		let baseUrl = `${process.env.REACT_APP_API_URI}/api/twitch/suggestions/${searchMode}/`
+		let baseUrl = `${process.env.API_URI}/api/twitch/suggestions/${searchMode}/`
 
 		if (query) baseUrl = `${baseUrl}${query}`
 
