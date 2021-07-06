@@ -18,6 +18,8 @@ router.get('/channel', async (_, res) => {
 router.get('/channel/:id', async (req, res) => {
 	const suggestions = await channelsAutoComplete(req.params.id)
 
+	console.log('Suggestion CALLED')
+
 	res.send(suggestions)
 })
 

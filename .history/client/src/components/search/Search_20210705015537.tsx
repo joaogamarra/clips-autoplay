@@ -80,7 +80,7 @@ const Search: FC = () => {
 
 	const handleSearchChange = async (e: React.FormEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value
-		setLocalSearch({ ...localSearch, value: val.replace('/', '') })
+		setLocalSearch({ ...localSearch, value: val })
 	}
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,7 +151,6 @@ const Search: FC = () => {
 						/>
 					</div>
 				)}
-				{localSearch.mode !== searchType.subreddit || (localSearch.mode === searchType.subreddit && localSearch.sort === sortType.top) ? (
 				<div className='inputs-group'>
 					<h2 className='title-lg'>Filter by</h2>
 					<RadioCustom
@@ -195,7 +194,7 @@ const Search: FC = () => {
 						checked={localSearch.timePeriod === apiTimePeriod.all}
 					/>
 				</div>
-				): null}
+				
 				{localSearch.mode !== searchType.subreddit && (
 					<input
 						className='input-main-search'

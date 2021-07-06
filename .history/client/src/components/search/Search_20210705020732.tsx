@@ -80,7 +80,7 @@ const Search: FC = () => {
 
 	const handleSearchChange = async (e: React.FormEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value
-		setLocalSearch({ ...localSearch, value: val.replace('/', '') })
+		setLocalSearch({ ...localSearch, value: val })
 	}
 
 	const handleSortChange = (e: React.ChangeEvent<HTMLInputElement>) => {

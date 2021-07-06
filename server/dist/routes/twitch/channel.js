@@ -26,8 +26,8 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const channel = yield channel_1.default(token, req.params.id);
     const clips = yield clips_1.default(token, channel, undefined, query);
     const parsedClips = twitchClipsParsing_1.parseTwitchClips(clips);
+    yield twitchAutoComplete_1.channelIncreaseRanking(channel);
     res.send(parsedClips);
-    twitchAutoComplete_1.channelIncreaseRanking(channel);
 }));
 exports.default = router;
 //# sourceMappingURL=channel.js.map

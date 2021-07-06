@@ -15,7 +15,7 @@ router.get('/:id', async (req, res) => {
 	const channel = await getChannel(token, req.params.id)
 	const clips = await getClips(token, channel, undefined, query)
 	const parsedClips = parseTwitchClips(clips)
-	await channelIncreaseRanking(channel)
+	channelIncreaseRanking(channel)
 
 	res.send(parsedClips)
 })

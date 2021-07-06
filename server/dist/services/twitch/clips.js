@@ -17,7 +17,7 @@ const getClips = (token, channel, category, query) => __awaiter(void 0, void 0, 
     let searchType = `broadcaster_id=${channel === null || channel === void 0 ? void 0 : channel.id}`;
     if (category)
         searchType = `game_id=${category === null || category === void 0 ? void 0 : category.id}`;
-    const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=5`;
+    const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=50`;
     const res = yield service_1.default(token, baseUrl);
     if (res) {
         const data = res.data;

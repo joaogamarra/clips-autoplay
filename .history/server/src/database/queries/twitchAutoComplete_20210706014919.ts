@@ -31,6 +31,8 @@ const channelIncreaseRanking = async (channel: TwitchChannel) => {
 			avatar: channel.profile_image_url
 		})
 		await newChannel.save()
+
+		console.log('NEW Channel SAVED')
 	} else {
 		await TwitchChannelAutoComplete.updateOne({ name: channel.login }, { $inc: { rank: 1 } })
 	}

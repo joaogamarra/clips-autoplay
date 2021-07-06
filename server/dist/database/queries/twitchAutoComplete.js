@@ -33,8 +33,9 @@ const channelIncreaseRanking = (channel) => __awaiter(void 0, void 0, void 0, fu
             id: channel.id,
             name: channel.login,
             rank: 1,
+            avatar: channel.profile_image_url
         });
-        newChannel.save();
+        yield newChannel.save();
     }
     else {
         yield twitch_1.TwitchChannelAutoComplete.updateOne({ name: channel.login }, { $inc: { rank: 1 } });

@@ -26,10 +26,10 @@ export const addFavourite = async (search: searchClips) => {
 
 			newFavourites[itemIndex].rank = newFavourites[itemIndex].rank + 1
 		} else {
-			const apiUrl = `${process.env.REACT_APP_API_URI}/api/twitch/suggestions/${search.mode}/${search.value}`
-			const { data }: { data: AutocompleteObj[] } = await axios.get(apiUrl)
+			const baseUrl = `http://localhost:4000/api/twitch/suggestions/${search.mode}/${search.value}`
+			const { data }: { data: AutocompleteObj[] } = await axios.get(baseUrl)
 			let thisAvatar = ''
-			if(data[0]?.avatar) thisAvatar = data[0].avatar
+			if(data[0].avatar) thisAvatar = data[0].avatar
 
 			newFavourites = storedFavourites.concat({ search: search, rank: 0, avatar: thisAvatar })
 		}
