@@ -28,7 +28,9 @@ const Player: FC = () => {
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
 
-	ReactGA.pageview(window.location.pathname + window.location.search)
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search)
+	}, [params])
 
 	useEffect(() => {
 		setTransition('loading')
@@ -71,11 +73,13 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
+			if (newClipIndex + 1 <= clips.data.length) {
 			//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
 			if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
 				nextClip()
 			} else {
-				if (newClipIndex <= clips.data.length) {
+				console.log(newClipIndex, clips.data.length)
+				
 					setTransition('loading')
 
 					dispatch(setCurrentClip(clipsData[newClipIndex]))

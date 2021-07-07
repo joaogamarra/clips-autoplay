@@ -1,17 +1,25 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getClips } from 'src/common/api'
-import { setClipIndex, setClips, setCurrentClip, setCurrentSearch, updateClips } from 'src/state/reducer'
+import {
+	setClipIndex,
+	setClips,
+	setCurrentClip,
+	setCurrentSearch,
+	setFavourites,
+	updateClips,
+} from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon, XIcon } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
+import ReactGA from 'react-ga'
 
 import './player.scss'
 import 'src/styles/button-generic.scss'
 
 import Loader from '../common/loader/Loader'
-import { addFavourite } from 'src/common/localstorage'
+import { addFavourite, getFavourites } from 'src/common/localstorage'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -19,6 +27,10 @@ const Player: FC = () => {
 	const [error, setError] = useState(false)
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search)
+	}, [params])
 
 	useEffect(() => {
 		setTransition('loading')
@@ -35,7 +47,10 @@ const Player: FC = () => {
 			} else {
 				dispatch(setClips(data))
 				dispatch(setCurrentClip(data.data[0]))
-				addFavourite(params)
+				await addFavourite(params)
+				const favouritesRes = await getFavourites()
+
+				dispatch(setFavourites(favouritesRes))
 			}
 		}
 
@@ -62,6 +77,7 @@ const Player: FC = () => {
 			if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
 				nextClip()
 			} else {
+				console.log(newClipIndex, clips.data.length)
 				if (newClipIndex <= clips.data.length) {
 					setTransition('loading')
 

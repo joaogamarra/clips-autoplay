@@ -13,6 +13,7 @@ import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon, XIcon } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
+import ReactGA from 'react-ga'
 
 import './player.scss'
 import 'src/styles/button-generic.scss'
@@ -26,6 +27,10 @@ const Player: FC = () => {
 	const [error, setError] = useState(false)
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search)
+	}, [params])
 
 	useEffect(() => {
 		setTransition('loading')
@@ -42,8 +47,8 @@ const Player: FC = () => {
 			} else {
 				dispatch(setClips(data))
 				dispatch(setCurrentClip(data.data[0]))
-				addFavourite(params)
-				const favouritesRes = getFavourites()
+				await addFavourite(params)
+				const favouritesRes = await getFavourites()
 
 				dispatch(setFavourites(favouritesRes))
 			}
@@ -68,11 +73,13 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
-			//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
-			if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
-				nextClip()
-			} else {
-				if (newClipIndex <= clips.data.length) {
+			if (newClipIndex + 1 <= clips.data.length) {
+				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
+				if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
+					nextClip()
+				} else {
+				console.log(newClipIndex, clips.data.length)
+				
 					setTransition('loading')
 
 					dispatch(setCurrentClip(clipsData[newClipIndex]))

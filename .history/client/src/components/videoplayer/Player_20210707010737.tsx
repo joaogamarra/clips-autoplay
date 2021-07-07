@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react'
-import {useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { getClips } from 'src/common/api'
 import {
 	setClipIndex,
@@ -11,7 +11,7 @@ import {
 } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
-import { ChevronRightIcon,  } from '@primer/octicons-react'
+import { ChevronRightIcon, XIcon } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
 import ReactGA from 'react-ga'
 
@@ -20,8 +20,6 @@ import 'src/styles/button-generic.scss'
 
 import Loader from '../common/loader/Loader'
 import { addFavourite, getFavourites } from 'src/common/localstorage'
-import PlayerError from './PlayerError'
-import PlayerFinished from './PlayerFinished'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -50,7 +48,6 @@ const Player: FC = () => {
 			} else {
 				dispatch(setClips(data))
 				dispatch(setCurrentClip(data.data[0]))
-				setFinished(false)
 				await addFavourite(params)
 				const favouritesRes = await getFavourites()
 
@@ -129,8 +126,16 @@ const Player: FC = () => {
 	return (
 		<>
 			<div className='player-container'>
-				{finished && (
-					<PlayerFinished />
+			{finished && (
+					<div className='error-container'>
+						
+						<p className='error-description'>
+							You have reached the final clip for the current search
+						</p>
+						<Link to='/' className='button-generic'>
+							New Search
+						</Link>
+					</div>
 				)}
 				{currentClip.video_url && (
 					<>
@@ -185,7 +190,18 @@ const Player: FC = () => {
 					</>
 				)}
 				{error && (
-					<PlayerError/>
+					<div className='error-container'>
+						<XIcon size={48} />
+						<p className='error-description'>
+							We couldn't find any clips for your Search.
+							<br />
+							The game/user might not exist or they might not have any clips in the selected period.
+							<br /> Users that are currently suspended also have their clips disabled.
+						</p>
+						<Link to='/' className='button-generic'>
+							New Search
+						</Link>
+					</div>
 				)}
 
 				

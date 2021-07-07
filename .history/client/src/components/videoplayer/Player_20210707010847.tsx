@@ -13,6 +13,7 @@ import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon, XIcon } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
+import ReactGA from 'react-ga'
 
 import './player.scss'
 import 'src/styles/button-generic.scss'
@@ -24,8 +25,13 @@ const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
 	const [transition, setTransition] = useState('loading')
 	const [error, setError] = useState(false)
+	const [finished, setFinished] = useState(false)
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
+
+	useEffect(() => {
+		ReactGA.pageview(window.location.pathname + window.location.search)
+	}, [params])
 
 	useEffect(() => {
 		setTransition('loading')
@@ -42,9 +48,9 @@ const Player: FC = () => {
 			} else {
 				dispatch(setClips(data))
 				dispatch(setCurrentClip(data.data[0]))
+				setFinished(false)
 				await addFavourite(params)
 				const favouritesRes = await getFavourites()
-				console.log(favouritesRes)
 
 				dispatch(setFavourites(favouritesRes))
 			}
@@ -69,16 +75,19 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
-			//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
-			if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
-				nextClip()
-			} else {
-				if (newClipIndex <= clips.data.length) {
+			if (newClipIndex + 1 <= clips.data.length) {
+				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
+				if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
+					nextClip()
+				} else {
 					setTransition('loading')
 
 					dispatch(setCurrentClip(clipsData[newClipIndex]))
 					dispatch(setClipIndex(newClipIndex))
 				}
+			} else {
+				setFinished(true)
+				setTransition('')
 			}
 		},
 		[clipIndex, clips, dispatch]
@@ -118,6 +127,17 @@ const Player: FC = () => {
 	return (
 		<>
 			<div className='player-container'>
+			{finished && (
+					<div className='error-container'>
+						
+						<p className='error-description'>
+							You have reached the final clip for the current search
+						</p>
+						<Link to='/' className='button-generic'>
+							New Search
+						</Link>
+					</div>
+				)}
 				{currentClip.video_url && (
 					<>
 						<div className='video-controls'>
@@ -184,6 +204,8 @@ const Player: FC = () => {
 						</Link>
 					</div>
 				)}
+
+				
 				<Loader visible={transition} />
 			</div>
 		</>
