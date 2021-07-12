@@ -11,8 +11,6 @@ interface Props {
 }
 
 const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
-	const defaultAvatar =
-		'https://static-cdn.jtvnw.net/user-default-pictures-uv/cdd517fe-def4-11e9-948e-784f43822e80-profile_image-70x70.png'
 	return (
 		<section className='suggestions-container'>
 			<h2 className='title-lg'>Suggestions</h2>
@@ -20,13 +18,10 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 				<ul className='suggestions-list'>
 					{localSearch.mode && (
 						<>
-							{suggestions.map(({ avatar, name, id }, index) => (
-								<li className='suggestions-item' key={id}>
+							{suggestions?.map(({ avatar, name }) => (
+								<li className='suggestions-item' key={name}>
 									<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}`}>
-										<ChannelAndAvatar
-											src={avatar !== undefined && avatar !== '' ? avatar : defaultAvatar}
-											name={name}
-										/>
+										<ChannelAndAvatar src={avatar} name={name} />
 									</Link>
 								</li>
 							))}
