@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/static/css/main.3e1f6f1c.chunk.css",
-    "main.js": "/static/js/main.e37a91cf.chunk.js",
-    "main.js.map": "/static/js/main.e37a91cf.chunk.js.map",
+    "main.js": "/static/js/main.ad031fa3.chunk.js",
+    "main.js.map": "/static/js/main.ad031fa3.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.900dd88b.js",
     "runtime-main.js.map": "/static/js/runtime-main.900dd88b.js.map",
-    "static/js/2.27f71bfd.chunk.js": "/static/js/2.27f71bfd.chunk.js",
-    "static/js/2.27f71bfd.chunk.js.map": "/static/js/2.27f71bfd.chunk.js.map",
+    "static/js/2.1c66673a.chunk.js": "/static/js/2.1c66673a.chunk.js",
+    "static/js/2.1c66673a.chunk.js.map": "/static/js/2.1c66673a.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.3e1f6f1c.chunk.css.map": "/static/css/main.3e1f6f1c.chunk.css.map",
-    "static/js/2.27f71bfd.chunk.js.LICENSE.txt": "/static/js/2.27f71bfd.chunk.js.LICENSE.txt",
+    "static/js/2.1c66673a.chunk.js.LICENSE.txt": "/static/js/2.1c66673a.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/static/media/notlikethis.abcad286.png",
     "static/media/logo-reddit.569e7461.svg": "/static/media/logo-reddit.569e7461.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.900dd88b.js",
-    "static/js/2.27f71bfd.chunk.js",
+    "static/js/2.1c66673a.chunk.js",
     "static/css/main.3e1f6f1c.chunk.css",
-    "static/js/main.e37a91cf.chunk.js"
+    "static/js/main.ad031fa3.chunk.js"
   ]
 }
