@@ -12,7 +12,7 @@ Search for Twitch Channels, Games or Categories, LiveStreamFail with some filter
 
 ## Built With
 
-- Nodejs with Express
+- NodeJS with Express
 - MongoDB with mongoose
 - TypeScript
 - React
