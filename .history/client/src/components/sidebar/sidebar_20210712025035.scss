@@ -6,13 +6,7 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
-	z-index: 100;
 	background: $color-main-black;
-	box-shadow: 1px 0px 5px 1px rgba(0, 0, 0, 0.41);
-	overflow: hidden;
-	transform: translateY(calc(54px - 100vh));
-	transition: transform 200ms ease-in-out;
-	scroll-behavior: smooth;
 	@media only screen and (max-width: $screen-xs) {
 		&.is-visible {
 			transform: translateY(0);
@@ -121,7 +115,7 @@
 			top: 50%;
 			transform: translateY(-50%);
 			right: 0;
-			padding: 17px;
+			padding: 18px;
 
 			font-size: 9px;
 			background: none;
