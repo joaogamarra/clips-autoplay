@@ -8,7 +8,7 @@ Search for Twitch Channels, Games or Categories, LiveStreamFail with some filter
 - Autocomplete Search
 - API wrapper based on Twitch API
 - Favourite Searches Saving (Local Storage)
-- Continuos Playlist Creation
+- Continuous Playlist Creation
 
 ## Built With
 
