@@ -48,11 +48,15 @@ const categoryIncreaseRanking = (id) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.categoryIncreaseRanking = categoryIncreaseRanking;
 const channelsDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield twitch_1.TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit);
+    const res = yield twitch_1.TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(30);
+    const shuffle = res.sort(() => Math.random() - 0.5).slice(0, channelsLimit);
+    return shuffle;
 });
 exports.channelsDefault = channelsDefault;
 const categoriesDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield twitch_1.TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit);
+    const res = yield twitch_1.TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(30);
+    const shuffle = res.sort(() => Math.random() - 0.5).slice(0, channelsLimit);
+    return shuffle;
 });
 exports.categoriesDefault = categoriesDefault;
 //# sourceMappingURL=twitchAutoComplete.js.map

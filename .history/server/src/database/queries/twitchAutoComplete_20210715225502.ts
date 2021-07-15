@@ -6,7 +6,10 @@ const channelsLimit = 8
 const channelsAutoComplete = async (query: string) => {
 	const res = await TwitchChannelAutoComplete.find({ name: new RegExp('^' + query.toLowerCase()) })
 		.sort({ rank: -1 })
-		.limit(channelsLimit)
+		.limit(30)
+
+	const shuffle = res.sort(() => Math.random() - 0.5)
+	console.log(shuffle)
 	return res
 }
 
@@ -42,17 +45,11 @@ const categoryIncreaseRanking = async (id: string) => {
 }
 
 const channelsDefault = async () => {
-	const res = await TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(30)
-	const shuffle = res.sort(() => Math.random() - 0.5).slice(0, channelsLimit)
-
-	return shuffle
+	return await TwitchChannelAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit)
 }
 
 const categoriesDefault = async () => {
-	const res =  await TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(30)
-	const shuffle = res.sort(() => Math.random() - 0.5).slice(0, channelsLimit)
-
-	return shuffle
+	return await TwitchCategoryAutoComplete.find({}).sort({ rank: -1 }).limit(channelsLimit)
 }
 
 export {
