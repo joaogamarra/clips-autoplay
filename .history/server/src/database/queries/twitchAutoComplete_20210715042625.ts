@@ -4,14 +4,14 @@ import { TwitchCategoryAutoComplete, TwitchChannelAutoComplete } from '../models
 const channelsLimit = 8
 
 const channelsAutoComplete = async (query: string) => {
-	const res = await TwitchChannelAutoComplete.find({ name: new RegExp('^' + query.toLowerCase()) })
+	const res = await TwitchChannelAutoComplete.find({ name: new RegExp('^' + query.toLowerCase) })
 		.sort({ rank: -1 })
 		.limit(channelsLimit)
 	return res
 }
 
 const categoriesAutoComplete = async (query: string) => {
-	const res = await TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query.toLowerCase()) })
+	const res = await TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query.toLowerCase) })
 		.sort({ rank: -1 })
 		.limit(channelsLimit)
 

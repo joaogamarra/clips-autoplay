@@ -13,14 +13,14 @@ exports.categoriesDefault = exports.channelsDefault = exports.categoryIncreaseRa
 const twitch_1 = require("../models/twitch");
 const channelsLimit = 8;
 const channelsAutoComplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield twitch_1.TwitchChannelAutoComplete.find({ name: new RegExp('^' + query) })
+    const res = yield twitch_1.TwitchChannelAutoComplete.find({ name: new RegExp('^' + query.toLowerCase()) })
         .sort({ rank: -1 })
         .limit(channelsLimit);
     return res;
 });
 exports.channelsAutoComplete = channelsAutoComplete;
 const categoriesAutoComplete = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield twitch_1.TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query) })
+    const res = yield twitch_1.TwitchCategoryAutoComplete.find({ name: new RegExp('^' + query.toLowerCase()) })
         .sort({ rank: -1 })
         .limit(channelsLimit);
     return res;
