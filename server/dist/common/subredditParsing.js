@@ -20,6 +20,7 @@ const parseSubreddit = (data) => {
                 parsedData.data.push({
                     title: item.data.title,
                     video_url: itemLink,
+                    twitch_url: item.data.url,
                     comments_url: item.data.permalink,
                 });
             }

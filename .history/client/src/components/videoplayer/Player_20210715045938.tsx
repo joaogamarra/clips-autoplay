@@ -13,7 +13,6 @@ import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon,  } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
-import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
 
 import './player.scss'
@@ -29,7 +28,6 @@ const Player: FC = () => {
 	const [transition, setTransition] = useState('loading')
 	const [error, setError] = useState(false)
 	const [finished, setFinished] = useState(false)
-	const [videoMaxWidth, setVideoMaxWidth] = useState(1200)
 	const [loadingClips, setLoadingClips] = useState(false)
 	const params = useParams<searchClips>()
 
@@ -45,8 +43,6 @@ const Player: FC = () => {
 			dispatch(setCurrentSearch(params))
 
 			const data = await getClips(params)
-			console.log(data)
-
 
 			if ('error' in data) {
 				setError(true)
@@ -69,7 +65,6 @@ const Player: FC = () => {
 				setCurrentClip({
 					title: '',
 					video_url: '',
-					twitch_url: '',
 					comments_url: '',
 				})
 			)
@@ -79,20 +74,16 @@ const Player: FC = () => {
 
 	useEffect(() => {
 
-		
+		const video = document.querySelector('.player-container video')
+		const vh = window.innerHeight
+		const vw = window.innerWidth
 
-		const updateVideoSize = () => {
-			const video = document.querySelector('.player-container video')
-			const vh = window.innerHeight
-			
-			if(video){
-					setVideoMaxWidth((vh - 200) * 1.69)
+		if(video?.clientHeight){
+			if(video?.clientHeight + 300 > vh) {
+				console.log(vh - 300)
+				console.log((vh - 300) * 16.9)
 			}
 		}
-
-		updateVideoSize()
-
-		window.onresize = updateVideoSize
 		
 	}, [])
 
@@ -152,7 +143,7 @@ const Player: FC = () => {
 
 	return (
 		<>
-			<div className='player-container' style={{ maxWidth: videoMaxWidth}}>
+			<div className='player-container'>
 				{finished && (
 					<PlayerFinished />
 				)}
@@ -162,17 +153,6 @@ const Player: FC = () => {
 							<h4 className='title-lg'>{currentClip.title}</h4>
 
 							<div className='right-container'>
-								{currentClip.twitch_url && (
-									<a
-										className='link-twitch'
-										href={`${currentClip.twitch_url}`}
-										target='_blank'
-										rel='noreferrer'
-										title='clip link'
-									>
-										<img className='' width='25' src={twitchLogo} alt='twitch logo' />
-									</a>
-								)}
 								{currentClip.comments_url && (
 									<a
 										className='link-comments'
@@ -208,7 +188,7 @@ const Player: FC = () => {
 							</div>
 						</div>
 
-						{<video
+						<video
 							className={transition}
 							src={currentClip.video_url}
 							autoPlay={true}
@@ -216,7 +196,7 @@ const Player: FC = () => {
 							onEnded={() => nextClip()}
 							onLoadedData={() => setTransition('')}
 							onError={() => nextClip()}
-						></video>}
+						></video>
 					</>
 				)}
 				{error && (

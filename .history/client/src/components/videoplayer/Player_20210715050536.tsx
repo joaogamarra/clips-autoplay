@@ -13,7 +13,6 @@ import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon,  } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
-import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
 
 import './player.scss'
@@ -45,8 +44,6 @@ const Player: FC = () => {
 			dispatch(setCurrentSearch(params))
 
 			const data = await getClips(params)
-			console.log(data)
-
 
 			if ('error' in data) {
 				setError(true)
@@ -69,7 +66,6 @@ const Player: FC = () => {
 				setCurrentClip({
 					title: '',
 					video_url: '',
-					twitch_url: '',
 					comments_url: '',
 				})
 			)
@@ -84,9 +80,11 @@ const Player: FC = () => {
 		const updateVideoSize = () => {
 			const video = document.querySelector('.player-container video')
 			const vh = window.innerHeight
-			
-			if(video){
-					setVideoMaxWidth((vh - 200) * 1.69)
+			console.log('update')
+			if(video?.clientHeight){
+				if(video?.clientHeight + 270 > vh) {
+					setVideoMaxWidth((vh - 270) * 1.69)
+				}
 			}
 		}
 
@@ -162,17 +160,6 @@ const Player: FC = () => {
 							<h4 className='title-lg'>{currentClip.title}</h4>
 
 							<div className='right-container'>
-								{currentClip.twitch_url && (
-									<a
-										className='link-twitch'
-										href={`${currentClip.twitch_url}`}
-										target='_blank'
-										rel='noreferrer'
-										title='clip link'
-									>
-										<img className='' width='25' src={twitchLogo} alt='twitch logo' />
-									</a>
-								)}
 								{currentClip.comments_url && (
 									<a
 										className='link-comments'
@@ -208,7 +195,7 @@ const Player: FC = () => {
 							</div>
 						</div>
 
-						{<video
+						<video
 							className={transition}
 							src={currentClip.video_url}
 							autoPlay={true}
@@ -216,7 +203,7 @@ const Player: FC = () => {
 							onEnded={() => nextClip()}
 							onLoadedData={() => setTransition('')}
 							onError={() => nextClip()}
-						></video>}
+						></video>
 					</>
 				)}
 				{error && (

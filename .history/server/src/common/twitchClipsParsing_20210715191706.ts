@@ -16,7 +16,7 @@ export const parseTwitchClips = (data: any) => {
 		parsedData.data.push({
 			title: item.title,
 			video_url: `${itemLink}.mp4`,
-			twitch_url: item.url
+			embed_url: item.embed_url
 		})
 	})
 	return parsedData

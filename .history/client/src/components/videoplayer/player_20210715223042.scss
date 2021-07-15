@@ -47,7 +47,15 @@
 		align-items: stretch;
 	}
 
-	.link-comments, .link-twitch {
+	.link-comments {
+		display: flex;
+		align-items: center;
+
+		height: 100%;
+		padding: 0 12px;
+	}
+
+	.link-twitch {
 		display: flex;
 		align-items: center;
 
