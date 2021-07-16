@@ -30,7 +30,7 @@ export const parseSubreddit = async (data: any) => {
 	await Promise.all(parsedData.data.map(async(item) => {
 		const commentsList = []
 
-		const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=15`)
+		const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=8`)
 						
 		const commentsArr = comments[1]?.data?.children
 	
@@ -38,15 +38,15 @@ export const parseSubreddit = async (data: any) => {
 			let i = 0
 			while(commentsList.length < 5 && i < commentsArr.length) {
 				const commentData = commentsArr[i].data
-				if(!commentData.distinguished && commentData.body){
+				if(!commentData.distinguished){
 					commentsList.push({
-						comment: commentData.body.replace('&gt;', ''),
+						comment: commentData.body,
 						author: commentData.author,
 						score: commentData.score
 					})
-
-					item.comments = commentsList
 				}
+
+				item.comments = commentsList
 				i++
 			}
 		}

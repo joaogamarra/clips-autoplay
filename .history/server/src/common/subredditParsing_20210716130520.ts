@@ -39,8 +39,9 @@ export const parseSubreddit = async (data: any) => {
 			while(commentsList.length < 5 && i < commentsArr.length) {
 				const commentData = commentsArr[i].data
 				if(!commentData.distinguished && commentData.body){
+					
 					commentsList.push({
-						comment: commentData.body.replace('&gt;', ''),
+						comment: commentData.body,
 						author: commentData.author,
 						score: commentData.score
 					})

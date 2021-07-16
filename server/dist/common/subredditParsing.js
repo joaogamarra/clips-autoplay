@@ -39,20 +39,20 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
     yield Promise.all(parsedData.data.map((item) => __awaiter(void 0, void 0, void 0, function* () {
         var _e, _f, _g;
         const commentsList = [];
-        const comments = yield subreddit_1.getSubreddit(`${(_e = item.comments_url) === null || _e === void 0 ? void 0 : _e.replace('/r/', '')}.json?sort=top`);
+        const comments = yield subreddit_1.getSubreddit(`${(_e = item.comments_url) === null || _e === void 0 ? void 0 : _e.replace('/r/', '')}.json?sort=top&limit=15`);
         const commentsArr = (_g = (_f = comments[1]) === null || _f === void 0 ? void 0 : _f.data) === null || _g === void 0 ? void 0 : _g.children;
         if (commentsArr.length > 0) {
             let i = 0;
             while (commentsList.length < 5 && i < commentsArr.length) {
                 const commentData = commentsArr[i].data;
-                if (!commentData.distinguished) {
+                if (!commentData.distinguished && commentData.body) {
                     commentsList.push({
                         comment: commentData.body.replace('&gt;', ''),
                         author: commentData.author,
                         score: commentData.score
                     });
+                    item.comments = commentsList;
                 }
-                item.comments = commentsList;
                 i++;
             }
         }
