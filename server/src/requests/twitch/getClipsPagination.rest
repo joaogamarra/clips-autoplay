@@ -2,5 +2,5 @@
 GET https://api.twitch.tv/helix/clips?broadcaster_id=71092938&first=5&after=eyJiIjpudWxsLCJhIjp7IkN1cnNvciI6Ik5RPT0ifX0
 Content-Type: application/json
 Authorization: Bearer jk7c89u5tnjdkl24remxv9j5ac8rui
-Client-Id: tctkc758owz1egz7tich6z98kyekli
+Client-Id: <client-id>
 
