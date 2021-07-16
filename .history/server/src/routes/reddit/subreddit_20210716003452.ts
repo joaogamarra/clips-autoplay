@@ -7,11 +7,12 @@ import { parseRedditQuery } from '../../common/queryParsing'
 const router = express.Router()
 
 router.get('/:id', async (req, res) => {
+	console.log(req)
 	const query = parseRedditQuery(req)
-
 	const data: AxiosResponse = await getSubreddit(query)
 	if (data) {
-		const dataParsed = await parseSubreddit(data.data)
+		const dataParsed = parseSubreddit(data)
+
 
 		res.send(dataParsed)
 	} else {

@@ -12,17 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getSubreddit = void 0;
 const service_1 = __importDefault(require("./service"));
 const getSubreddit = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const baseUrl = `https://old.reddit.com/r/livestreamfail/${query}`;
-    console.log(baseUrl);
+    const baseUrl = `https://old.reddit.com/r/${query}`;
     const res = yield service_1.default(baseUrl);
     if (res) {
-        return res.data.data;
+        return res.data;
     }
     else {
         return false;
     }
 });
-exports.default = getSubreddit;
+exports.getSubreddit = getSubreddit;
 //# sourceMappingURL=subreddit.js.map

@@ -10,6 +10,7 @@ router.get('/:id', async (req, res) => {
 	const query = parseRedditQuery(req)
 
 	const data: AxiosResponse = await getSubreddit(query)
+	console.log(data.data)
 	if (data) {
 		const dataParsed = await parseSubreddit(data.data)
 

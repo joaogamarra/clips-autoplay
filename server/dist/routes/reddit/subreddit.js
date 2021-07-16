@@ -12,16 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const subreddit_1 = __importDefault(require("../../services/reddit/subreddit"));
+const subreddit_1 = require("../../services/reddit/subreddit");
 const express_1 = __importDefault(require("express"));
 const subredditParsing_1 = require("../../common/subredditParsing");
 const queryParsing_1 = require("../../common/queryParsing");
 const router = express_1.default.Router();
-router.get('/livestreamfail', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const query = queryParsing_1.parseRedditQuery(req);
-    const data = yield subreddit_1.default(query);
+    const data = yield subreddit_1.getSubreddit(query);
     if (data) {
-        const dataParsed = subredditParsing_1.parseSubreddit(data);
+        const dataParsed = yield subredditParsing_1.parseSubreddit(data.data);
         res.send(dataParsed);
     }
     else {

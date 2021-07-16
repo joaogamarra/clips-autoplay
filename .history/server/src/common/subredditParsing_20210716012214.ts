@@ -1,7 +1,7 @@
 import { getSubreddit } from '../services/reddit/subreddit'
 import { responseClips } from '../types/response'
 
-export const parseSubreddit = async (data: any) => {
+export const parseSubreddit = (data: any) => {
 	const parsedData: responseClips = {
 		data: [],
 		pagination: {
@@ -15,6 +15,30 @@ export const parseSubreddit = async (data: any) => {
 		const url = item.data?.media?.oembed?.thumbnail_url
 		if (url) {
 			const itemLink = isVideo(url)
+			const commentsList = []
+
+			const comments = await getSubreddit(`${item.data.permalink.replace('/r/', '')}.json`)
+
+			console.log(comments)
+							
+			/* const commentsArr = comments[1]?.data?.children
+
+			if(commentsArr.length > 0) {
+				let i = 0
+				while(commentsList.length < 5 && i < commentsArr.length) {
+					const commentData = commentsArr[i].data
+					if(!commentData.distinguished){
+						commentsList.push({
+							comment: commentData.body,
+							author: commentData.author,
+							score: commentData.score
+						})
+					}
+					i++
+				}
+			}
+ */			
+			
 
 			if (itemLink) {
 				parsedData.data.push({
@@ -26,37 +50,6 @@ export const parseSubreddit = async (data: any) => {
 			}
 		}
 	})
-
-	await Promise.all(parsedData.data.map(async(item) => {
-		const commentsList = []
-
-		const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top`)
-						
-		const commentsArr = comments[1]?.data?.children
-	
-		if(commentsArr.length > 0) {
-			let i = 0
-			while(commentsList.length < 5 && i < commentsArr.length) {
-				const commentData = commentsArr[i].data
-				if(!commentData.distinguished){
-					commentsList.push({
-						comment: commentData.body.replace('&gt;', ''),
-						author: commentData.author,
-						score: commentData.score
-					})
-				}
-
-				item.comments = commentsList
-				i++
-			}
-		}
-		
-	}))
-		
-		
-	
-
-
 	return parsedData
 }
 

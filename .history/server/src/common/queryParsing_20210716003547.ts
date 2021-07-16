@@ -79,6 +79,7 @@ export const parseRedditQuery = (req: Request) => {
 	let timeQuery = ''
 	let sort = sortType.hot
 
+	console.log(req.query)
 	if (typeof req.query.timeperiod === 'string') {
 		timePeriod = parseTimePeriod(req.query.timeperiod)
 		timeQuery = `&t=${timePeriod}`
@@ -88,7 +89,7 @@ export const parseRedditQuery = (req: Request) => {
 	}
 	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`
 
-	query = `${sort}.json?limit=100${timeQuery}${after}`
+	query = `${sort}.json?limit=70${timeQuery}${after}`
 
 	return query
 }

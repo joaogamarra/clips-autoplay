@@ -1,6 +1,6 @@
 import getResponse from './service'
 
-const getSubreddit = async (query: string) => {
+export const getSubreddit = async (query: string) => {
 	const baseUrl = `https://old.reddit.com/r/livestreamfail/${query}`
 
 	const res = await getResponse(baseUrl)
@@ -11,5 +11,3 @@ const getSubreddit = async (query: string) => {
 		return false
 	}
 }
-
-export default getSubreddit

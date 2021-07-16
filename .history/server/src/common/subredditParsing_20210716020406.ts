@@ -45,8 +45,6 @@ export const parseSubreddit = async (data: any) => {
 						score: commentData.score
 					})
 				}
-
-				item.comments = commentsList
 				i++
 			}
 		}
