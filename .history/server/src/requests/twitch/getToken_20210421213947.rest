@@ -1,3 +1,0 @@
-
-GET https://id.twitch.tv/oauth2/token?client_id=tctkc758owz1egz7tich6z98kyekli&client_secret=hr7owv8espjco3ql2rwofxv50r70k5&grant_type=client_credentials
-Content-Type: application/json

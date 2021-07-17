@@ -1,3 +1,0 @@
-
-POST https://id.twitch.tv/oauth2/token?client_id=<clientID>&client_secret=<clientSecret>&grant_type=client_credentials
-Content-Type: application/json

@@ -1,4 +1,0 @@
-GET https://api.twitch.tv/helix/search/channels?query=xqcow
-Content-Type: application/json
-Authorization: Bearer dz7u3c41q40k0hejknfqeag3wjldt7
-Client-Id: tctkc758owz1egz7tich6z98kyekli
