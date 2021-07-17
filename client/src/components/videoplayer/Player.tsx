@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from 'react'
-import {useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getClips } from 'src/common/api'
 import {
 	setClipIndex,
@@ -11,7 +11,7 @@ import {
 } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
-import { ChevronRightIcon,  } from '@primer/octicons-react'
+import { ChevronRightIcon, CommentIcon, ScreenFullIcon } from '@primer/octicons-react'
 import redditLogo from '../../assets/logo-reddit.svg'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
@@ -23,6 +23,7 @@ import Loader from '../common/loader/Loader'
 import { addFavourite, getFavourites } from 'src/common/localstorage'
 import PlayerError from './PlayerError'
 import PlayerFinished from './PlayerFinished'
+import CommentsBox from './CommentsBox'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -31,6 +32,8 @@ const Player: FC = () => {
 	const [finished, setFinished] = useState(false)
 	const [videoMaxWidth, setVideoMaxWidth] = useState(1200)
 	const [loadingClips, setLoadingClips] = useState(false)
+	const [commentsVisible, setCommentsVisible] = useState(true)
+	const [fullscreen, setFullscreen] = useState(false)
 	const params = useParams<searchClips>()
 
 	useEffect(() => {
@@ -45,8 +48,6 @@ const Player: FC = () => {
 			dispatch(setCurrentSearch(params))
 
 			const data = await getClips(params)
-			console.log(data)
-
 
 			if ('error' in data) {
 				setError(true)
@@ -78,22 +79,19 @@ const Player: FC = () => {
 	}, [dispatch, params])
 
 	useEffect(() => {
-
-		
-
 		const updateVideoSize = () => {
 			const video = document.querySelector('.player-container video')
 			const vh = window.innerHeight
-			
-			if(video){
-					setVideoMaxWidth((vh - 200) * 1.69)
+			const vw = window.innerWidth
+
+			if (video && vw > 1000) {
+				setVideoMaxWidth((vh - 200) * 1.69)
 			}
 		}
 
 		updateVideoSize()
 
 		window.onresize = updateVideoSize
-		
 	}, [])
 
 	const nextClip = useCallback(
@@ -152,10 +150,13 @@ const Player: FC = () => {
 
 	return (
 		<>
-			<div className='player-container' style={{ maxWidth: videoMaxWidth}}>
-				{finished && (
-					<PlayerFinished />
-				)}
+			<div
+				className={`player-container ${commentsVisible && currentClip.comments ? 'has-comments' : ''} ${
+					fullscreen ? 'is-fullscreen' : ''
+				}`}
+				style={{ maxWidth: videoMaxWidth }}
+			>
+				{finished && <PlayerFinished />}
 				{currentClip.video_url && (
 					<>
 						<div className='video-controls'>
@@ -168,22 +169,30 @@ const Player: FC = () => {
 										href={`${currentClip.twitch_url}`}
 										target='_blank'
 										rel='noreferrer'
-										title='clip link'
+										title='clip twitch page'
 									>
 										<img className='' width='25' src={twitchLogo} alt='twitch logo' />
 									</a>
 								)}
-								{currentClip.comments_url && (
-									<a
-										className='link-comments'
-										href={`https://reddit.com${currentClip.comments_url}`}
-										target='_blank'
-										rel='noreferrer'
-										title='clip comments'
+
+								<button
+									className='toggle-fullscreen'
+									title='toggle fullscreen'
+									onClick={() => setFullscreen(!fullscreen)}
+								>
+									<ScreenFullIcon size={20} />
+								</button>
+
+								{currentClip.comments && (
+									<button
+										className='toggle-comments'
+										title='toggle comments'
+										onClick={() => setCommentsVisible(!commentsVisible)}
 									>
-										<img className='' width='25' src={redditLogo} alt='reddit logo' />
-									</a>
+										<CommentIcon size={20} />
+									</button>
 								)}
+
 								<button
 									className='btn-clips-control btn-left'
 									onClick={() => nextClip('prev')}
@@ -207,23 +216,27 @@ const Player: FC = () => {
 								</button>
 							</div>
 						</div>
+						<div className='video-comments-wrapper'>
+							{
+								<video
+									className={transition}
+									src={currentClip.video_url}
+									autoPlay={true}
+									controls={true}
+									onEnded={() => nextClip()}
+									onLoadedData={() => setTransition('')}
+									onError={() => nextClip()}
+								></video>
+							}
 
-						{<video
-							className={transition}
-							src={currentClip.video_url}
-							autoPlay={true}
-							controls={true}
-							onEnded={() => nextClip()}
-							onLoadedData={() => setTransition('')}
-							onError={() => nextClip()}
-						></video>}
+							{currentClip.comments && transition !== 'loading' ? (
+								<CommentsBox currentClip={currentClip}></CommentsBox>
+							) : null}
+						</div>
 					</>
 				)}
-				{error && (
-					<PlayerError/>
-				)}
+				{error && <PlayerError />}
 
-				
 				<Loader visible={transition} />
 			</div>
 		</>

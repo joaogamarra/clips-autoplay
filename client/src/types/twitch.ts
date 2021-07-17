@@ -5,6 +5,13 @@ export interface ResponseClip {
 	video_url: string
 	twitch_url: string
 	comments_url: string
+	comments?: comment[]
+}
+
+export interface comment {
+	author: string
+	score: string
+	comment: string
 }
 
 export interface ResponseClips {

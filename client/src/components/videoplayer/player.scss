@@ -6,11 +6,46 @@
 	width: 100%;
 	max-width: 1200px;
 
+	&.has-comments {
+		video {
+			width: calc(100% - #{$comments-width});
+		}
+
+		.comments-container {
+			opacity: 1;
+			transition: opacity 200ms ease-in-out 200ms;
+		}
+
+		.toggle-comments {
+			opacity: 1;
+		}
+	}
+
+	&.is-fullscreen {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		max-width: 100vw !important;
+		height: 100vh;
+		z-index: 120;
+		background-color: $color-main-black;
+
+		.toggle-fullscreen {
+			opacity: 1;
+		}
+
+		.video-comments-wrapper video {
+			height: calc(100vh - 46px);
+		}
+	}
+
 	.video-controls {
 		display: flex;
 		justify-content: space-between;
 		align-items: stretch;
 		padding: 0 0 0 12px;
+		width: 100%;
 		border-bottom: 1px solid $color-main-black;
 		background: rgba($color-purple-main, 0.2);
 
@@ -24,13 +59,65 @@
 
 	video {
 		display: block;
-		margin: 0 auto 24px;
 		width: 100%;
 		height: auto;
+		transition: width 300ms ease-in-out;
+	}
 
-		&.loading {
-			width: 100%;
-			opacity: 0;
+	.video-comments-wrapper {
+		position: relative;
+	}
+
+	.comments-container {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding-top: 12px;
+		width: $comments-width;
+		height: 100%;
+		font-size: 16px;
+		line-height: 22px;
+		background-color: rgba($color-purple-main, 0.05);
+		overflow-y: auto;
+		border-bottom: 1px solid rgba($color-purple-main, 0.1);
+		overflow-x: hidden;
+		transition: opacity 200ms ease-in-out;
+		opacity: 0;
+
+		.comments-item {
+			padding: 0 24px;
+			margin-bottom: 12px;
+		}
+
+		.comment-author {
+			font-size: 12px;
+		}
+	}
+
+	.toggle-comments,
+	.toggle-fullscreen {
+		padding: 0 12px;
+		color: $color-main-white;
+		background: none;
+		outline: none;
+		border: none;
+		cursor: pointer;
+		opacity: 0.3;
+		transition: opacity 200ms ease-in-out;
+	}
+
+	.link-comments {
+		position: sticky;
+		display: block;
+		bottom: 0;
+		left: 0;
+		padding: 12px 0;
+		width: 100%;
+		text-align: center;
+		background-color: rgba($color-main-black, 0.9);
+
+		&:hover {
+			text-decoration: underline;
 		}
 	}
 
@@ -47,7 +134,7 @@
 		align-items: stretch;
 	}
 
-	.link-comments, .link-twitch {
+	.link-twitch {
 		display: flex;
 		align-items: center;
 
@@ -127,6 +214,24 @@
 		.btn-clips-control {
 			padding: 12px 0;
 			width: calc(50% - 1px);
+		}
+	}
+
+	@media only screen and (max-width: $screen-md) {
+		&.has-comments {
+			video {
+				width: 100%;
+			}
+
+			.comments-container {
+				position: relative;
+				width: 100%;
+				height: 300px;
+			}
+		}
+
+		.toggle-fullscreen {
+			display: none;
 		}
 	}
 }
