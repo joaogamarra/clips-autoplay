@@ -3,8 +3,7 @@
 **/package-lock.json
 
 # Compiled
-**/dist
-**/build
+**/client/build
 
 # IDE
 .vscode/*
