@@ -12,6 +12,7 @@
 		}
 
 		.comments-box {
+			pointer-events: initial;
 			opacity: 1;
 			transition: opacity 200ms ease-in-out 200ms;
 		}
@@ -81,6 +82,7 @@
 		border-bottom: 1px solid rgba($color-purple-main, 0.1);
 		transition: opacity 200ms ease-in-out;
 		opacity: 0;
+		pointer-events: none;
 
 		.comments-container {
 			padding-bottom: 46px;
@@ -224,14 +226,18 @@
 	}
 
 	@media only screen and (max-width: $screen-md) {
+		.comments-box {
+			position: relative;
+			width: 100%;
+			height: 0;
+		}
+
 		&.has-comments {
 			video {
 				width: 100%;
 			}
 
 			.comments-box {
-				position: relative;
-				width: 100%;
 				height: 300px;
 			}
 		}

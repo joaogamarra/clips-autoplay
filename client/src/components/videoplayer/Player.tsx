@@ -77,26 +77,14 @@ const Player: FC = () => {
 		}
 	}, [dispatch, params])
 
-	useEffect(() => {
-		const updateVideoSize = () => {
-			const video = document.querySelector('.player-container video')
-			const vh = window.innerHeight
-			const vw = window.innerWidth
-
-			if (video && vw > 1000) {
-				setVideoMaxWidth((vh - 200) * 1.69)
-			}
-		}
-
-		updateVideoSize()
-
-		window.onresize = updateVideoSize
-	}, [])
-
 	const nextClip = useCallback(
 		(direction?: string) => {
 			const clipsData = clips.data
 			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+
+			if (direction === 'prev' && clipIndex <= 0) {
+				return false
+			}
 
 			if (newClipIndex + 1 <= clips.data.length) {
 				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
@@ -104,6 +92,7 @@ const Player: FC = () => {
 					nextClip()
 				} else {
 					setTransition('loading')
+					setFinished(false)
 
 					dispatch(setCurrentClip(clipsData[newClipIndex]))
 					dispatch(setClipIndex(newClipIndex))
@@ -118,10 +107,8 @@ const Player: FC = () => {
 
 	const loadMoreClips = useCallback(async () => {
 		const after = clips.pagination.cursor
-		console.log('moreclips called')
 		if (after !== '' && !loadingClips) {
 			setLoadingClips(true)
-			console.log('loading clips')
 			const data = await getClips(currentSearch, after)
 
 			if ('error' in data) {
@@ -146,6 +133,33 @@ const Player: FC = () => {
 			loadMoreClips()
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])
+
+	useEffect(() => {
+		const updateVideoSize = () => {
+			const video = document.querySelector('.player-container video')
+			const vh = window.innerHeight
+			const vw = window.innerWidth
+
+			if (video && vw > 1000) {
+				setVideoMaxWidth((vh - 200) * 1.69)
+			}
+		}
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'ArrowLeft') {
+				nextClip('prev')
+			}
+
+			if (e.key === 'ArrowRight') {
+				nextClip()
+			}
+		}
+
+		updateVideoSize()
+
+		window.onresize = updateVideoSize
+		window.onkeydown = handleKeyDown
+	}, [nextClip])
 
 	return (
 		<>
