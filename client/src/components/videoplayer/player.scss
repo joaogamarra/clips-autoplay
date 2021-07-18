@@ -11,7 +11,7 @@
 			width: calc(100% - #{$comments-width});
 		}
 
-		.comments-container {
+		.comments-box {
 			opacity: 1;
 			transition: opacity 200ms ease-in-out 200ms;
 		}
@@ -68,7 +68,7 @@
 		position: relative;
 	}
 
-	.comments-container {
+	.comments-box {
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -78,11 +78,17 @@
 		font-size: 16px;
 		line-height: 22px;
 		background-color: rgba($color-purple-main, 0.05);
-		overflow-y: auto;
 		border-bottom: 1px solid rgba($color-purple-main, 0.1);
-		overflow-x: hidden;
 		transition: opacity 200ms ease-in-out;
 		opacity: 0;
+
+		.comments-container {
+			padding-bottom: 46px;
+			width: 100%;
+			height: 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+		}
 
 		.comments-item {
 			padding: 0 24px;
@@ -107,7 +113,7 @@
 	}
 
 	.link-comments {
-		position: sticky;
+		position: absolute;
 		display: block;
 		bottom: 0;
 		left: 0;
@@ -223,7 +229,7 @@
 				width: 100%;
 			}
 
-			.comments-container {
+			.comments-box {
 				position: relative;
 				width: 100%;
 				height: 300px;

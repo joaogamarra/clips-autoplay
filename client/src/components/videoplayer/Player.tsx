@@ -12,7 +12,6 @@ import {
 import { useStateValue } from 'src/state/state'
 import { searchClips } from 'src/types/search'
 import { ChevronRightIcon, CommentIcon, ScreenFullIcon } from '@primer/octicons-react'
-import redditLogo from '../../assets/logo-reddit.svg'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
 

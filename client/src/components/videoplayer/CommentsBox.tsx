@@ -1,19 +1,21 @@
-import { FC } from "react"
-import { ResponseClip } from "src/types/twitch"
+import { FC } from 'react'
+import { ResponseClip } from 'src/types/twitch'
 
 interface Props {
 	currentClip: ResponseClip
 }
 
-const CommentsBox: FC<Props> = ({currentClip}) => {
+const CommentsBox: FC<Props> = ({ currentClip }) => {
 	return (
-		<div className="comments-container">
-			{currentClip.comments?.map(({ comment, author }, index) => (
-				<div className='comments-item' key={index}>
-					<span className='comment-author'>{`/u/${author}`}</span>
-					<p>{comment}</p>
-				</div>
-			))}
+		<div className='comments-box'>
+			<div className='comments-container'>
+				{currentClip.comments?.map(({ comment, author }, index) => (
+					<div className='comments-item' key={index}>
+						<span className='comment-author'>{`/u/${author}`}</span>
+						<p>{comment}</p>
+					</div>
+				))}
+			</div>
 
 			{currentClip.comments_url && (
 				<a
@@ -23,7 +25,7 @@ const CommentsBox: FC<Props> = ({currentClip}) => {
 					rel='noreferrer'
 					title='clip comments'
 				>
-					See All Comments 
+					See All Comments
 				</a>
 			)}
 		</div>
