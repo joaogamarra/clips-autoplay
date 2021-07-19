@@ -27,35 +27,32 @@ export const parseSubreddit = async (data: any) => {
 		}
 	})
 
-	await Promise.all(parsedData.data.map(async(item) => {
-		const commentsList = []
+	await Promise.all(
+		parsedData.data.map(async (item) => {
+			const commentsList = []
+			console.log(`URL REQUEST: ${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=30`)
+			const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=30`)
 
-		const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=30`)
-						
-		const commentsArr = comments[1]?.data?.children
-	
-		if(commentsArr.length > 0) {
-			let i = 0
-			while(commentsList.length < 10 && i < commentsArr.length) {
-				const commentData = commentsArr[i].data
-				if(!commentData.distinguished && commentData.body){
-					commentsList.push({
-						comment: commentData.body.replace('&gt;', ''),
-						author: commentData.author,
-						score: commentData.score
-					})
+			const commentsArr = comments[1]?.data?.children
 
-					item.comments = commentsList
+			if (commentsArr && commentsArr.length > 0) {
+				let i = 0
+				while (commentsList.length < 10 && i < commentsArr.length) {
+					const commentData = commentsArr[i].data
+					if (!commentData.distinguished && commentData.body) {
+						commentsList.push({
+							comment: commentData.body.replace('&gt;', ''),
+							author: commentData.author,
+							score: commentData.score,
+						})
+
+						item.comments = commentsList
+					}
+					i++
 				}
-				i++
 			}
-		}
-		
-	}))
-		
-		
-	
-
+		})
+	)
 
 	return parsedData
 }
