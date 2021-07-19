@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { getFavourites, removeFavourite } from 'src/common/localstorage'
 import { apiTimePeriod, searchClips } from 'src/types/search'
 import './sidebar.scss'
-import { HeartFillIcon, XCircleFillIcon, HomeFillIcon } from '@primer/octicons-react'
+import { HeartFillIcon, XCircleFillIcon, SearchIcon } from '@primer/octicons-react'
 import ChannelAndAvatar from '../common/channelAndAvatar/ChannelAndAvatar'
 import { useStateValue } from 'src/state/state'
 import { setFavourites } from 'src/state/reducer'
@@ -45,8 +45,8 @@ const Sidebar: FC = () => {
 					<div className='favourites-container'>
 						<h5 className='title-lg'>
 							<Link to='/' title='Homepage' onClick={() => handleFavouriteClick()}>
-								<HomeFillIcon size={30} className='sidebar-icon' />
-								<span className='title-text'>Homepage</span>
+								<SearchIcon size={30} className='sidebar-icon' />
+								<span className='title-text'>Search</span>
 							</Link>
 						</h5>
 

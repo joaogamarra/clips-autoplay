@@ -63,6 +63,10 @@
 		width: 100%;
 		height: auto;
 		transition: width 300ms ease-in-out;
+
+		&.loading {
+			opacity: 0;
+		}
 	}
 
 	.video-comments-wrapper {
@@ -132,7 +136,7 @@
 	.btn-playback-speed {
 		position: relative;
 		padding: 0 12px;
-		min-width: 70px;
+		min-width: 63px;
 		height: 100%;
 		color: $color-main-white;
 		background: none;
