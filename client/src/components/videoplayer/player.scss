@@ -129,6 +129,60 @@
 		}
 	}
 
+	.btn-playback-speed {
+		position: relative;
+		padding: 0 12px;
+		min-width: 70px;
+		height: 100%;
+		color: $color-main-white;
+		background: none;
+		outline: none;
+		border: none;
+		cursor: pointer;
+	}
+
+	.playback-speed-container {
+		position: relative;
+		text-align: center;
+	}
+
+	.playback-options {
+		position: absolute;
+		top: 45px;
+		left: 0;
+		width: 100%;
+		max-height: 0;
+		background: #36284f;
+		z-index: 10;
+		overflow: hidden;
+		transition: max-height 200ms ease-in-out;
+
+		&.is-visible {
+			max-height: 300px;
+		}
+
+		li {
+			padding: 2px 12px;
+
+			&:first-child {
+				padding: 6px 12px 2px;
+			}
+
+			&:last-child {
+				padding: 2px 12px 6px;
+			}
+		}
+
+		button {
+			padding: 0;
+			outline: none;
+			border: none;
+			background: none;
+			color: inherit;
+			cursor: pointer;
+		}
+	}
+
 	.loader {
 		position: absolute;
 		top: 300px;

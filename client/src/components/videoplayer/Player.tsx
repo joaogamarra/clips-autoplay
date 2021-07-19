@@ -32,6 +32,8 @@ const Player: FC = () => {
 	const [videoMaxWidth, setVideoMaxWidth] = useState(1200)
 	const [loadingClips, setLoadingClips] = useState(false)
 	const [commentsVisible, setCommentsVisible] = useState(true)
+	const [playbackSpeed, setPlaybackSpeed] = useState(1)
+	const [playbackOptionsVisible, setPlaybackOptionsVisible] = useState(false)
 	const [fullscreen, setFullscreen] = useState(false)
 	const params = useParams<searchClips>()
 
@@ -128,11 +130,20 @@ const Player: FC = () => {
 		}
 
 		//When there are clips and the currentClip is reaching the last fetch more
-		//------Todo - Increase Margin before deploy
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
 			loadMoreClips()
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])
+
+	const handlePlaybackSpeed = (speed: number) => {
+		const video = document.querySelector('.player-container video') as HTMLMediaElement
+		setPlaybackSpeed(speed)
+		setPlaybackOptionsVisible(false)
+		if (video) {
+			video.defaultPlaybackRate = speed
+			video.playbackRate = speed
+		}
+	}
 
 	useEffect(() => {
 		const updateVideoSize = () => {
@@ -205,6 +216,31 @@ const Player: FC = () => {
 										<CommentIcon size={20} />
 									</button>
 								)}
+								<div className='playback-speed-container'>
+									<button
+										onClick={() => setPlaybackOptionsVisible(!playbackOptionsVisible)}
+										className='btn-playback-speed'
+									>
+										{playbackSpeed}x
+									</button>
+									<ul className={`playback-options ${playbackOptionsVisible ? 'is-visible' : ''}`}>
+										<li>
+											<button onClick={() => handlePlaybackSpeed(0.5)}>0.5x</button>
+										</li>
+										<li>
+											<button onClick={() => handlePlaybackSpeed(1)}>1x</button>
+										</li>
+										<li>
+											<button onClick={() => handlePlaybackSpeed(1.25)}>1.25x</button>
+										</li>
+										<li>
+											<button onClick={() => handlePlaybackSpeed(1.5)}>1.5x</button>
+										</li>
+										<li>
+											<button onClick={() => handlePlaybackSpeed(2)}>2x</button>
+										</li>
+									</ul>
+								</div>
 
 								<button
 									className='btn-clips-control btn-left'

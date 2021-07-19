@@ -30,7 +30,7 @@ export const parseSubreddit = async (data: any) => {
 	await Promise.all(
 		parsedData.data.map(async (item) => {
 			const commentsList = []
-			console.log(`URL REQUEST: ${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=30`)
+
 			const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=30`)
 
 			const commentsArr = comments[1]?.data?.children
