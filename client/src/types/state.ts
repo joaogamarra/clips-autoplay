@@ -27,6 +27,10 @@ export type Action =
 			payload: ResponseClips
 	  }
 	| {
+			type: 'CLIP_SEEN'
+			payload: ResponseClip
+	  }
+	| {
 			type: 'SET_CURRENT_SEARCH'
 			payload: searchClips
 	  }

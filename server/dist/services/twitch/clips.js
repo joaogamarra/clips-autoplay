@@ -13,11 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const service_1 = __importDefault(require("./service"));
-const getClips = (token, channel, category, query) => __awaiter(void 0, void 0, void 0, function* () {
+const getClips = (token, channel, category, query, limit) => __awaiter(void 0, void 0, void 0, function* () {
     let searchType = `broadcaster_id=${channel === null || channel === void 0 ? void 0 : channel.id}`;
+    const queryLimit = limit ? limit : 50;
     if (category)
         searchType = `game_id=${category === null || category === void 0 ? void 0 : category.id}`;
-    const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=50`;
+    const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=${queryLimit}`;
     const res = yield service_1.default(token, baseUrl);
     if (res) {
         const data = res.data;

@@ -17,6 +17,7 @@ export enum apiTimePeriod {
 	month = 'month',
 	year = 'year',
 	all = 'all',
+	shuffle = 'shuffle',
 }
 
 export enum sortType {

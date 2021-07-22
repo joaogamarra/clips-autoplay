@@ -4,13 +4,14 @@ import { getClips } from 'src/common/api'
 import {
 	setClipIndex,
 	setClips,
+	setClipSeen,
 	setCurrentClip,
 	setCurrentSearch,
 	setFavourites,
 	updateClips,
 } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
-import { searchClips } from 'src/types/search'
+import { apiTimePeriod, searchClips } from 'src/types/search'
 import { ChevronRightIcon, CommentIcon, ScreenFullIcon } from '@primer/octicons-react'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
@@ -23,15 +24,19 @@ import { addFavourite, getFavourites } from 'src/common/localstorage'
 import PlayerError from './PlayerError'
 import PlayerFinished from './PlayerFinished'
 import CommentsBox from './CommentsBox'
+import { getRandomInt } from 'src/common/utils'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
+	const [indexUsed, setIndexUsed] = useState<number[]>([])
 	const [transition, setTransition] = useState('loading')
 	const [error, setError] = useState(false)
 	const [finished, setFinished] = useState(false)
 	const [videoMaxWidth, setVideoMaxWidth] = useState(1200)
 	const [loadingClips, setLoadingClips] = useState(false)
 	const [commentsVisible, setCommentsVisible] = useState(true)
+	const [nextDisabled, setNextDisabled] = useState(false)
+	const [prevDisabled, setPrevDisabled] = useState(true)
 	const [playbackSpeed, setPlaybackSpeed] = useState(1)
 	const [playbackOptionsVisible, setPlaybackOptionsVisible] = useState(false)
 	const [fullscreen, setFullscreen] = useState(false)
@@ -45,7 +50,6 @@ const Player: FC = () => {
 		setTransition('loading')
 
 		const getdata = async () => {
-			dispatch(setClipIndex(0))
 			dispatch(setCurrentSearch(params))
 
 			const data = await getClips(params)
@@ -55,7 +59,17 @@ const Player: FC = () => {
 				setTransition('')
 			} else {
 				dispatch(setClips(data))
-				dispatch(setCurrentClip(data.data[0]))
+				if (params.timePeriod === apiTimePeriod.shuffle) {
+					const randomIndex = getRandomInt(0, data.data.length)
+					const clip = data.data[randomIndex]
+					dispatch(setCurrentClip(clip))
+					dispatch(setClipIndex(randomIndex))
+					dispatch(setClipSeen(clip))
+					setIndexUsed([randomIndex])
+				} else {
+					dispatch(setCurrentClip(data.data[0]))
+					dispatch(setClipIndex(0))
+				}
 				setFinished(false)
 				await addFavourite(params)
 				const favouritesRes = await getFavourites()
@@ -79,34 +93,6 @@ const Player: FC = () => {
 		}
 	}, [dispatch, params])
 
-	const nextClip = useCallback(
-		(direction?: string) => {
-			const clipsData = clips.data
-			const newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
-
-			if (direction === 'prev' && clipIndex <= 0) {
-				return false
-			}
-
-			if (newClipIndex + 1 <= clips.data.length) {
-				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
-				if (clipsData[clipIndex].video_url === clipsData[newClipIndex].video_url) {
-					nextClip()
-				} else {
-					setTransition('loading')
-					setFinished(false)
-
-					dispatch(setCurrentClip(clipsData[newClipIndex]))
-					dispatch(setClipIndex(newClipIndex))
-				}
-			} else {
-				setFinished(true)
-				setTransition('')
-			}
-		},
-		[clipIndex, clips, dispatch]
-	)
-
 	const loadMoreClips = useCallback(async () => {
 		const after = clips.pagination.cursor
 		if (after !== '' && !loadingClips) {
@@ -122,12 +108,84 @@ const Player: FC = () => {
 		}
 	}, [clips.pagination.cursor, currentSearch, dispatch, loadingClips])
 
+	const nextClip = useCallback(
+		(direction?: string) => {
+			const clipsData = clips.data
+			let newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+
+			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle) {
+				return false
+			}
+
+			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
+				const indexUsedPopped = indexUsed.slice(0, indexUsed.length - 1)
+
+				//increase clips pool
+				if (clipsData.length < 21100) {
+					loadMoreClips()
+				}
+
+				// When going backwards use the previous clips instead of random
+				if (direction === 'prev') {
+					const indexUsedLength = indexUsed.length
+					if (indexUsedLength > 0) {
+						const currentIndex = indexUsed.indexOf(clipIndex)
+						newClipIndex = indexUsed[currentIndex - 1]
+					}
+				}
+				// If the user went back show the clips ordered instead of grabbing a new random one
+				else if (indexUsed.length > 1 && indexUsedPopped.includes(clipIndex)) {
+					const currentIndex = indexUsed.indexOf(clipIndex)
+					newClipIndex = indexUsed[currentIndex + 1]
+				} else {
+					const filteredData = clipsData.filter((clip) => !clip.seen)
+					if (filteredData.length > 0) {
+						const filteredIndex = getRandomInt(0, filteredData.length - 1)
+						const filteredClip = filteredData[filteredIndex]
+						newClipIndex = clipsData.findIndex((clip) => clip === filteredClip)
+						console.log(clipsData.length, newClipIndex)
+						setIndexUsed(indexUsed.concat(newClipIndex))
+					} else {
+						setFinished(true)
+						setTransition('')
+
+						return false
+					}
+				}
+			}
+
+			if (newClipIndex + 1 <= clips.data.length) {
+				const newClip = clipsData[newClipIndex]
+				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
+				if (clipIndex > 0 && clipsData[clipIndex].video_url === newClip.video_url) {
+					nextClip()
+				} else {
+					setTransition('loading')
+					setFinished(false)
+					dispatch(setCurrentClip(newClip))
+					dispatch(setClipIndex(newClipIndex))
+					dispatch(setClipSeen(newClip))
+				}
+			} else {
+				setFinished(true)
+				setTransition('')
+			}
+
+			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
+				clipsData.length === indexUsed.length ? setNextDisabled(true) : setNextDisabled(false)
+				indexUsed.length === 0 || indexUsed[0] === newClipIndex
+					? setPrevDisabled(true)
+					: setPrevDisabled(false)
+			} else {
+				clips.data.length <= newClipIndex + 1 ? setNextDisabled(true) : setNextDisabled(false)
+				newClipIndex <= 0 ? setPrevDisabled(true) : setPrevDisabled(false)
+			}
+		},
+		[clipIndex, clips.data, currentSearch.timePeriod, dispatch, indexUsed, loadMoreClips]
+	)
+
 	useEffect(() => {
 		const clipsTotal = clips.data.length
-		//Starts the Autoplay if the clips have been set and none has played yet
-		if (clipsTotal > 0 && clipIndex === -1) {
-			nextClip()
-		}
 
 		//When there are clips and the currentClip is reaching the last fetch more
 		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
@@ -245,7 +303,7 @@ const Player: FC = () => {
 								<button
 									className='btn-clips-control btn-left'
 									onClick={() => nextClip('prev')}
-									disabled={clipIndex <= 0}
+									disabled={prevDisabled}
 								>
 									Previous
 									<i className='icon-container'>
@@ -256,7 +314,7 @@ const Player: FC = () => {
 								<button
 									className='btn-clips-control btn-right'
 									onClick={() => nextClip()}
-									disabled={clips.data.length <= clipIndex + 1}
+									disabled={nextDisabled}
 								>
 									Next
 									<i className='icon-container'>

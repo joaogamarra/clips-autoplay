@@ -6,6 +6,7 @@ export interface ResponseClip {
 	twitch_url: string
 	comments_url: string
 	comments?: comment[]
+	seen?: boolean
 }
 
 export interface comment {

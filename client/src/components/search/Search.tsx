@@ -68,8 +68,11 @@ const Search: FC = () => {
 
 	const handleSearchTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value as searchType
-
-		setLocalSearch({ ...localSearch, mode: val })
+		if (val === searchType.subreddit && localSearch.timePeriod === apiTimePeriod.shuffle) {
+			setLocalSearch({ ...localSearch, timePeriod: apiTimePeriod.day, mode: val })
+		} else {
+			setLocalSearch({ ...localSearch, mode: val })
+		}
 	}
 
 	const handleTimePeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -151,51 +154,63 @@ const Search: FC = () => {
 						/>
 					</div>
 				)}
-				{localSearch.mode !== searchType.subreddit || (localSearch.mode === searchType.subreddit && localSearch.sort === sortType.top) ? (
-				<div className='inputs-group'>
-					<h2 className='title-lg'>Filter by</h2>
-					<RadioCustom
-						id='timePeriod-day'
-						name='timePeriod'
-						label='Day'
-						value={apiTimePeriod.day}
-						onChange={handleTimePeriodChange}
-						checked={localSearch.timePeriod === apiTimePeriod.day}
-					/>
-					<RadioCustom
-						id='timePeriod-week'
-						name='timePeriod'
-						label='Week'
-						value={apiTimePeriod.week}
-						onChange={handleTimePeriodChange}
-						checked={localSearch.timePeriod === apiTimePeriod.week}
-					/>
-					<RadioCustom
-						id='timePeriod-month'
-						name='timePeriod'
-						label='Month'
-						value={apiTimePeriod.month}
-						onChange={handleTimePeriodChange}
-						checked={localSearch.timePeriod === apiTimePeriod.month}
-					/>
-					<RadioCustom
-						id='timePeriod-year'
-						name='timePeriod'
-						label='Year'
-						value={apiTimePeriod.year}
-						onChange={handleTimePeriodChange}
-						checked={localSearch.timePeriod === apiTimePeriod.year}
-					/>
-					<RadioCustom
-						id='timePeriod-all'
-						name='timePeriod'
-						label='All'
-						value={apiTimePeriod.all}
-						onChange={handleTimePeriodChange}
-						checked={localSearch.timePeriod === apiTimePeriod.all}
-					/>
-				</div>
-				): null}
+				{localSearch.mode !== searchType.subreddit ||
+				(localSearch.mode === searchType.subreddit && localSearch.sort === sortType.top) ? (
+					<div className='inputs-group'>
+						<h2 className='title-lg'>Filter by</h2>
+
+						<RadioCustom
+							id='timePeriod-day'
+							name='timePeriod'
+							label='Day'
+							value={apiTimePeriod.day}
+							onChange={handleTimePeriodChange}
+							checked={localSearch.timePeriod === apiTimePeriod.day}
+						/>
+						<RadioCustom
+							id='timePeriod-week'
+							name='timePeriod'
+							label='Week'
+							value={apiTimePeriod.week}
+							onChange={handleTimePeriodChange}
+							checked={localSearch.timePeriod === apiTimePeriod.week}
+						/>
+						<RadioCustom
+							id='timePeriod-month'
+							name='timePeriod'
+							label='Month'
+							value={apiTimePeriod.month}
+							onChange={handleTimePeriodChange}
+							checked={localSearch.timePeriod === apiTimePeriod.month}
+						/>
+						<RadioCustom
+							id='timePeriod-year'
+							name='timePeriod'
+							label='Year'
+							value={apiTimePeriod.year}
+							onChange={handleTimePeriodChange}
+							checked={localSearch.timePeriod === apiTimePeriod.year}
+						/>
+						<RadioCustom
+							id='timePeriod-all'
+							name='timePeriod'
+							label='All'
+							value={apiTimePeriod.all}
+							onChange={handleTimePeriodChange}
+							checked={localSearch.timePeriod === apiTimePeriod.all}
+						/>
+						{localSearch.mode !== searchType.subreddit && (
+							<RadioCustom
+								id='timePeriod-shuffle'
+								name='timePeriod'
+								label='Shuffle'
+								value={apiTimePeriod.shuffle}
+								onChange={handleTimePeriodChange}
+								checked={localSearch.timePeriod === apiTimePeriod.shuffle}
+							/>
+						)}
+					</div>
+				) : null}
 				{localSearch.mode !== searchType.subreddit && (
 					<input
 						className='input-main-search'

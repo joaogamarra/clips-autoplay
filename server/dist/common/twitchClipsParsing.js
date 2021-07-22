@@ -2,23 +2,23 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseTwitchClips = void 0;
 const parseTwitchClips = (data) => {
-    const parsedData = {
-        data: [],
-        pagination: {
-            cursor: '',
-        },
-    };
+    let cursor = '';
     if (data.pagination.cursor)
-        parsedData.pagination.cursor = data.pagination.cursor;
-    data.data.forEach((item) => {
+        cursor = data.pagination.cursor;
+    const resData = data.data.map((item) => {
         const itemLink = item.thumbnail_url.split('-preview-')[0];
-        parsedData.data.push({
+        return {
             title: item.title,
             video_url: `${itemLink}.mp4`,
-            twitch_url: item.url
-        });
+            twitch_url: item.url,
+        };
     });
-    return parsedData;
+    return {
+        data: resData,
+        pagination: {
+            cursor: cursor,
+        },
+    };
 };
 exports.parseTwitchClips = parseTwitchClips;
 //# sourceMappingURL=twitchClipsParsing.js.map

@@ -30,6 +30,13 @@ export const updateClips = (clips: ResponseClips): Action => {
 	}
 }
 
+export const setClipSeen = (clip: ResponseClip): Action => {
+	return {
+		type: 'CLIP_SEEN',
+		payload: clip,
+	}
+}
+
 export const setCurrentSearch = (search: searchClips): Action => {
 	return {
 		type: 'SET_CURRENT_SEARCH',
@@ -76,6 +83,22 @@ export const reducer = (state: State, action: Action): State => {
 					pagination: {
 						cursor: action.payload.pagination.cursor,
 					},
+				},
+			}
+
+		case 'CLIP_SEEN':
+			const changedClip = {
+				...action.payload,
+				seen: true,
+			}
+			const newClipsData = state.clips.data.map((clip) => {
+				return clip?.twitch_url !== action.payload.twitch_url ? clip : changedClip
+			})
+			return {
+				...state,
+				clips: {
+					...state.clips,
+					data: newClipsData,
 				},
 			}
 

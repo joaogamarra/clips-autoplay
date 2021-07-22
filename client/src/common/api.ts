@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { searchClips, searchType } from 'src/types/search'
+import { apiTimePeriod, searchClips, searchType } from 'src/types/search'
 import { AutocompleteObj, ResponseClips } from 'src/types/twitch'
 
 export const getClips = async (search: searchClips, after?: string) => {
@@ -7,10 +7,13 @@ export const getClips = async (search: searchClips, after?: string) => {
 
 	if (search.mode === searchType.subreddit) {
 		query = `${process.env.REACT_APP_API_URI}/api/${search.mode}/livestreamfail?timeperiod=${search.timePeriod}&sort=${search.value}`
+	} else if (search.timePeriod === apiTimePeriod.shuffle) {
+		query = `${process.env.REACT_APP_API_URI}/api/twitch/${search.mode}/${search.value}/${search.timePeriod}`
+		if (after) query = `${query}?after=${after}`
 	} else {
 		query = `${process.env.REACT_APP_API_URI}/api/twitch/${search.mode}/${search.value}?timeperiod=${search.timePeriod}`
 	}
-	if (after) query = `${query}&after=${after}`
+	if (after && search.timePeriod !== apiTimePeriod.shuffle) query = `${query}&after=${after}`
 	try {
 		const { data }: { data: ResponseClips } = await axios.get(query)
 

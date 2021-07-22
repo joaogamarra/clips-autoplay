@@ -5,14 +5,16 @@ const getClips = async (
 	token: TwitchToken,
 	channel?: TwitchChannel,
 	category?: TwitchCategory,
-	query?: string
+	query?: string,
+	limit?: number
 ) => {
 	let searchType = `broadcaster_id=${channel?.id}`
+	const queryLimit = limit ? limit : 50
 	if (category) searchType = `game_id=${category?.id}`
 
-	const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=50`
+	const baseUrl = `https://api.twitch.tv/helix/clips?${searchType}${query}&first=${queryLimit}`
 
-	const res = await getResponse(token, baseUrl)	
+	const res = await getResponse(token, baseUrl)
 
 	if (res) {
 		const data = res.data

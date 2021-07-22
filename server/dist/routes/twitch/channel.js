@@ -29,5 +29,27 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     yield twitchAutoComplete_1.channelIncreaseRanking(channel);
     res.send(parsedClips);
 }));
+router.get('/:id/shuffle', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = queryParsing_1.parseTwitchQuery(req);
+    const token = yield token_1.default();
+    const channel = yield channel_1.default(token, req.params.id);
+    let clips = yield clips_1.default(token, channel, undefined, query, 100);
+    let after = clips.pagination.cursor;
+    const clipsLoop = () => __awaiter(void 0, void 0, void 0, function* () {
+        if (after) {
+            const newClips = yield clips_1.default(token, channel, undefined, `&after=${after}`, 100);
+            after = newClips.pagination.cursor;
+            clips.pagination.cursor = after;
+            clips.data = clips.data.concat(newClips.data);
+            if (after && clips.data.length < 150) {
+                yield clipsLoop();
+            }
+        }
+    });
+    yield clipsLoop();
+    const parsedClips = twitchClipsParsing_1.parseTwitchClips(clips);
+    yield twitchAutoComplete_1.channelIncreaseRanking(channel);
+    res.send(parsedClips);
+}));
 exports.default = router;
 //# sourceMappingURL=channel.js.map

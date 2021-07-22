@@ -21,4 +21,33 @@ router.get('/:id', async (req, res) => {
 	categoryIncreaseRanking(category.name)
 })
 
+router.get('/:id/shuffle', async (req, res) => {
+	const query = parseTwitchQuery(req)
+	const token = await getToken()
+	const category = await getCategory(token, req.params.id)
+	let clips = await getClips(token, undefined, category, query, 100)
+	let after = clips.pagination.cursor
+
+	const clipsLoop = async () => {
+		if (after) {
+			const newClips = await getClips(token, undefined, category, `&after=${after}`, 100)
+
+			after = newClips.pagination.cursor
+			clips.pagination.cursor = after
+			clips.data = clips.data.concat(newClips.data)
+
+			if (after && clips.data.length < 150) {
+				await clipsLoop()
+			}
+		}
+	}
+
+	await clipsLoop()
+
+	const parsedClips = parseTwitchClips(clips)
+	await categoryIncreaseRanking(category.name)
+
+	res.send(parsedClips)
+})
+
 export default router
