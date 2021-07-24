@@ -7,6 +7,8 @@ import LogoMain from './components/logoMain/LogoMain'
 import ReactGA from 'react-ga'
 import { createBrowserHistory } from 'history'
 import { useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import Privacy from './components/privacy/Privacy'
 
 ReactGA.initialize('UA-200630534-1')
 const browserHistory = createBrowserHistory()
@@ -29,8 +31,15 @@ const App: React.FC = () => {
 						<Player />
 					</Route>
 
+					<Route path='/privacy'>
+						<Privacy />
+					</Route>
+
 					<Route path='/'>
 						<Search />
+						<Link className='link-privacy' to='/privacy'>
+							Privacy Policy
+						</Link>
 					</Route>
 				</Switch>
 			</main>
