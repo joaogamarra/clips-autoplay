@@ -15,7 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const getResponse = (baseUrl) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const res = yield axios_1.default.get(baseUrl);
+        const res = yield axios_1.default.get(baseUrl, {
+            timeout: 1000
+        });
         return res;
     }
     catch (e) {

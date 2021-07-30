@@ -16,8 +16,8 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
     const parsedData = {
         data: [],
         pagination: {
-            cursor: '',
-        },
+            cursor: ''
+        }
     };
     if (data.after)
         parsedData.pagination.cursor = data.after;
@@ -31,7 +31,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
                     title: item.data.title,
                     video_url: itemLink,
                     twitch_url: item.data.url,
-                    comments_url: item.data.permalink,
+                    comments_url: item.data.permalink
                 });
             }
         }
@@ -39,6 +39,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
     yield Promise.all(parsedData.data.map((item) => __awaiter(void 0, void 0, void 0, function* () {
         var _e, _f, _g;
         const commentsList = [];
+        console.log(item.comments_url);
         const comments = yield subreddit_1.getSubreddit(`${(_e = item.comments_url) === null || _e === void 0 ? void 0 : _e.replace('/r/', '')}.json?sort=top&limit=30`);
         const commentsArr = (_g = (_f = comments[1]) === null || _f === void 0 ? void 0 : _f.data) === null || _g === void 0 ? void 0 : _g.children;
         if (commentsArr && commentsArr.length > 0) {
@@ -49,7 +50,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
                     commentsList.push({
                         comment: commentData.body.replace('&gt;', ''),
                         author: commentData.author,
-                        score: commentData.score,
+                        score: commentData.score
                     });
                     item.comments = commentsList;
                 }

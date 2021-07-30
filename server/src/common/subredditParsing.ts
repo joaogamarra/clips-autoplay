@@ -5,8 +5,8 @@ export const parseSubreddit = async (data: any) => {
 	const parsedData: responseClips = {
 		data: [],
 		pagination: {
-			cursor: '',
-		},
+			cursor: ''
+		}
 	}
 
 	if (data.after) parsedData.pagination.cursor = data.after
@@ -21,7 +21,7 @@ export const parseSubreddit = async (data: any) => {
 					title: item.data.title,
 					video_url: itemLink,
 					twitch_url: item.data.url,
-					comments_url: item.data.permalink,
+					comments_url: item.data.permalink
 				})
 			}
 		}
@@ -31,6 +31,7 @@ export const parseSubreddit = async (data: any) => {
 		parsedData.data.map(async (item) => {
 			const commentsList = []
 
+			console.log(item.comments_url)
 			const comments = await getSubreddit(`${item.comments_url?.replace('/r/', '')}.json?sort=top&limit=30`)
 
 			const commentsArr = comments[1]?.data?.children
@@ -43,7 +44,7 @@ export const parseSubreddit = async (data: any) => {
 						commentsList.push({
 							comment: commentData.body.replace('&gt;', ''),
 							author: commentData.author,
-							score: commentData.score,
+							score: commentData.score
 						})
 
 						item.comments = commentsList

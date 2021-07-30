@@ -8,7 +8,7 @@ import {
 	setCurrentClip,
 	setCurrentSearch,
 	setFavourites,
-	updateClips,
+	updateClips
 } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
 import { apiTimePeriod, searchClips } from 'src/types/search'
@@ -86,7 +86,7 @@ const Player: FC = () => {
 					title: '',
 					video_url: '',
 					twitch_url: '',
-					comments_url: '',
+					comments_url: ''
 				})
 			)
 			setTransition('loading')
@@ -119,9 +119,10 @@ const Player: FC = () => {
 
 			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
 				const indexUsedPopped = indexUsed.slice(0, indexUsed.length - 1)
+				ReactGA.pageview(`${window.location.pathname}${window.location.search}/${indexUsed.length}`)
 
 				//increase clips pool
-				if (clipsData.length < 21100) {
+				if (clipsData.length < 1100) {
 					loadMoreClips()
 				}
 
@@ -133,6 +134,7 @@ const Player: FC = () => {
 						newClipIndex = indexUsed[currentIndex - 1]
 					}
 				}
+
 				// If the user went back show the clips ordered instead of grabbing a new random one
 				else if (indexUsed.length > 1 && indexUsedPopped.includes(clipIndex)) {
 					const currentIndex = indexUsed.indexOf(clipIndex)
@@ -143,7 +145,6 @@ const Player: FC = () => {
 						const filteredIndex = getRandomInt(0, filteredData.length - 1)
 						const filteredClip = filteredData[filteredIndex]
 						newClipIndex = clipsData.findIndex((clip) => clip === filteredClip)
-						console.log(clipsData.length, newClipIndex)
 						setIndexUsed(indexUsed.concat(newClipIndex))
 					} else {
 						setFinished(true)
@@ -165,6 +166,9 @@ const Player: FC = () => {
 					dispatch(setCurrentClip(newClip))
 					dispatch(setClipIndex(newClipIndex))
 					dispatch(setClipSeen(newClip))
+					if (currentSearch.timePeriod !== apiTimePeriod.shuffle) {
+						ReactGA.pageview(`${window.location.pathname}${window.location.search}/${newClipIndex}`)
+					}
 				}
 			} else {
 				setFinished(true)
@@ -177,7 +181,7 @@ const Player: FC = () => {
 					? setPrevDisabled(true)
 					: setPrevDisabled(false)
 			} else {
-				clips.data.length <= newClipIndex + 1 ? setNextDisabled(true) : setNextDisabled(false)
+				clips.data.length < newClipIndex + 1 ? setNextDisabled(true) : setNextDisabled(false)
 				newClipIndex <= 0 ? setPrevDisabled(true) : setPrevDisabled(false)
 			}
 		},
@@ -188,7 +192,7 @@ const Player: FC = () => {
 		const clipsTotal = clips.data.length
 
 		//When there are clips and the currentClip is reaching the last fetch more
-		if (clipsTotal > 0 && clipIndex + 3 > clipsTotal) {
+		if (clipsTotal > 0 && clipIndex + 10 > clipsTotal) {
 			loadMoreClips()
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])

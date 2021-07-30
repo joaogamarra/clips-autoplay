@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSubreddit = void 0;
 const service_1 = __importDefault(require("./service"));
 const getSubreddit = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    const baseUrl = `https://old.reddit.com/r/${query}`;
+    const baseUrl = `https://reddit.com/r/${query}`;
     const res = yield service_1.default(baseUrl);
     if (res) {
         return res.data;
