@@ -6,7 +6,7 @@ export const getClips = async (search: searchClips, after?: string) => {
 	let query
 
 	if (search.mode === searchType.subreddit) {
-		query = `${process.env.REACT_APP_API_URI}/api/${search.mode}/livestreamfail?timeperiod=${search.timePeriod}&sort=${search.value}`
+		query = `${process.env.REACT_APP_API_URI}/api/${search.mode}/PublicFreakout?timeperiod=${search.timePeriod}&sort=${search.value}`
 	} else if (search.timePeriod === apiTimePeriod.shuffle) {
 		query = `${process.env.REACT_APP_API_URI}/api/twitch/${search.mode}/${search.value}/${search.timePeriod}`
 		if (after) query = `${query}?after=${after}`
@@ -22,8 +22,8 @@ export const getClips = async (search: searchClips, after?: string) => {
 		return {
 			error: {
 				status: response.status,
-				message: response.statusText,
-			},
+				message: response.statusText
+			}
 		}
 	}
 }

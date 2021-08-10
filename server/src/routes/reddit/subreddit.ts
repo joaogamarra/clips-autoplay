@@ -1,4 +1,4 @@
-import {getSubreddit} from '../../services/reddit/subreddit'
+import { getSubreddit } from '../../services/reddit/subreddit'
 import express from 'express'
 import { parseSubreddit } from '../../common/subredditParsing'
 import { AxiosResponse } from 'axios'

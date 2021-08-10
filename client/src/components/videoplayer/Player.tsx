@@ -15,10 +15,8 @@ import { apiTimePeriod, searchClips } from 'src/types/search'
 import { ChevronRightIcon, CommentIcon, ScreenFullIcon } from '@primer/octicons-react'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
-
 import './player.scss'
 import 'src/styles/button-generic.scss'
-
 import Loader from '../common/loader/Loader'
 import { addFavourite, getFavourites } from 'src/common/localstorage'
 import PlayerError from './PlayerError'
@@ -59,6 +57,7 @@ const Player: FC = () => {
 				setTransition('')
 			} else {
 				dispatch(setClips(data))
+				setError(false)
 				if (params.timePeriod === apiTimePeriod.shuffle) {
 					const randomIndex = getRandomInt(0, data.data.length)
 					const clip = data.data[randomIndex]
@@ -165,7 +164,8 @@ const Player: FC = () => {
 					setFinished(false)
 					dispatch(setCurrentClip(newClip))
 					dispatch(setClipIndex(newClipIndex))
-					dispatch(setClipSeen(newClip))
+					if (currentSearch.timePeriod === apiTimePeriod.shuffle) dispatch(setClipSeen(newClip))
+
 					if (currentSearch.timePeriod !== apiTimePeriod.shuffle) {
 						ReactGA.pageview(`${window.location.pathname}${window.location.search}/${newClipIndex}`)
 					}
@@ -329,15 +329,17 @@ const Player: FC = () => {
 						</div>
 						<div className='video-comments-wrapper'>
 							{
-								<video
-									className={transition}
-									src={currentClip.video_url}
-									autoPlay={true}
-									controls={true}
-									onEnded={() => nextClip()}
-									onLoadedData={() => setTransition('')}
-									onError={() => nextClip()}
-								></video>
+								<>
+									<video
+										className={transition}
+										src={currentClip.video_url}
+										autoPlay={true}
+										onEnded={() => nextClip()}
+										onLoadedData={() => setTransition('')}
+										onError={() => nextClip()}
+									></video>
+									<audio src={currentClip.audio_url} autoPlay={false} controls={false}></audio>
+								</>
 							}
 
 							{currentClip.comments && transition !== 'loading' ? (

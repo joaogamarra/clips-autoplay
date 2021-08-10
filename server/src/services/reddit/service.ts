@@ -1,9 +1,12 @@
 import axios from 'axios'
 
-const getResponse = async (baseUrl: string) => {
+const getResponse = async (baseUrl: string, timeout?: number) => {
+	let configTimeout = 4000
+	if (timeout) configTimeout = timeout
+
 	try {
 		const res = await axios.get(baseUrl, {
-			timeout: 1000
+			timeout: configTimeout
 		})
 
 		return res

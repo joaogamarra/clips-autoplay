@@ -16,11 +16,11 @@ const axios_1 = __importDefault(require("axios"));
 const getResponse = (token, baseUrl) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (token && process.env.TWITCH_CLIENT_ID) {
-            const res = yield axios_1.default.get(baseUrl, {
+            const res = yield axios_1.default.get(encodeURI(baseUrl), {
                 headers: {
                     'Client-Id': process.env.TWITCH_CLIENT_ID,
-                    Authorization: `Bearer ${token.access_token}`,
-                },
+                    Authorization: `Bearer ${token.access_token}`
+                }
             });
             return res;
         }
