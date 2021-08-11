@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getClips } from 'src/common/api'
 import {
@@ -12,8 +12,6 @@ import {
 } from 'src/state/reducer'
 import { useStateValue } from 'src/state/state'
 import { apiTimePeriod, searchClips } from 'src/types/search'
-import { ChevronRightIcon, CommentIcon, ScreenFullIcon } from '@primer/octicons-react'
-import twitchLogo from '../../assets/logo-twitch.svg'
 import ReactGA from 'react-ga'
 import './player.scss'
 import 'src/styles/button-generic.scss'
@@ -23,6 +21,8 @@ import PlayerError from './PlayerError'
 import PlayerFinished from './PlayerFinished'
 import CommentsBox from './CommentsBox'
 import { getRandomInt } from 'src/common/utils'
+import VideoTopControls from './VideoTopControls'
+import VideoBottomControls from './VideoBottomControls'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -35,9 +35,10 @@ const Player: FC = () => {
 	const [commentsVisible, setCommentsVisible] = useState(true)
 	const [nextDisabled, setNextDisabled] = useState(false)
 	const [prevDisabled, setPrevDisabled] = useState(true)
-	const [playbackSpeed, setPlaybackSpeed] = useState(1)
-	const [playbackOptionsVisible, setPlaybackOptionsVisible] = useState(false)
 	const [fullscreen, setFullscreen] = useState(false)
+	const [videoPlaying, setVideoPlaying] = useState(false)
+	const videoEl = useRef<HTMLVideoElement>(null)
+	const audioEl = useRef<HTMLAudioElement>(null)
 	const params = useParams<searchClips>()
 
 	useEffect(() => {
@@ -49,7 +50,6 @@ const Player: FC = () => {
 
 		const getdata = async () => {
 			dispatch(setCurrentSearch(params))
-
 			const data = await getClips(params)
 
 			if ('error' in data) {
@@ -112,18 +112,15 @@ const Player: FC = () => {
 			const clipsData = clips.data
 			let newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 
-			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle) {
+			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle)
 				return false
-			}
 
 			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
 				const indexUsedPopped = indexUsed.slice(0, indexUsed.length - 1)
 				ReactGA.pageview(`${window.location.pathname}${window.location.search}/${indexUsed.length}`)
 
 				//increase clips pool
-				if (clipsData.length < 1100) {
-					loadMoreClips()
-				}
+				clipsData.length < 1100 && loadMoreClips()
 
 				// When going backwards use the previous clips instead of random
 				if (direction === 'prev') {
@@ -197,23 +194,23 @@ const Player: FC = () => {
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])
 
-	const handlePlaybackSpeed = (speed: number) => {
-		const video = document.querySelector('.player-container video') as HTMLMediaElement
-		setPlaybackSpeed(speed)
-		setPlaybackOptionsVisible(false)
-		if (video) {
-			video.defaultPlaybackRate = speed
-			video.playbackRate = speed
+	const handleVideoPlay = () => {
+		if (videoPlaying) {
+			videoEl.current?.pause()
+			audioEl.current?.pause()
+		} else {
+			videoEl.current?.play()
+			audioEl.current?.play()
 		}
+		setVideoPlaying(!videoPlaying)
 	}
 
 	useEffect(() => {
 		const updateVideoSize = () => {
-			const video = document.querySelector('.player-container video')
 			const vh = window.innerHeight
 			const vw = window.innerWidth
 
-			if (video && vw > 1000) {
+			if (videoEl && vw > 1000) {
 				setVideoMaxWidth((vh - 200) * 1.69)
 			}
 		}
@@ -238,107 +235,41 @@ const Player: FC = () => {
 		<>
 			<div
 				className={`player-container ${commentsVisible && currentClip.comments ? 'has-comments' : ''} ${
-					fullscreen ? 'is-fullscreen' : ''
+					fullscreen && 'is-fullscreen'
 				}`}
 				style={{ maxWidth: videoMaxWidth }}
 			>
 				{finished && <PlayerFinished />}
 				{currentClip.video_url && (
 					<>
-						<div className='video-controls'>
-							<h4 className='title-lg'>{currentClip.title}</h4>
-
-							<div className='right-container'>
-								{currentClip.twitch_url && (
-									<a
-										className='link-twitch'
-										href={`${currentClip.twitch_url}`}
-										target='_blank'
-										rel='noreferrer'
-										title='clip twitch page'
-									>
-										<img className='' width='25' src={twitchLogo} alt='twitch logo' />
-									</a>
-								)}
-
-								<button
-									className='toggle-fullscreen'
-									title='toggle fullscreen'
-									onClick={() => setFullscreen(!fullscreen)}
-								>
-									<ScreenFullIcon size={20} />
-								</button>
-
-								{currentClip.comments && (
-									<button
-										className='toggle-comments'
-										title='toggle comments'
-										onClick={() => setCommentsVisible(!commentsVisible)}
-									>
-										<CommentIcon size={20} />
-									</button>
-								)}
-								<div className='playback-speed-container'>
-									<button
-										onClick={() => setPlaybackOptionsVisible(!playbackOptionsVisible)}
-										className='btn-playback-speed'
-									>
-										{playbackSpeed}x
-									</button>
-									<ul className={`playback-options ${playbackOptionsVisible ? 'is-visible' : ''}`}>
-										<li>
-											<button onClick={() => handlePlaybackSpeed(0.5)}>0.5x</button>
-										</li>
-										<li>
-											<button onClick={() => handlePlaybackSpeed(1)}>1x</button>
-										</li>
-										<li>
-											<button onClick={() => handlePlaybackSpeed(1.25)}>1.25x</button>
-										</li>
-										<li>
-											<button onClick={() => handlePlaybackSpeed(1.5)}>1.5x</button>
-										</li>
-										<li>
-											<button onClick={() => handlePlaybackSpeed(2)}>2x</button>
-										</li>
-									</ul>
-								</div>
-
-								<button
-									className='btn-clips-control btn-left'
-									onClick={() => nextClip('prev')}
-									disabled={prevDisabled}
-								>
-									Previous
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
-								</button>
-
-								<button
-									className='btn-clips-control btn-right'
-									onClick={() => nextClip()}
-									disabled={nextDisabled}
-								>
-									Next
-									<i className='icon-container'>
-										<ChevronRightIcon size={20} />
-									</i>
-								</button>
-							</div>
-						</div>
+						<VideoTopControls
+							handleComments={() => setCommentsVisible(!commentsVisible)}
+							handleNext={() => nextClip()}
+							handlePrev={() => nextClip('prev')}
+							nextDisabled={nextDisabled}
+							prevDisabled={prevDisabled}
+						/>
 						<div className='video-comments-wrapper'>
 							{
 								<>
 									<video
 										className={transition}
 										src={currentClip.video_url}
+										ref={videoEl}
 										autoPlay={true}
 										onEnded={() => nextClip()}
 										onLoadedData={() => setTransition('')}
 										onError={() => nextClip()}
+										onPlay={() => setVideoPlaying(true)}
+										onClick={() => handleVideoPlay()}
 									></video>
-									<audio src={currentClip.audio_url} autoPlay={false} controls={false}></audio>
+									<audio ref={audioEl} src={currentClip.audio_url} autoPlay={true} controls={false}></audio>
+									<VideoBottomControls
+										videoEl={videoEl.current}
+										audioEl={audioEl.current}
+										handleVideoPlay={() => handleVideoPlay()}
+										videoPlaying={videoPlaying}
+									/>
 								</>
 							}
 

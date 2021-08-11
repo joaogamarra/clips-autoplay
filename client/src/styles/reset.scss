@@ -67,6 +67,13 @@ select {
 	font: inherit;
 }
 
+button {
+	background: none;
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+
 /* Remove all animations and transitions for people that prefer not to see them */
 @media (prefers-reduced-motion: reduce) {
 	* {
