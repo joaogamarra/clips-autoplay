@@ -23,6 +23,7 @@ import CommentsBox from './CommentsBox'
 import { getRandomInt } from 'src/common/utils'
 import VideoTopControls from './VideoTopControls'
 import VideoBottomControls from './VideoBottomControls'
+import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -35,11 +36,16 @@ const Player: FC = () => {
 	const [commentsVisible, setCommentsVisible] = useState(true)
 	const [nextDisabled, setNextDisabled] = useState(false)
 	const [prevDisabled, setPrevDisabled] = useState(true)
-	const [fullscreen, setFullscreen] = useState(false)
+	const [innerFullScreen, setInnerFullScreen] = useState(false)
 	const [videoPlaying, setVideoPlaying] = useState(false)
+	const [videoPercentage, setVideoPercentage] = useState(0)
+	const [videoFullScreen, setVideoFullScreen] = useState(false)
+	const [controlsVisible, setControlsVisible] = useState(false)
 	const videoEl = useRef<HTMLVideoElement>(null)
 	const audioEl = useRef<HTMLAudioElement>(null)
+	const videoContainer = useRef<HTMLDivElement>(null)
 	const params = useParams<searchClips>()
+	const handle = useFullScreenHandle()
 
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search)
@@ -197,13 +203,32 @@ const Player: FC = () => {
 	const handleVideoPlay = () => {
 		if (videoPlaying) {
 			videoEl.current?.pause()
-			audioEl.current?.pause()
+			if (audioEl?.current?.src) audioEl.current?.pause()
 		} else {
 			videoEl.current?.play()
-			audioEl.current?.play()
+			if (audioEl?.current?.src) audioEl.current?.play()
 		}
 		setVideoPlaying(!videoPlaying)
 	}
+
+	const handleVideoFullScreen = () => {
+		if (videoFullScreen) {
+			handle.exit()
+			setVideoFullScreen(false)
+		} else {
+			handle.enter()
+			setVideoFullScreen(true)
+		}
+	}
+
+	useEffect(() => {
+		const controlsTimeout = setTimeout(() => {
+			if (videoPlaying) setControlsVisible(false)
+		}, 3000)
+		return () => {
+			clearTimeout(controlsTimeout)
+		}
+	}, [controlsVisible, videoPlaying])
 
 	useEffect(() => {
 		const updateVideoSize = () => {
@@ -216,13 +241,8 @@ const Player: FC = () => {
 		}
 
 		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === 'ArrowLeft') {
-				nextClip('prev')
-			}
-
-			if (e.key === 'ArrowRight') {
-				nextClip()
-			}
+			if (e.key === 'ArrowLeft') nextClip('prev')
+			if (e.key === 'ArrowRight') nextClip()
 		}
 
 		updateVideoSize()
@@ -232,11 +252,12 @@ const Player: FC = () => {
 	}, [nextClip])
 
 	return (
-		<>
+		<FullScreen handle={handle}>
 			<div
-				className={`player-container ${commentsVisible && currentClip.comments ? 'has-comments' : ''} ${
-					fullscreen && 'is-fullscreen'
-				}`}
+				ref={videoContainer}
+				className={`player-container ${commentsVisible && currentClip.comments ? 'has-comments' : ''} 
+				${videoFullScreen && 'is-fullscreen'}
+				${innerFullScreen && 'is-inner-fullscreen'}`}
 				style={{ maxWidth: videoMaxWidth }}
 			>
 				{finished && <PlayerFinished />}
@@ -248,28 +269,44 @@ const Player: FC = () => {
 							handlePrev={() => nextClip('prev')}
 							nextDisabled={nextDisabled}
 							prevDisabled={prevDisabled}
+							innerFullScreen={innerFullScreen}
+							handleInnerFullScreen={() => setInnerFullScreen(!innerFullScreen)}
 						/>
 						<div className='video-comments-wrapper'>
 							{
 								<>
-									<video
-										className={transition}
-										src={currentClip.video_url}
-										ref={videoEl}
-										autoPlay={true}
-										onEnded={() => nextClip()}
-										onLoadedData={() => setTransition('')}
-										onError={() => nextClip()}
-										onPlay={() => setVideoPlaying(true)}
-										onClick={() => handleVideoPlay()}
-									></video>
-									<audio ref={audioEl} src={currentClip.audio_url} autoPlay={true} controls={false}></audio>
-									<VideoBottomControls
-										videoEl={videoEl.current}
-										audioEl={audioEl.current}
-										handleVideoPlay={() => handleVideoPlay()}
-										videoPlaying={videoPlaying}
-									/>
+									<div
+										className={`video-controls-wrapper ${
+											!videoPlaying || controlsVisible ? 'controls-visible' : ''
+										}`}
+									>
+										<video
+											className={transition}
+											src={currentClip.video_url}
+											ref={videoEl}
+											autoPlay={true}
+											onEnded={() => nextClip()}
+											onLoadedData={() => setTransition('')}
+											onError={() => nextClip()}
+											onPlay={() => setVideoPlaying(true)}
+											onClick={() => handleVideoPlay()}
+											onMouseMove={() => setControlsVisible(true)}
+											onTimeUpdate={() =>
+												setVideoPercentage((100 / videoEl.current!.duration) * videoEl.current!.currentTime)
+											}
+										></video>
+										<audio ref={audioEl} src={currentClip.audio_url} autoPlay={true} controls={false}></audio>
+										<VideoBottomControls
+											videoEl={videoEl.current}
+											audioEl={audioEl.current}
+											handleVideoPlay={() => handleVideoPlay()}
+											videoPlaying={videoPlaying}
+											videoPercentage={videoPercentage}
+											videoFullScreen={videoFullScreen}
+											handleVideoFullScreen={handleVideoFullScreen}
+											handleMouseMove={() => setControlsVisible(true)}
+										/>
+									</div>
 								</>
 							}
 
@@ -283,7 +320,7 @@ const Player: FC = () => {
 
 				<Loader visible={transition} />
 			</div>
-		</>
+		</FullScreen>
 	)
 }
 

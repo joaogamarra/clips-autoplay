@@ -13,7 +13,7 @@ const Search: FC = () => {
 		mode: searchType.channel,
 		value: '',
 		timePeriod: apiTimePeriod.week,
-		sort: sortType.hot,
+		sort: sortType.hot
 	})
 
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
@@ -60,10 +60,21 @@ const Search: FC = () => {
 	const formSubmit = async (e: React.MouseEvent<HTMLElement>) => {
 		e.preventDefault()
 		let value = localSearch.value
+		let mode = localSearch.mode
+		let period = localSearch.timePeriod
 
-		if (localSearch.mode === searchType.subreddit) value = localSearch.sort
+		if (mode === searchType.livestreamfail) {
+			mode = searchType.subreddit
+			value = 'livestreamfail'
+		}
 
-		history.push(`/${localSearch.mode}/${localSearch.timePeriod}/${value}`)
+		if (localSearch.sort === sortType.hot) period = apiTimePeriod.day
+
+		if (localSearch.sort && mode === searchType.subreddit) {
+			history.push(`/${mode}/${period}/${value}/${localSearch.sort}`)
+		} else {
+			history.push(`/${mode}/${period}/${value}`)
+		}
 	}
 
 	const handleSearchTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,12 +105,18 @@ const Search: FC = () => {
 
 	return (
 		<div className='search-container'>
-			<h2 className='text-intro'>
-				Watch the best Twitch Clips from your favourite content creators without interruptions
-			</h2>
+			<h2 className='text-intro'>Watch the best Clips from Reddit and Twitch without interruptions</h2>
 			<form>
 				<div className='inputs-group'>
-					<h2 className='title-lg'>Search Clips by</h2>
+					<h2 className='title-lg'>Search Clips from</h2>
+					<RadioCustom
+						id='searchType-reddit'
+						name='search-type'
+						label='Reddit'
+						value={searchType.subreddit}
+						onChange={handleSearchTypeChange}
+						checked={localSearch.mode === searchType.subreddit}
+					/>
 					<RadioCustom
 						id='searchType-channel'
 						name='search-type'
@@ -120,12 +137,12 @@ const Search: FC = () => {
 						id='searchType-lsf'
 						name='search-type'
 						label='LiveStreamFail'
-						value={searchType.subreddit}
+						value={searchType.livestreamfail}
 						onChange={handleSearchTypeChange}
-						checked={localSearch.mode === searchType.subreddit}
+						checked={localSearch.mode === searchType.livestreamfail}
 					/>
 				</div>
-				{localSearch.mode === searchType.subreddit && (
+				{(localSearch.mode === searchType.subreddit || localSearch.mode === searchType.livestreamfail) && (
 					<div className='inputs-group'>
 						<h2 className='title-lg'>Sort by</h2>
 						<RadioCustom
@@ -154,8 +171,10 @@ const Search: FC = () => {
 						/>
 					</div>
 				)}
-				{localSearch.mode !== searchType.subreddit ||
-				(localSearch.mode === searchType.subreddit && localSearch.sort === sortType.top) ? (
+				{localSearch.mode === searchType.channel ||
+				localSearch.mode === searchType.category ||
+				((localSearch.mode === searchType.subreddit || localSearch.mode === searchType.livestreamfail) &&
+					localSearch.sort === sortType.top) ? (
 					<div className='inputs-group'>
 						<h2 className='title-lg'>Filter by</h2>
 
@@ -199,7 +218,7 @@ const Search: FC = () => {
 							onChange={handleTimePeriodChange}
 							checked={localSearch.timePeriod === apiTimePeriod.all}
 						/>
-						{localSearch.mode !== searchType.subreddit && (
+						{(localSearch.mode === searchType.channel || localSearch.mode === searchType.category) && (
 							<RadioCustom
 								id='timePeriod-shuffle'
 								name='timePeriod'
@@ -211,29 +230,33 @@ const Search: FC = () => {
 						)}
 					</div>
 				) : null}
-				{localSearch.mode !== searchType.subreddit && (
+
+				{localSearch.mode !== searchType.livestreamfail && (
 					<input
 						className='input-main-search'
 						type='text'
 						placeholder={
 							localSearch.mode === searchType.channel
 								? 'Insert the channel name'
-								: 'Insert the category/game name'
+								: localSearch.mode === searchType.category
+								? 'Insert the category/game name'
+								: 'Insert subreddit name'
 						}
 						value={localSearch.value}
 						onChange={handleSearchChange}
 					/>
 				)}
+
 				<button
 					type='submit'
 					className='button-generic'
 					onClick={formSubmit}
-					disabled={localSearch.value === '' && localSearch.mode !== searchType.subreddit}
+					disabled={localSearch.value === '' && localSearch.mode !== searchType.livestreamfail}
 				>
 					Search
 				</button>
 
-				{localSearch.mode !== searchType.subreddit && (
+				{localSearch.mode !== searchType.livestreamfail && (
 					<Suggestions suggestions={searchSuggestions} localSearch={localSearch} />
 				)}
 			</form>

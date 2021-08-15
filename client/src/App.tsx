@@ -27,7 +27,7 @@ const App: React.FC = () => {
 			<main className='main-content'>
 				<LogoMain />
 				<Switch>
-					<Route path='/:mode/:timePeriod/:value?'>
+					<Route path='/:mode/:timePeriod/:value/:sort?'>
 						<Player />
 					</Route>
 

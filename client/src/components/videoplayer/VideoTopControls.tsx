@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { MdChevronRight, MdChatBubbleOutline } from 'react-icons/md'
+import { MdChevronRight, MdChatBubble, MdFullscreenExit, MdFullscreen } from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
 
@@ -7,18 +7,23 @@ interface Props {
 	handleComments: () => void
 	handleNext: () => void
 	handlePrev: () => void
+	handleInnerFullScreen: () => void
 	prevDisabled: boolean
 	nextDisabled: boolean
+	innerFullScreen: boolean
 }
 
 const VideoTopControls: FC<Props> = ({
 	handleComments,
 	handleNext,
 	handlePrev,
+	handleInnerFullScreen,
+	innerFullScreen,
 	prevDisabled,
 	nextDisabled
 }) => {
 	const [{ currentClip }] = useStateValue()
+
 	return (
 		<div className='video-top-controls'>
 			<h4 className='title-lg'>{currentClip.title}</h4>
@@ -36,10 +41,14 @@ const VideoTopControls: FC<Props> = ({
 					</a>
 				)}
 				{currentClip.comments && (
-					<button className='toggle-comments' title='toggle comments' onClick={handleComments}>
-						<MdChatBubbleOutline />
+					<button className='btn-comments' title='toggle comments' onClick={handleComments}>
+						<MdChatBubble />
 					</button>
 				)}
+
+				<button className='btn-inner-fullscreen' onClick={handleInnerFullScreen}>
+					{innerFullScreen ? <MdFullscreenExit /> : <MdFullscreen />}
+				</button>
 
 				<button className='btn-clips-control btn-left' onClick={handlePrev} disabled={prevDisabled}>
 					Previous

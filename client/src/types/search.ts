@@ -2,6 +2,7 @@ export enum searchType {
 	channel = 'channel',
 	category = 'category',
 	subreddit = 'subreddit',
+	livestreamfail = 'livestreamfail'
 }
 
 export interface searchClips {
@@ -17,11 +18,11 @@ export enum apiTimePeriod {
 	month = 'month',
 	year = 'year',
 	all = 'all',
-	shuffle = 'shuffle',
+	shuffle = 'shuffle'
 }
 
 export enum sortType {
 	new = 'new',
 	top = 'top',
-	hot = 'hot',
+	hot = 'hot'
 }
