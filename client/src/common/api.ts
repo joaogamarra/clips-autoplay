@@ -6,8 +6,7 @@ export const getClips = async (search: searchClips, after?: string) => {
 	let query
 
 	if (search.mode === searchType.subreddit) {
-		console.log(search)
-		query = `${process.env.REACT_APP_API_URI}/api/${search.mode}/${search.value}?timeperiod=${search.timePeriod}&sort=${search.sort}`
+		query = `${process.env.REACT_APP_API_URI}/api/reddit/${search.mode}/${search.value}?timeperiod=${search.timePeriod}&sort=${search.sort}`
 	} else if (search.timePeriod === apiTimePeriod.shuffle) {
 		query = `${process.env.REACT_APP_API_URI}/api/twitch/${search.mode}/${search.value}/${search.timePeriod}`
 		if (after) query = `${query}?after=${after}`

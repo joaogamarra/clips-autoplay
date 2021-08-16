@@ -3,6 +3,7 @@ import express from 'express'
 import { parseSubreddit } from '../../common/subredditParsing'
 import { AxiosResponse } from 'axios'
 import { parseRedditQuery } from '../../common/queryParsing'
+import { subredditIncreaseRanking } from '../../database/queries/redditAutoComplete'
 
 const router = express.Router()
 
@@ -12,6 +13,8 @@ router.get('/:id', async (req, res) => {
 	const data: AxiosResponse = await getSubreddit(query)
 	if (data) {
 		const dataParsed = await parseSubreddit(data.data)
+
+		await subredditIncreaseRanking(req.params.id)
 
 		res.send(dataParsed)
 	} else {

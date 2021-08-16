@@ -17,7 +17,6 @@ const service_1 = __importDefault(require("./service"));
 const getSubreddit = (query, timeout) => __awaiter(void 0, void 0, void 0, function* () {
     const baseUrl = `https://reddit.com/r/${query}`;
     const res = yield service_1.default(encodeURI(baseUrl), timeout);
-    console.log(baseUrl);
     if (res) {
         return res.data;
     }
