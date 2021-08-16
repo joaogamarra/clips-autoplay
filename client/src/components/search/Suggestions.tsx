@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { searchClips } from 'src/types/search'
+import { searchClips, searchType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
 import ChannelAndAvatar from '../common/channelAndAvatar/ChannelAndAvatar'
 import './suggestions.scss'
@@ -20,9 +20,15 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 						<>
 							{suggestions?.map(({ avatar, name }) => (
 								<li className='suggestions-item' key={name}>
-									<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}`}>
-										<ChannelAndAvatar src={avatar} name={name} />
-									</Link>
+									{localSearch.mode === searchType.subreddit ? (
+										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}/${localSearch.sort}`}>
+											<ChannelAndAvatar src={avatar} name={name} />
+										</Link>
+									) : (
+										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name} $`}>
+											<ChannelAndAvatar src={avatar} name={name} />
+										</Link>
+									)}
 								</li>
 							))}
 						</>

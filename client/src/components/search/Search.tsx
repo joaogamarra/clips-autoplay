@@ -10,23 +10,35 @@ import Suggestions from './Suggestions'
 
 const Search: FC = () => {
 	const [localSearch, setLocalSearch] = useState<searchClips>({
-		mode: searchType.channel,
+		mode: searchType.subreddit,
 		value: '',
-		timePeriod: apiTimePeriod.week,
+		timePeriod: apiTimePeriod.day,
 		sort: sortType.hot
 	})
 
 	const [searchSuggestions, setSearchSuggestions] = useState<AutocompleteObj[]>([])
+	const [subredditSuggestions, setSubredditSuggestions] = useState<AutocompleteObj[]>([])
 	const [channelSuggestions, setChannelSuggestions] = useState<AutocompleteObj[]>([])
 	const [categorySuggestions, setCategorySuggestions] = useState<AutocompleteObj[]>([])
 	const history = useHistory()
 
 	const updateSuggestions = useCallback(async () => {
-		if (localSearch.value.length > 0 && localSearch.mode !== searchType.subreddit) {
+		if (localSearch.value.length > 0 && localSearch.mode !== searchType.livestreamfail) {
 			const suggestions: any = await getSuggestions(localSearch.mode, localSearch.value)
 
 			suggestions && setSearchSuggestions(suggestions)
 		} else {
+			if (localSearch.mode === searchType.subreddit) {
+				if (subredditSuggestions.length > 0) {
+					setSearchSuggestions(subredditSuggestions)
+				} else {
+					const suggestions: any = await getSuggestions(localSearch.mode)
+					if (suggestions.length > 0) {
+						setSearchSuggestions(suggestions)
+						setSubredditSuggestions(suggestions)
+					}
+				}
+			}
 			if (localSearch.mode === searchType.channel) {
 				if (channelSuggestions.length > 0) {
 					setSearchSuggestions(channelSuggestions)
@@ -51,7 +63,7 @@ const Search: FC = () => {
 				}
 			}
 		}
-	}, [categorySuggestions, channelSuggestions, localSearch.mode, localSearch.value])
+	}, [categorySuggestions, channelSuggestions, localSearch.mode, localSearch.value, subredditSuggestions])
 
 	useEffect(() => {
 		updateSuggestions()
@@ -69,7 +81,6 @@ const Search: FC = () => {
 		}
 
 		if (localSearch.sort === sortType.hot) period = apiTimePeriod.day
-
 		if (localSearch.sort && mode === searchType.subreddit) {
 			history.push(`/${mode}/${period}/${value}/${localSearch.sort}`)
 		} else {

@@ -4,7 +4,6 @@ import { AutocompleteObj, ResponseClips } from 'src/types/twitch'
 
 export const getClips = async (search: searchClips, after?: string) => {
 	let query
-
 	if (search.mode === searchType.subreddit) {
 		query = `${process.env.REACT_APP_API_URI}/api/reddit/${search.mode}/${search.value}?timeperiod=${search.timePeriod}&sort=${search.sort}`
 	} else if (search.timePeriod === apiTimePeriod.shuffle) {
@@ -29,8 +28,11 @@ export const getClips = async (search: searchClips, after?: string) => {
 }
 
 export const getSuggestions = async (searchMode: searchType, query?: string) => {
-	if (searchMode !== searchType.subreddit) {
-		let baseUrl = `${process.env.REACT_APP_API_URI}/api/twitch/suggestions/${searchMode}/`
+	console.log(searchMode)
+	if (searchMode !== searchType.livestreamfail) {
+		let baseUrl = `${process.env.REACT_APP_API_URI}/api/`
+		if (searchMode === searchType.subreddit) baseUrl = `${baseUrl}reddit/suggestions/`
+		else baseUrl = `${baseUrl}twitch/suggestions/${searchMode}/`
 
 		if (query) baseUrl = `${baseUrl}${query}`
 
