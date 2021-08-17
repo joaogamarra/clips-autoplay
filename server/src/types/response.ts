@@ -12,6 +12,8 @@ export interface responseClip {
 	comments_url?: string
 	twitch_url?: string
 	comments?: comment[]
+	nsfw?: boolean
+	loud?: boolean
 }
 
 export interface comment {

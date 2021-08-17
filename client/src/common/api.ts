@@ -14,8 +14,6 @@ export const getClips = async (search: searchClips, after?: string) => {
 	}
 	if (after && search.timePeriod !== apiTimePeriod.shuffle) query = `${query}&after=${after}`
 	try {
-		console.log(query)
-		console.log(search)
 		const { data }: { data: ResponseClips } = await axios.get(query)
 
 		return data
@@ -30,7 +28,6 @@ export const getClips = async (search: searchClips, after?: string) => {
 }
 
 export const getSuggestions = async (searchMode: searchType, query?: string) => {
-	console.log(searchMode)
 	if (searchMode !== searchType.livestreamfail) {
 		let baseUrl = `${process.env.REACT_APP_API_URI}/api/`
 		if (searchMode === searchType.subreddit) baseUrl = `${baseUrl}reddit/suggestions/`

@@ -14,6 +14,7 @@ interface Props {
 	videoPlaying: boolean
 	videoPercentage: number
 	videoFullScreen: boolean
+	hasAudio: string | undefined
 	handleVideoFullScreen: () => void
 	handleVideoPlay: () => void
 	handleMouseMove: () => void
@@ -25,6 +26,7 @@ const VideoBottomControls: FC<Props> = ({
 	videoPlaying,
 	videoPercentage,
 	videoFullScreen,
+	hasAudio,
 	handleVideoFullScreen,
 	handleVideoPlay,
 	handleMouseMove
@@ -118,20 +120,26 @@ const VideoBottomControls: FC<Props> = ({
 					style={{ transform: `translateX(${progressPosition}px)` }}
 				></div>
 			</div>
-			<button className='btn-video-mute' onClick={() => toggleSound()}>
-				{videoMuted ? <MdVolumeMute /> : <MdVolumeUp />}
-			</button>
-			<input
-				ref={VolumeEl}
-				type='range'
-				className='video-volume'
-				title='volume'
-				min='0'
-				max='10'
-				step='0.1'
-				value={videoVolume}
-				onChange={handleVolume}
-			/>
+
+			{hasAudio && (
+				<>
+					<button className='btn-video-mute' onClick={() => toggleSound()}>
+						{videoMuted ? <MdVolumeMute /> : <MdVolumeUp />}
+					</button>
+					<input
+						ref={VolumeEl}
+						type='range'
+						className='video-volume'
+						title='volume'
+						min='0'
+						max='10'
+						step='0.1'
+						value={videoVolume}
+						onChange={handleVolume}
+					/>
+				</>
+			)}
+
 			<div className='playback-speed-container'>
 				<button
 					onClick={() => setPlaybackOptionsVisible(!playbackOptionsVisible)}

@@ -22,7 +22,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
     if (data.after)
         parsedData.pagination.cursor = data.after;
     (_a = data.children) === null || _a === void 0 ? void 0 : _a.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-        var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
+        var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y;
         let url = '';
         const twitchPath = (_d = (_c = (_b = item.data) === null || _b === void 0 ? void 0 : _b.media) === null || _c === void 0 ? void 0 : _c.oembed) === null || _d === void 0 ? void 0 : _d.thumbnail_url;
         let redditPath = (_g = (_f = (_e = item.data) === null || _e === void 0 ? void 0 : _e.media) === null || _f === void 0 ? void 0 : _f.reddit_video) === null || _g === void 0 ? void 0 : _g.fallback_url;
@@ -49,39 +49,33 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
             url = exports.isRedditGif(redditGifPath);
         if (redditGifDirect)
             url = redditGifDirect;
-        if (url !== '') {
-            const itemLink = url;
-            if (itemLink && twitchPath && exports.isTwitch(itemLink)) {
-                parsedData.data.push({
-                    title: item.data.title,
-                    video_url: itemLink,
-                    twitch_url: item.data.url,
-                    comments_url: item.data.permalink
-                });
+        const nsfw = item.data.thumbnail === 'nsfw';
+        const loud = (_y = item.data.link_flair_text) === null || _y === void 0 ? void 0 : _y.toLowerCase().includes('loud');
+        if (url !== '' && url) {
+            const dataObj = {
+                title: item.data.title,
+                video_url: url,
+                comments_url: item.data.permalink
+            };
+            if (nsfw)
+                dataObj.nsfw = nsfw;
+            if (loud)
+                dataObj.nsfw = loud;
+            if (twitchPath && exports.isTwitch(url)) {
+                dataObj.twitch_url = item.data.url;
             }
-            else if (itemLink && redditPath && exports.isReddit(itemLink)) {
-                const audio_url = `${itemLink.substr(0, itemLink.lastIndexOf('_') + 1)}audio.mp4`;
-                parsedData.data.push({
-                    title: item.data.title,
-                    video_url: itemLink,
-                    audio_url,
-                    comments_url: item.data.permalink
-                });
+            else if (redditPath && exports.isReddit(url)) {
+                const audio_url = `${url.substr(0, url.lastIndexOf('_') + 1)}audio.mp4`;
+                dataObj.audio_url = audio_url;
             }
-            else if (itemLink) {
-                parsedData.data.push({
-                    title: item.data.title,
-                    video_url: itemLink,
-                    comments_url: item.data.permalink
-                });
-            }
+            parsedData.data.push(dataObj);
         }
     }));
     yield Promise.all(parsedData.data.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-        var _y, _z, _0, _1, _2;
+        var _z, _0, _1, _2, _3;
         const commentsList = [];
-        const comments = yield subreddit_1.getSubreddit(`${(_y = item.comments_url) === null || _y === void 0 ? void 0 : _y.replace('/r/', '')}.json?sort=top&limit=15`, 2000);
-        const commentsArr = (_0 = (_z = comments[1]) === null || _z === void 0 ? void 0 : _z.data) === null || _0 === void 0 ? void 0 : _0.children;
+        const comments = yield subreddit_1.getSubreddit(`${(_z = item.comments_url) === null || _z === void 0 ? void 0 : _z.replace('/r/', '')}.json?sort=top&limit=15`, 2000);
+        const commentsArr = (_1 = (_0 = comments[1]) === null || _0 === void 0 ? void 0 : _0.data) === null || _1 === void 0 ? void 0 : _1.children;
         if (commentsArr && commentsArr.length > 0) {
             let i = 0;
             while (commentsList.length < 10 && i < commentsArr.length) {
@@ -93,7 +87,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
                         score: commentData.score
                     });
                     if (commentData.replies) {
-                        const replieData = (_2 = (_1 = commentData.replies.data) === null || _1 === void 0 ? void 0 : _1.children[0]) === null || _2 === void 0 ? void 0 : _2.data;
+                        const replieData = (_3 = (_2 = commentData.replies.data) === null || _2 === void 0 ? void 0 : _2.children[0]) === null || _3 === void 0 ? void 0 : _3.data;
                         if (replieData.body && commentData.body !== '[deleted]') {
                             commentsList.push({
                                 comment: replieData.body.replace('&gt;', ''),

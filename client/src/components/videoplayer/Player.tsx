@@ -258,6 +258,13 @@ const Player: FC = () => {
 			const currentSrc = audio.src
 
 			audio.src = currentSrc?.replace('DASH_audio.mp4', 'audio')
+		} else {
+			dispatch(
+				setCurrentClip({
+					...currentClip,
+					audio_url: ''
+				})
+			)
 		}
 	}
 
@@ -343,6 +350,7 @@ const Player: FC = () => {
 											videoPlaying={videoPlaying}
 											videoPercentage={videoPercentage}
 											videoFullScreen={videoFullScreen}
+											hasAudio={currentClip.audio_url}
 											handleVideoFullScreen={handleVideoFullScreen}
 											handleMouseMove={() => setControlsVisible(true)}
 										/>

@@ -1,5 +1,5 @@
 import { getSubreddit } from '../services/reddit/subreddit'
-import { responseClips } from '../types/response'
+import { responseClip, responseClips } from '../types/response'
 
 export const parseSubreddit = async (data: any) => {
 	const parsedData: responseClips = {
@@ -32,32 +32,26 @@ export const parseSubreddit = async (data: any) => {
 		if (redditGifPath && isRedditGif(redditGifPath)) url = isRedditGif(redditGifPath)
 		if (redditGifDirect) url = redditGifDirect
 
-		if (url !== '') {
-			const itemLink = url
+		const nsfw = item.data.thumbnail === 'nsfw'
+		const loud = item.data.link_flair_text?.toLowerCase().includes('loud')
 
-			if (itemLink && twitchPath && isTwitch(itemLink)) {
-				parsedData.data.push({
-					title: item.data.title,
-					video_url: itemLink,
-					twitch_url: item.data.url,
-					comments_url: item.data.permalink
-				})
-			} else if (itemLink && redditPath && isReddit(itemLink)) {
-				const audio_url = `${itemLink.substr(0, itemLink.lastIndexOf('_') + 1)}audio.mp4`
-
-				parsedData.data.push({
-					title: item.data.title,
-					video_url: itemLink,
-					audio_url,
-					comments_url: item.data.permalink
-				})
-			} else if (itemLink) {
-				parsedData.data.push({
-					title: item.data.title,
-					video_url: itemLink,
-					comments_url: item.data.permalink
-				})
+		if (url !== '' && url) {
+			const dataObj: responseClip = {
+				title: item.data.title,
+				video_url: url,
+				comments_url: item.data.permalink
 			}
+
+			if (nsfw) dataObj.nsfw = nsfw
+			if (loud) dataObj.nsfw = loud
+
+			if (twitchPath && isTwitch(url)) {
+				dataObj.twitch_url = item.data.url
+			} else if (redditPath && isReddit(url)) {
+				const audio_url = `${url.substr(0, url.lastIndexOf('_') + 1)}audio.mp4`
+				dataObj.audio_url = audio_url
+			}
+			parsedData.data.push(dataObj)
 		}
 	})
 
