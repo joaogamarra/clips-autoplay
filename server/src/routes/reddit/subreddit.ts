@@ -8,18 +8,32 @@ import { subredditIncreaseRanking } from '../../database/queries/redditAutoCompl
 const router = express.Router()
 
 router.get('/:id', async (req, res) => {
-	const query = parseRedditQuery(req)
+	const tries = 3
+	let currentTry = 1
+	let limit = 50
+	let dataParsed
 
-	const data: AxiosResponse = await getSubreddit(query)
-	if (data) {
-		const dataParsed = await parseSubreddit(data.data)
+	const requestLoop = async () => {
+		const query = parseRedditQuery(req, limit)
 
-		await subredditIncreaseRanking(req.params.id)
-
-		res.send(dataParsed)
-	} else {
-		throw new Error('not found')
+		let data: AxiosResponse = await getSubreddit(query)
+		if (data) {
+			dataParsed = await parseSubreddit(data.data)
+			if (dataParsed.data.length === 0 && dataParsed.pagination.cursor && currentTry < tries) {
+				currentTry++
+				limit = 100
+				req.query.after = dataParsed.pagination.cursor
+				await requestLoop()
+			}
+		} else {
+			throw new Error('not found')
+		}
 	}
+
+	await requestLoop()
+
+	await subredditIncreaseRanking(req.params.id)
+	res.send(dataParsed)
 })
 
 export default router

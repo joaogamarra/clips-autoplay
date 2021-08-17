@@ -19,16 +19,29 @@ const queryParsing_1 = require("../../common/queryParsing");
 const redditAutoComplete_1 = require("../../database/queries/redditAutoComplete");
 const router = express_1.default.Router();
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const query = queryParsing_1.parseRedditQuery(req);
-    const data = yield subreddit_1.getSubreddit(query);
-    if (data) {
-        const dataParsed = yield subredditParsing_1.parseSubreddit(data.data);
-        yield redditAutoComplete_1.subredditIncreaseRanking(req.params.id);
-        res.send(dataParsed);
-    }
-    else {
-        throw new Error('not found');
-    }
+    const tries = 3;
+    let currentTry = 1;
+    let limit = 50;
+    let dataParsed;
+    const requestLoop = () => __awaiter(void 0, void 0, void 0, function* () {
+        const query = queryParsing_1.parseRedditQuery(req, limit);
+        let data = yield subreddit_1.getSubreddit(query);
+        if (data) {
+            dataParsed = yield subredditParsing_1.parseSubreddit(data.data);
+            if (dataParsed.data.length === 0 && dataParsed.pagination.cursor && currentTry < tries) {
+                currentTry++;
+                limit = 100;
+                req.query.after = dataParsed.pagination.cursor;
+                yield requestLoop();
+            }
+        }
+        else {
+            throw new Error('not found');
+        }
+    });
+    yield requestLoop();
+    yield redditAutoComplete_1.subredditIncreaseRanking(req.params.id);
+    res.send(dataParsed);
 }));
 exports.default = router;
 //# sourceMappingURL=subreddit.js.map

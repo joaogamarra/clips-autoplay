@@ -25,7 +25,7 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 											<ChannelAndAvatar src={avatar} name={name} />
 										</Link>
 									) : (
-										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name} $`}>
+										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}`}>
 											<ChannelAndAvatar src={avatar} name={name} />
 										</Link>
 									)}
@@ -36,8 +36,8 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 				</ul>
 			) : (
 				<p className='no-suggestions'>
-					No suggestions found but you can still search using the button since not every user is in our
-					database.
+					No suggestions found but you can still search using the "Search" button since not every result is in
+					our database.
 				</p>
 			)}
 		</section>

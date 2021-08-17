@@ -72,12 +72,13 @@ export const parseSort = (sort: string) => {
 	throw new Error('Bad Request: Sort')
 }
 
-export const parseRedditQuery = (req: Request) => {
+export const parseRedditQuery = (req: Request, limit?: number) => {
 	let query
 	let timePeriod: apiTimePeriod = apiTimePeriod.all
 	let after = ''
 	let timeQuery = ''
 	let sort = sortType.hot
+	if (!limit) limit = 50
 
 	if (typeof req.query.timeperiod === 'string') {
 		timePeriod = parseTimePeriod(req.query.timeperiod)
@@ -88,7 +89,7 @@ export const parseRedditQuery = (req: Request) => {
 	}
 	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`
 
-	query = `${req.params.id}/${sort}.json?limit=50${timeQuery}${after}`
+	query = `${req.params.id}/${sort}.json?limit=${limit}${timeQuery}${after}`
 
 	return query
 }

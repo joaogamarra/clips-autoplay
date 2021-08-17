@@ -71,12 +71,14 @@ const parseSort = (sort) => {
     throw new Error('Bad Request: Sort');
 };
 exports.parseSort = parseSort;
-const parseRedditQuery = (req) => {
+const parseRedditQuery = (req, limit) => {
     let query;
     let timePeriod = twitch_1.apiTimePeriod.all;
     let after = '';
     let timeQuery = '';
     let sort = subreddit_1.sortType.hot;
+    if (!limit)
+        limit = 50;
     if (typeof req.query.timeperiod === 'string') {
         timePeriod = exports.parseTimePeriod(req.query.timeperiod);
         timeQuery = `&t=${timePeriod}`;
@@ -86,7 +88,7 @@ const parseRedditQuery = (req) => {
     }
     if (typeof req.query.after === 'string')
         after = `&after=${req.query.after}`;
-    query = `${req.params.id}/${sort}.json?limit=50${timeQuery}${after}`;
+    query = `${req.params.id}/${sort}.json?limit=${limit}${timeQuery}${after}`;
     return query;
 };
 exports.parseRedditQuery = parseRedditQuery;

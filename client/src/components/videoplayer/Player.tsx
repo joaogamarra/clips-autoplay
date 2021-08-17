@@ -103,12 +103,12 @@ const Player: FC = () => {
 		if (after !== '' && !loadingClips) {
 			setLoadingClips(true)
 			const data = await getClips(currentSearch, after)
+			setLoadingClips(false)
 
 			if ('error' in data) {
 				console.log(data.error)
 			} else {
 				dispatch(updateClips(data))
-				setLoadingClips(false)
 			}
 		}
 	}, [clips.pagination.cursor, currentSearch, dispatch, loadingClips])
@@ -200,7 +200,7 @@ const Player: FC = () => {
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])
 
-	const handleVideoPlay = () => {
+	const handleVideoPlay = useCallback(() => {
 		if (videoPlaying) {
 			videoEl.current?.pause()
 			if (audioEl?.current?.src) audioEl.current?.pause()
@@ -209,7 +209,7 @@ const Player: FC = () => {
 			if (audioEl?.current?.src) audioEl.current?.play()
 		}
 		setVideoPlaying(!videoPlaying)
-	}
+	}, [videoPlaying])
 
 	const handleVideoFullScreen = () => {
 		if (videoFullScreen) {
@@ -243,13 +243,45 @@ const Player: FC = () => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === 'ArrowLeft') nextClip('prev')
 			if (e.key === 'ArrowRight') nextClip()
+			if (e.key === ' ') handleVideoPlay()
 		}
 
 		updateVideoSize()
 
 		window.onresize = updateVideoSize
 		window.onkeydown = handleKeyDown
-	}, [nextClip])
+	}, [handleVideoPlay, nextClip])
+
+	const handleAudioError = () => {
+		const audio = audioEl.current
+		if (audio && audio.src.includes('DASH_audio')) {
+			const currentSrc = audio.src
+
+			audio.src = currentSrc?.replace('DASH_audio.mp4', 'audio')
+		}
+	}
+
+	useEffect(() => {
+		const updateVideoSize = () => {
+			const vh = window.innerHeight
+			const vw = window.innerWidth
+
+			if (videoEl && vw > 1000) {
+				setVideoMaxWidth((vh - 200) * 1.69)
+			}
+		}
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === 'ArrowLeft') nextClip('prev')
+			if (e.key === 'ArrowRight') nextClip()
+			if (e.key === ' ') handleVideoPlay()
+		}
+
+		updateVideoSize()
+
+		window.onresize = updateVideoSize
+		window.onkeydown = handleKeyDown
+	}, [handleVideoPlay, nextClip])
 
 	return (
 		<FullScreen handle={handle}>
@@ -295,7 +327,15 @@ const Player: FC = () => {
 												setVideoPercentage((100 / videoEl.current!.duration) * videoEl.current!.currentTime)
 											}
 										></video>
-										<audio ref={audioEl} src={currentClip.audio_url} autoPlay={true} controls={false}></audio>
+										{currentClip.audio_url && (
+											<audio
+												ref={audioEl}
+												src={currentClip.audio_url}
+												autoPlay={true}
+												controls={false}
+												onError={() => handleAudioError()}
+											></audio>
+										)}
 										<VideoBottomControls
 											videoEl={videoEl.current}
 											audioEl={audioEl.current}

@@ -141,19 +141,19 @@ const VideoBottomControls: FC<Props> = ({
 				</button>
 				<ul className={`playback-options ${playbackOptionsVisible ? 'is-visible' : ''}`}>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(0.5)}>0.5</button>
-					</li>
-					<li>
-						<button onClick={() => handlePlaybackSpeed(1)}>1</button>
-					</li>
-					<li>
-						<button onClick={() => handlePlaybackSpeed(1.25)}>1.25</button>
+						<button onClick={() => handlePlaybackSpeed(2)}>2</button>
 					</li>
 					<li>
 						<button onClick={() => handlePlaybackSpeed(1.5)}>1.5</button>
 					</li>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(2)}>2</button>
+						<button onClick={() => handlePlaybackSpeed(1.25)}>1.25</button>
+					</li>
+					<li>
+						<button onClick={() => handlePlaybackSpeed(1)}>1</button>
+					</li>
+					<li>
+						<button onClick={() => handlePlaybackSpeed(0.5)}>0.5</button>
 					</li>
 				</ul>
 			</div>

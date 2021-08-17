@@ -14,6 +14,8 @@ export const getClips = async (search: searchClips, after?: string) => {
 	}
 	if (after && search.timePeriod !== apiTimePeriod.shuffle) query = `${query}&after=${after}`
 	try {
+		console.log(query)
+		console.log(search)
 		const { data }: { data: ResponseClips } = await axios.get(query)
 
 		return data
