@@ -65,7 +65,7 @@ const Sidebar: FC = () => {
 											to={`/${search.mode}/${apiTimePeriod.day}/${search.value}${search.sort ? '/hot' : ''}`}
 											onClick={() => handleFavouriteClick()}
 										>
-											<ChannelAndAvatar src={avatar} name={search.value} />
+											<ChannelAndAvatar src={avatar} name={search.value} type={search.mode} />
 										</Link>
 										<button title='Remove Favourite' onClick={() => handleRemove(search)}>
 											<XCircleFillIcon size={14} />

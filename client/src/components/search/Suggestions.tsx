@@ -22,11 +22,11 @@ const Suggestions: FC<Props> = ({ suggestions, localSearch }) => {
 								<li className='suggestions-item' key={name}>
 									{localSearch.mode === searchType.subreddit ? (
 										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}/${localSearch.sort}`}>
-											<ChannelAndAvatar src={avatar} name={name} />
+											<ChannelAndAvatar src={avatar} name={name} type={localSearch.mode} />
 										</Link>
 									) : (
 										<Link to={`/${localSearch.mode}/${localSearch.timePeriod}/${name}`}>
-											<ChannelAndAvatar src={avatar} name={name} />
+											<ChannelAndAvatar src={avatar} name={name} type={localSearch.mode} />
 										</Link>
 									)}
 								</li>

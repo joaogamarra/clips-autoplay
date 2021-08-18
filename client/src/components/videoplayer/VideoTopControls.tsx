@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { MdChevronRight, MdChatBubble, MdFullscreenExit, MdFullscreen, MdBlock } from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
+import { searchType } from 'src/types/search'
 
 interface Props {
 	handleComments: () => void
@@ -26,7 +27,7 @@ const VideoTopControls: FC<Props> = ({
 	nextDisabled,
 	nsfw
 }) => {
-	const [{ currentClip }] = useStateValue()
+	const [{ currentClip, currentSearch }] = useStateValue()
 
 	return (
 		<div className='video-top-controls'>
@@ -44,10 +45,12 @@ const VideoTopControls: FC<Props> = ({
 						<img className='' width='30' src={twitchLogo} alt='twitch logo' />
 					</a>
 				)}
-				<button className={`btn-nsfw ${nsfw ? '' : 'hidden'}`} title='toggle nsfw' onClick={handleNsfw}>
-					<MdBlock />
-					<span className='btn-text'>{nsfw ? 'Hide' : 'Show'} 18+</span>
-				</button>
+				{currentSearch.mode === searchType.subreddit && (
+					<button className={`btn-nsfw ${nsfw ? '' : 'hidden'}`} title='toggle nsfw' onClick={handleNsfw}>
+						<MdBlock />
+						<span className='btn-text'>{nsfw ? 'Hide' : 'Show'} 18+</span>
+					</button>
+				)}
 
 				{currentClip.comments && (
 					<button className='btn-comments' title='toggle comments' onClick={handleComments}>
@@ -55,7 +58,11 @@ const VideoTopControls: FC<Props> = ({
 					</button>
 				)}
 
-				<button className='btn-inner-fullscreen' onClick={handleInnerFullScreen}>
+				<button
+					className='btn-inner-fullscreen'
+					title='toggle inner fulscreen'
+					onClick={handleInnerFullScreen}
+				>
 					{innerFullScreen ? <MdFullscreenExit /> : <MdFullscreen />}
 				</button>
 
