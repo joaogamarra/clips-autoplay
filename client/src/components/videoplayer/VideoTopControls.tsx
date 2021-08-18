@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { MdChevronRight, MdChatBubble, MdFullscreenExit, MdFullscreen } from 'react-icons/md'
+import { MdChevronRight, MdChatBubble, MdFullscreenExit, MdFullscreen, MdBlock } from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
 
@@ -8,9 +8,11 @@ interface Props {
 	handleNext: () => void
 	handlePrev: () => void
 	handleInnerFullScreen: () => void
+	handleNsfw: () => void
 	prevDisabled: boolean
 	nextDisabled: boolean
 	innerFullScreen: boolean
+	nsfw: boolean
 }
 
 const VideoTopControls: FC<Props> = ({
@@ -18,9 +20,11 @@ const VideoTopControls: FC<Props> = ({
 	handleNext,
 	handlePrev,
 	handleInnerFullScreen,
+	handleNsfw,
 	innerFullScreen,
 	prevDisabled,
-	nextDisabled
+	nextDisabled,
+	nsfw
 }) => {
 	const [{ currentClip }] = useStateValue()
 
@@ -31,15 +35,20 @@ const VideoTopControls: FC<Props> = ({
 			<div className='right-container'>
 				{currentClip.twitch_url && (
 					<a
-						className='link-twitch'
+						className='btn-twitch-page'
 						href={`${currentClip.twitch_url}`}
 						target='_blank'
 						rel='noreferrer'
 						title='clip twitch page'
 					>
-						<img className='' width='25' src={twitchLogo} alt='twitch logo' />
+						<img className='' width='30' src={twitchLogo} alt='twitch logo' />
 					</a>
 				)}
+				<button className={`btn-nsfw ${nsfw ? '' : 'hidden'}`} title='toggle nsfw' onClick={handleNsfw}>
+					<MdBlock />
+					<span className='btn-text'>{nsfw ? 'Hide' : 'Show'} 18+</span>
+				</button>
+
 				{currentClip.comments && (
 					<button className='btn-comments' title='toggle comments' onClick={handleComments}>
 						<MdChatBubble />

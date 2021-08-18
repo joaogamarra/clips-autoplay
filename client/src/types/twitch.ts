@@ -8,6 +8,9 @@ export interface ResponseClip {
 	comments_url: string
 	comments?: comment[]
 	seen?: boolean
+	nsfw?: boolean
+	loud?: boolean
+	isYoutube?: boolean
 }
 
 export interface comment {

@@ -7,7 +7,8 @@
 	max-width: 1200px;
 
 	&.has-comments {
-		video {
+		video,
+		iframe {
 			width: calc(100% - #{$comments-width});
 		}
 
@@ -17,7 +18,7 @@
 			transition: opacity 200ms ease-in-out 200ms;
 		}
 
-		.btn-comments {
+		.btn-comments svg {
 			opacity: 1;
 		}
 
@@ -72,6 +73,19 @@
 		}
 	}
 
+	.youtube-container {
+		position: relative;
+		height: calc(100vh - 280px);
+	}
+
+	iframe {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		transition: width 300ms ease-in-out;
+		z-index: 5;
+	}
+
 	.video-comments-wrapper {
 		position: relative;
 		background-color: rgba($color-purple-main, 0.05);
@@ -121,22 +135,58 @@
 		outline: none;
 		border: none;
 		cursor: pointer;
-		opacity: 0.3;
-		transition: opacity 200ms ease-in-out;
+		transition: background-color 200ms ease-in-out;
+		background-color: rgba($color-purple-main, 0);
+
+		&:hover {
+			background-color: rgba($color-purple-main, 0.2);
+		}
 
 		svg {
 			width: 24px;
 			height: 24px;
+			opacity: 0.3;
+			transition: opacity 200ms ease-in-out;
 		}
 	}
 
-	.btn-inner-fullscreen {
-		opacity: 1;
+	.btn-nsfw {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding: 2px 12px;
+		min-width: 98px;
+		color: $color-main-white;
+		font-size: 14px;
+		line-height: 18px;
+		background: none;
+		outline: none;
+		border: none;
+		cursor: pointer;
+		background-color: rgba($color-purple-main, 0);
+		transition: background-color 200ms ease-in-out;
+
+		&:hover {
+			background-color: rgba($color-purple-main, 0.2);
+		}
 
 		svg {
-			width: 32px;
-			height: 32px;
+			width: 22px;
+			height: 22px;
+			opacity: 0.3;
+			transition: opacity 300ms ease-in-out;
 		}
+
+		&.hidden svg {
+			opacity: 1;
+		}
+	}
+
+	.btn-inner-fullscreen svg {
+		width: 32px;
+		height: 32px;
+		opacity: 1;
 	}
 
 	.link-comments {
@@ -251,12 +301,18 @@
 		align-items: stretch;
 	}
 
-	.link-twitch {
+	.btn-twitch-page {
 		display: flex;
 		align-items: center;
-
 		height: 100%;
 		padding: 0 12px;
+		opacity: 0.3;
+		transition: opacity 200ms ease-in-out, background-color 200ms ease-in-out;
+		background-color: rgba($color-purple-main, 0);
+		&:hover {
+			opacity: 1;
+			background-color: rgba($color-purple-main, 0.2);
+		}
 	}
 
 	.btn-clips-control {
@@ -352,7 +408,7 @@
 		//background: rgba($color-main-black, 0.9);
 		opacity: 0;
 		z-index: 5;
-		transition: opacity 200ms ease-in-out;
+		transition: opacity 200ms ease-in-out, width 200ms ease-in-out;
 
 		&.is-visible {
 			opacity: 1;

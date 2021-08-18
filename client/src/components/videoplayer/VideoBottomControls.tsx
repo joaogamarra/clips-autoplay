@@ -14,7 +14,7 @@ interface Props {
 	videoPlaying: boolean
 	videoPercentage: number
 	videoFullScreen: boolean
-	hasAudio: string | undefined
+	hasAudio: boolean
 	handleVideoFullScreen: () => void
 	handleVideoPlay: () => void
 	handleMouseMove: () => void

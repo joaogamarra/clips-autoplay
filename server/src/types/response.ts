@@ -14,6 +14,7 @@ export interface responseClip {
 	comments?: comment[]
 	nsfw?: boolean
 	loud?: boolean
+	isYoutube?: boolean
 }
 
 export interface comment {

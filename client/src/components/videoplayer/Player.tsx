@@ -24,6 +24,7 @@ import { getRandomInt } from 'src/common/utils'
 import VideoTopControls from './VideoTopControls'
 import VideoBottomControls from './VideoBottomControls'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
+import YouTube from 'react-youtube'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -41,6 +42,7 @@ const Player: FC = () => {
 	const [videoPercentage, setVideoPercentage] = useState(0)
 	const [videoFullScreen, setVideoFullScreen] = useState(false)
 	const [controlsVisible, setControlsVisible] = useState(false)
+	const [nsfw, setNsfw] = useState(true)
 	const videoEl = useRef<HTMLVideoElement>(null)
 	const audioEl = useRef<HTMLAudioElement>(null)
 	const videoContainer = useRef<HTMLDivElement>(null)
@@ -57,6 +59,7 @@ const Player: FC = () => {
 		const getdata = async () => {
 			dispatch(setCurrentSearch(params))
 			const data = await getClips(params)
+			console.log(data)
 
 			if ('error' in data) {
 				setError(true)
@@ -117,10 +120,9 @@ const Player: FC = () => {
 		(direction?: string) => {
 			const clipsData = clips.data
 			let newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
-
 			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle)
 				return false
-
+			console.log(clipIndex)
 			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
 				const indexUsedPopped = indexUsed.slice(0, indexUsed.length - 1)
 				ReactGA.pageview(`${window.location.pathname}${window.location.search}/${indexUsed.length}`)
@@ -157,8 +159,14 @@ const Player: FC = () => {
 				}
 			}
 
-			if (newClipIndex + 1 <= clips.data.length) {
-				const newClip = clipsData[newClipIndex]
+			if (newClipIndex < clips.data.length) {
+				let newClip = clipsData[newClipIndex]
+
+				while (newClip.nsfw && !nsfw) {
+					newClipIndex++
+					newClip = clipsData[newClipIndex]
+				}
+
 				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
 				if (clipIndex > 0 && clipsData[clipIndex].video_url === newClip.video_url) {
 					nextClip()
@@ -188,7 +196,7 @@ const Player: FC = () => {
 				newClipIndex <= 0 ? setPrevDisabled(true) : setPrevDisabled(false)
 			}
 		},
-		[clipIndex, clips.data, currentSearch.timePeriod, dispatch, indexUsed, loadMoreClips]
+		[clipIndex, clips.data, currentSearch.timePeriod, dispatch, indexUsed, loadMoreClips, nsfw]
 	)
 
 	useEffect(() => {
@@ -290,6 +298,14 @@ const Player: FC = () => {
 		window.onkeydown = handleKeyDown
 	}, [handleVideoPlay, nextClip])
 
+	const autoplayValue: 0 | 1 | undefined = 1
+	const opts = {
+		playerVars: {
+			// https://developers.google.com/youtube/player_parameters
+			autoplay: autoplayValue
+		}
+	}
+
 	return (
 		<FullScreen handle={handle}>
 			<div
@@ -306,6 +322,8 @@ const Player: FC = () => {
 							handleComments={() => setCommentsVisible(!commentsVisible)}
 							handleNext={() => nextClip()}
 							handlePrev={() => nextClip('prev')}
+							handleNsfw={() => setNsfw(!nsfw)}
+							nsfw={nsfw}
 							nextDisabled={nextDisabled}
 							prevDisabled={prevDisabled}
 							innerFullScreen={innerFullScreen}
@@ -316,48 +334,66 @@ const Player: FC = () => {
 								<>
 									<div
 										className={`video-controls-wrapper ${
-											!videoPlaying || controlsVisible ? 'controls-visible' : ''
+											(!videoPlaying || controlsVisible) && !currentClip.isYoutube ? 'controls-visible' : ''
 										}`}
 									>
-										<video
-											className={transition}
-											src={currentClip.video_url}
-											ref={videoEl}
-											autoPlay={true}
-											onEnded={() => nextClip()}
-											onLoadedData={() => setTransition('')}
-											onError={() => nextClip()}
-											onPlay={() => setVideoPlaying(true)}
-											onClick={() => handleVideoPlay()}
-											onMouseMove={() => setControlsVisible(true)}
-											onTimeUpdate={() =>
-												setVideoPercentage((100 / videoEl.current!.duration) * videoEl.current!.currentTime)
-											}
-										></video>
-										{currentClip.audio_url && (
-											<audio
-												ref={audioEl}
-												src={currentClip.audio_url}
-												autoPlay={true}
-												controls={false}
-												onError={() => handleAudioError()}
-											></audio>
+										{currentClip.isYoutube ? (
+											<YouTube
+												videoId={currentClip.video_url}
+												opts={opts}
+												containerClassName='youtube-container'
+												onStateChange={() => setTransition('')}
+												onPlay={() => setVideoPlaying(true)}
+												onEnd={() => nextClip()}
+												onPause={() => setVideoPlaying(false)}
+												onError={() => nextClip()}
+											/>
+										) : (
+											<>
+												<video
+													className={transition}
+													src={currentClip.video_url}
+													ref={videoEl}
+													autoPlay={true}
+													onEnded={() => nextClip()}
+													onLoadedData={() => setTransition('')}
+													onError={() => nextClip()}
+													onPlay={() => setVideoPlaying(true)}
+													onClick={() => handleVideoPlay()}
+													onMouseMove={() => setControlsVisible(true)}
+													onTimeUpdate={() =>
+														setVideoPercentage(
+															(100 / videoEl.current!.duration) * videoEl.current!.currentTime
+														)
+													}
+												></video>
+
+												{currentClip.audio_url && (
+													<audio
+														ref={audioEl}
+														src={currentClip.audio_url}
+														autoPlay={true}
+														controls={false}
+														onError={() => handleAudioError()}
+													></audio>
+												)}
+
+												<VideoBottomControls
+													videoEl={videoEl.current}
+													audioEl={audioEl.current}
+													handleVideoPlay={() => handleVideoPlay()}
+													videoPlaying={videoPlaying}
+													videoPercentage={videoPercentage}
+													videoFullScreen={videoFullScreen}
+													hasAudio={!!!currentClip.isYoutube}
+													handleVideoFullScreen={handleVideoFullScreen}
+													handleMouseMove={() => setControlsVisible(true)}
+												/>
+											</>
 										)}
-										<VideoBottomControls
-											videoEl={videoEl.current}
-											audioEl={audioEl.current}
-											handleVideoPlay={() => handleVideoPlay()}
-											videoPlaying={videoPlaying}
-											videoPercentage={videoPercentage}
-											videoFullScreen={videoFullScreen}
-											hasAudio={currentClip.audio_url}
-											handleVideoFullScreen={handleVideoFullScreen}
-											handleMouseMove={() => setControlsVisible(true)}
-										/>
 									</div>
 								</>
 							}
-
 							{currentClip.comments && transition !== 'loading' ? (
 								<CommentsBox currentClip={currentClip}></CommentsBox>
 							) : null}

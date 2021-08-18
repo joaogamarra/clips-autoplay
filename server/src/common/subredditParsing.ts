@@ -20,6 +20,7 @@ export const parseSubreddit = async (data: any) => {
 		const redditGifPath = item.data?.preview?.images[0]?.variants?.mp4?.source?.url
 		const redditGifDirect = item.data?.preview?.reddit_video_preview?.fallback_url
 		let gifPath = item.data?.url_overridden_by_dest
+		const youtubePath = item.data?.url_overridden_by_dest
 
 		if (!gifPath?.endsWith('.gif')) gifPath = false
 
@@ -31,8 +32,9 @@ export const parseSubreddit = async (data: any) => {
 		if (gifPath && isGiphy(gifPath)) url = isGiphy(gifPath)
 		if (redditGifPath && isRedditGif(redditGifPath)) url = isRedditGif(redditGifPath)
 		if (redditGifDirect) url = redditGifDirect
+		if (youtubePath && isYoutube(youtubePath)) url = isYoutube(youtubePath)
 
-		const nsfw = item.data.thumbnail === 'nsfw'
+		const nsfw = item.data.over_18
 		const loud = item.data.link_flair_text?.toLowerCase().includes('loud')
 
 		if (url !== '' && url) {
@@ -43,13 +45,15 @@ export const parseSubreddit = async (data: any) => {
 			}
 
 			if (nsfw) dataObj.nsfw = nsfw
-			if (loud) dataObj.nsfw = loud
+			if (loud) dataObj.loud = loud
 
 			if (twitchPath && isTwitch(url)) {
 				dataObj.twitch_url = item.data.url
 			} else if (redditPath && isReddit(url)) {
 				const audio_url = `${url.substr(0, url.lastIndexOf('_') + 1)}audio.mp4`
 				dataObj.audio_url = audio_url
+			} else if (youtubePath && isYoutube(youtubePath)) {
+				dataObj.isYoutube = true
 			}
 			parsedData.data.push(dataObj)
 		}
@@ -145,4 +149,22 @@ export const isThumbsGfycat = (url: string) => {
 
 	if (url && url.includes(thumbsgfycatAddress)) return url.replace('.gif', '.mp4')
 	else return false
+}
+
+export const isYoutube = (url: string) => {
+	const youtubeAddress =
+		'https://www.youtube.com/' ||
+		'http://www.youtube.com/' ||
+		'https://m.youtube.com/' ||
+		'http://m.youtube.com/'
+	const youtubeAddress1 = 'https://youtu.be' || 'https://youtu.be'
+
+	if (url && url.includes(youtubeAddress)) {
+		let newURL = url.split('/watch?v=')[1]
+		if (newURL && newURL.includes('&amp;')) newURL = newURL.split('&amp;')[0]
+
+		return newURL
+	} else if (url && url.includes(youtubeAddress1)) {
+		return url.split('utu.be/')[1]
+	} else return false
 }
