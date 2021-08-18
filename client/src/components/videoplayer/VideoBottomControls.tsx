@@ -4,9 +4,12 @@ import {
 	MdVolumeUp,
 	MdFullscreen,
 	MdPause,
-	MdVolumeMute,
+	MdVolumeDown,
+	MdVolumeOff,
 	MdFullscreenExit
 } from 'react-icons/md'
+import { getUserOptions, saveUserOptions } from 'src/common/localstorage'
+import { storageOptions } from 'src/types/options'
 
 interface Props {
 	videoEl: HTMLVideoElement | null
@@ -39,18 +42,29 @@ const VideoBottomControls: FC<Props> = ({
 	const VolumeEl = useRef<HTMLInputElement>(null)
 	const progressEl = useRef<HTMLDivElement>(null)
 
-	const handlePlaybackSpeed = (speed: number) => {
-		setPlaybackSpeed(speed)
+	useEffect(() => {
+		const savedOptions: storageOptions = getUserOptions()
+
+		setVideoVolume(savedOptions.volume)
+		setPlaybackSpeed(savedOptions.playbackSpeed)
+	}, [])
+
+	useEffect(() => {
+		const savedOptions: storageOptions = getUserOptions()
+		saveUserOptions({
+			...savedOptions,
+			playbackSpeed: playbackSpeed
+		})
 		setPlaybackOptionsVisible(false)
 		if (videoEl) {
-			videoEl.defaultPlaybackRate = speed
-			videoEl.playbackRate = speed
+			videoEl.defaultPlaybackRate = playbackSpeed
+			videoEl.playbackRate = playbackSpeed
 		}
 		if (audioEl?.src) {
-			audioEl.defaultPlaybackRate = speed
-			audioEl.playbackRate = speed
+			audioEl.defaultPlaybackRate = playbackSpeed
+			audioEl.playbackRate = playbackSpeed
 		}
-	}
+	}, [audioEl, playbackSpeed, videoEl])
 
 	const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
 		const percent = e.nativeEvent.offsetX / e.currentTarget.offsetWidth
@@ -63,13 +77,11 @@ const VideoBottomControls: FC<Props> = ({
 		const muted = !videoMuted
 		setVideoMuted(muted)
 		if (audioEl?.src) {
-			muted ? setVideoVolume(0) : setVideoVolume(audioEl.volume * 10)
 			audioEl.muted = muted
 			if (!muted && videoVolume === 0) {
 				audioEl.volume = 0.2
 			}
 		} else if (videoEl) {
-			muted ? setVideoVolume(0) : setVideoVolume(videoEl.volume * 10)
 			videoEl.muted = muted
 			if (!muted && videoVolume === 0) {
 				videoEl.volume = 0.2
@@ -96,17 +108,16 @@ const VideoBottomControls: FC<Props> = ({
 		}
 	}, [videoVolume])
 
-	const handleVolume = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const target = e.currentTarget
-		const val = Number(target.value)
-		setVideoVolume(val)
+	useEffect(() => {
+		const savedOptions: storageOptions = getUserOptions()
+		saveUserOptions({
+			...savedOptions,
+			volume: videoVolume
+		})
 
-		if (val === 0 && !videoMuted) setVideoMuted(true)
-		else setVideoMuted(false)
-
-		if (audioEl?.src) audioEl.volume = val / 10
-		else if (videoEl) videoEl.volume = val / 10
-	}
+		if (audioEl?.src) audioEl.volume = videoVolume / 10
+		else if (videoEl) videoEl.volume = videoVolume / 10
+	}, [audioEl, videoEl, videoVolume])
 
 	return (
 		<div className='video-bottom-controls' onMouseMove={handleMouseMove}>
@@ -124,7 +135,7 @@ const VideoBottomControls: FC<Props> = ({
 			{hasAudio && (
 				<>
 					<button className='btn-video-mute' onClick={() => toggleSound()}>
-						{videoMuted ? <MdVolumeMute /> : <MdVolumeUp />}
+						{videoMuted ? <MdVolumeOff /> : videoVolume > 4 ? <MdVolumeUp /> : <MdVolumeDown />}
 					</button>
 					<input
 						ref={VolumeEl}
@@ -135,7 +146,9 @@ const VideoBottomControls: FC<Props> = ({
 						max='10'
 						step='0.1'
 						value={videoVolume}
-						onChange={handleVolume}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setVideoVolume(Number(e.currentTarget.value))
+						}
 					/>
 				</>
 			)}
@@ -149,19 +162,19 @@ const VideoBottomControls: FC<Props> = ({
 				</button>
 				<ul className={`playback-options ${playbackOptionsVisible ? 'is-visible' : ''}`}>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(2)}>2</button>
+						<button onClick={() => setPlaybackSpeed(2)}>2</button>
 					</li>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(1.5)}>1.5</button>
+						<button onClick={() => setPlaybackSpeed(1.5)}>1.5</button>
 					</li>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(1.25)}>1.25</button>
+						<button onClick={() => setPlaybackSpeed(1.25)}>1.25</button>
 					</li>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(1)}>1</button>
+						<button onClick={() => setPlaybackSpeed(1)}>1</button>
 					</li>
 					<li>
-						<button onClick={() => handlePlaybackSpeed(0.5)}>0.5</button>
+						<button onClick={() => setPlaybackSpeed(0.5)}>0.5</button>
 					</li>
 				</ul>
 			</div>

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { storageOptions } from 'src/types/options'
 import { searchClips, searchType } from 'src/types/search'
 import { AutocompleteObj } from 'src/types/twitch'
 
@@ -13,7 +14,7 @@ export const getFavourites = () => {
 }
 
 export const addFavourite = async (search: searchClips) => {
-	if (search.value !== '' && search.mode !== searchType.subreddit) {
+	if (search.value !== '') {
 		const storedFavourites = JSON.parse(localStorage.getItem('favourites') || '[]')
 		const itemIndex = storedFavourites.findIndex(
 			(i: { search: searchClips; rank: number }) =>
@@ -26,10 +27,16 @@ export const addFavourite = async (search: searchClips) => {
 
 			newFavourites[itemIndex].rank = newFavourites[itemIndex].rank + 1
 		} else {
-			const apiUrl = `${process.env.REACT_APP_API_URI}/api/twitch/suggestions/${search.mode}/${search.value}`
+			let apiUrl
+			if (search.mode === searchType.subreddit) {
+				apiUrl = `${process.env.REACT_APP_API_URI}/api/reddit/suggestions/${search.value}`
+			} else {
+				apiUrl = `${process.env.REACT_APP_API_URI}/api/twitch/suggestions/${search.mode}/${search.value}`
+			}
+
 			const { data }: { data: AutocompleteObj[] } = await axios.get(apiUrl)
 			let thisAvatar = ''
-			if(data[0]?.avatar) thisAvatar = data[0].avatar
+			if (data[0]?.avatar) thisAvatar = data[0].avatar
 
 			newFavourites = storedFavourites.concat({ search: search, rank: 0, avatar: thisAvatar })
 		}
@@ -49,4 +56,29 @@ export const removeFavourite = (search: searchClips) => {
 	})
 
 	localStorage.setItem('favourites', JSON.stringify(newFavourites))
+}
+
+export const saveUserOptions = (options: storageOptions) => {
+	const storedOptions = JSON.parse(localStorage.getItem('userOptions') || '')
+	console.log()
+	if (storedOptions !== '') {
+	}
+
+	localStorage.setItem('userOptions', JSON.stringify(options))
+}
+
+export const getUserOptions = () => {
+	const storageItem = localStorage.getItem('userOptions')
+	let storedOptions
+	if (storageItem) storedOptions = JSON.parse(storageItem)
+
+	if (!storedOptions) {
+		storedOptions = {
+			nsfw: true,
+			playbackSpeed: 1,
+			volume: 5
+		}
+		localStorage.setItem('userOptions', JSON.stringify(storedOptions))
+	}
+	return storedOptions
 }

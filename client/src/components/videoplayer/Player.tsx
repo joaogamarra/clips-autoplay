@@ -10,13 +10,14 @@ import {
 	setFavourites,
 	updateClips
 } from 'src/state/reducer'
+import { MdWarning } from 'react-icons/md'
 import { useStateValue } from 'src/state/state'
 import { apiTimePeriod, searchClips } from 'src/types/search'
 import ReactGA from 'react-ga'
 import './player.scss'
 import 'src/styles/button-generic.scss'
 import Loader from '../common/loader/Loader'
-import { addFavourite, getFavourites } from 'src/common/localstorage'
+import { addFavourite, getFavourites, getUserOptions, saveUserOptions } from 'src/common/localstorage'
 import PlayerError from './PlayerError'
 import PlayerFinished from './PlayerFinished'
 import CommentsBox from './CommentsBox'
@@ -59,7 +60,6 @@ const Player: FC = () => {
 		const getdata = async () => {
 			dispatch(setCurrentSearch(params))
 			const data = await getClips(params)
-			console.log(data)
 
 			if ('error' in data) {
 				setError(true)
@@ -122,7 +122,8 @@ const Player: FC = () => {
 			let newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
 			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle)
 				return false
-			console.log(clipIndex)
+			console.log(newClipIndex)
+
 			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
 				const indexUsedPopped = indexUsed.slice(0, indexUsed.length - 1)
 				ReactGA.pageview(`${window.location.pathname}${window.location.search}/${indexUsed.length}`)
@@ -163,7 +164,7 @@ const Player: FC = () => {
 				let newClip = clipsData[newClipIndex]
 
 				while (newClip.nsfw && !nsfw) {
-					newClipIndex++
+					direction === 'prev' ? newClipIndex-- : newClipIndex++
 					newClip = clipsData[newClipIndex]
 				}
 
@@ -198,6 +199,13 @@ const Player: FC = () => {
 		},
 		[clipIndex, clips.data, currentSearch.timePeriod, dispatch, indexUsed, loadMoreClips, nsfw]
 	)
+
+	useEffect(() => {
+		//Just in case the first clip is nsfw and nsfw is turned off
+		if (currentClip.nsfw && !nsfw) {
+			nextClip()
+		}
+	}, [currentClip.nsfw, nextClip, nsfw])
 
 	useEffect(() => {
 		const clipsTotal = clips.data.length
@@ -298,6 +306,22 @@ const Player: FC = () => {
 		window.onkeydown = handleKeyDown
 	}, [handleVideoPlay, nextClip])
 
+	const handleNsfw = () => {
+		const savedOptions = getUserOptions()
+
+		saveUserOptions({
+			...savedOptions,
+			nsfw: !nsfw
+		})
+		setNsfw(!nsfw)
+	}
+
+	useEffect(() => {
+		const savedOptions = getUserOptions()
+
+		setNsfw(savedOptions.nsfw)
+	}, [])
+
 	const autoplayValue: 0 | 1 | undefined = 1
 	const opts = {
 		playerVars: {
@@ -322,7 +346,7 @@ const Player: FC = () => {
 							handleComments={() => setCommentsVisible(!commentsVisible)}
 							handleNext={() => nextClip()}
 							handlePrev={() => nextClip('prev')}
-							handleNsfw={() => setNsfw(!nsfw)}
+							handleNsfw={() => handleNsfw()}
 							nsfw={nsfw}
 							nextDisabled={nextDisabled}
 							prevDisabled={prevDisabled}
@@ -337,6 +361,12 @@ const Player: FC = () => {
 											(!videoPlaying || controlsVisible) && !currentClip.isYoutube ? 'controls-visible' : ''
 										}`}
 									>
+										{currentClip.loud && (
+											<span className='warning-loud'>
+												<MdWarning /> Loud
+											</span>
+										)}
+
 										{currentClip.isYoutube ? (
 											<YouTube
 												videoId={currentClip.video_url}

@@ -91,6 +91,27 @@
 		background-color: rgba($color-purple-main, 0.05);
 	}
 
+	.warning-loud {
+		position: absolute;
+		display: flex;
+		align-items: center;
+		top: 0;
+		left: 0;
+		padding: 3px 10px;
+		background-color: rgba(#640b0b, 0.9);
+		border-bottom-right-radius: 5px;
+		color: #fff;
+		letter-spacing: 0.8px;
+		z-index: 5;
+		pointer-events: none;
+
+		svg {
+			margin-right: 6px;
+			width: 18px;
+			height: 18px;
+		}
+	}
+
 	.comments-box {
 		position: absolute;
 		top: 0;

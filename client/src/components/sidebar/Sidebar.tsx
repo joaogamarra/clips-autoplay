@@ -62,7 +62,7 @@ const Sidebar: FC = () => {
 								{favourites.map(({ search, avatar }) => (
 									<li className='favourites-item' key={search.value}>
 										<Link
-											to={`/${search.mode}/${apiTimePeriod.day}/${search.value}`}
+											to={`/${search.mode}/${apiTimePeriod.day}/${search.value}${search.sort ? '/hot' : ''}`}
 											onClick={() => handleFavouriteClick()}
 										>
 											<ChannelAndAvatar src={avatar} name={search.value} />
