@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isYoutube = exports.isThumbsGfycat = exports.isGiphy = exports.isGfycat = exports.isImgur = exports.isRedditGif = exports.isReddit = exports.isTwitch = exports.parseSubreddit = void 0;
+exports.isYoutube = exports.isThumbsGfycat = exports.isGiphy = exports.isGfycat = exports.isImgur = exports.isRedditGif = exports.isReddit = exports.isTwitchDirect = exports.isTwitch = exports.parseSubreddit = void 0;
 const subreddit_1 = require("../services/reddit/subreddit");
 const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -22,20 +22,23 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
     if (data.after)
         parsedData.pagination.cursor = data.after;
     (_a = data.children) === null || _a === void 0 ? void 0 : _a.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-        var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
+        var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
         let url = '';
         const twitchPath = (_d = (_c = (_b = item.data) === null || _b === void 0 ? void 0 : _b.media) === null || _c === void 0 ? void 0 : _c.oembed) === null || _d === void 0 ? void 0 : _d.thumbnail_url;
-        let redditPath = (_g = (_f = (_e = item.data) === null || _e === void 0 ? void 0 : _e.media) === null || _f === void 0 ? void 0 : _f.reddit_video) === null || _g === void 0 ? void 0 : _g.fallback_url;
-        if (!redditPath && ((_h = item.data) === null || _h === void 0 ? void 0 : _h.crosspost_parent_list))
-            redditPath = (_m = (_l = (_k = (_j = item.data) === null || _j === void 0 ? void 0 : _j.crosspost_parent_list[0]) === null || _k === void 0 ? void 0 : _k.media) === null || _l === void 0 ? void 0 : _l.reddit_video) === null || _m === void 0 ? void 0 : _m.fallback_url;
-        const redditGifPath = (_t = (_s = (_r = (_q = (_p = (_o = item.data) === null || _o === void 0 ? void 0 : _o.preview) === null || _p === void 0 ? void 0 : _p.images[0]) === null || _q === void 0 ? void 0 : _q.variants) === null || _r === void 0 ? void 0 : _r.mp4) === null || _s === void 0 ? void 0 : _s.source) === null || _t === void 0 ? void 0 : _t.url;
-        const redditGifDirect = (_w = (_v = (_u = item.data) === null || _u === void 0 ? void 0 : _u.preview) === null || _v === void 0 ? void 0 : _v.reddit_video_preview) === null || _w === void 0 ? void 0 : _w.fallback_url;
-        let gifPath = (_x = item.data) === null || _x === void 0 ? void 0 : _x.url_overridden_by_dest;
-        const youtubePath = (_y = item.data) === null || _y === void 0 ? void 0 : _y.url_overridden_by_dest;
+        const twitchDirectPath = (_e = item.data) === null || _e === void 0 ? void 0 : _e.url_overridden_by_dest;
+        let redditPath = (_h = (_g = (_f = item.data) === null || _f === void 0 ? void 0 : _f.media) === null || _g === void 0 ? void 0 : _g.reddit_video) === null || _h === void 0 ? void 0 : _h.fallback_url;
+        if (!redditPath && ((_j = item.data) === null || _j === void 0 ? void 0 : _j.crosspost_parent_list))
+            redditPath = (_o = (_m = (_l = (_k = item.data) === null || _k === void 0 ? void 0 : _k.crosspost_parent_list[0]) === null || _l === void 0 ? void 0 : _l.media) === null || _m === void 0 ? void 0 : _m.reddit_video) === null || _o === void 0 ? void 0 : _o.fallback_url;
+        const redditGifPath = (_u = (_t = (_s = (_r = (_q = (_p = item.data) === null || _p === void 0 ? void 0 : _p.preview) === null || _q === void 0 ? void 0 : _q.images[0]) === null || _r === void 0 ? void 0 : _r.variants) === null || _s === void 0 ? void 0 : _s.mp4) === null || _t === void 0 ? void 0 : _t.source) === null || _u === void 0 ? void 0 : _u.url;
+        const redditGifDirect = (_x = (_w = (_v = item.data) === null || _v === void 0 ? void 0 : _v.preview) === null || _w === void 0 ? void 0 : _w.reddit_video_preview) === null || _x === void 0 ? void 0 : _x.fallback_url;
+        let gifPath = (_y = item.data) === null || _y === void 0 ? void 0 : _y.url_overridden_by_dest;
+        const youtubePath = (_z = item.data) === null || _z === void 0 ? void 0 : _z.url_overridden_by_dest;
         if (!(gifPath === null || gifPath === void 0 ? void 0 : gifPath.endsWith('.gif')))
             gifPath = false;
         if (twitchPath && exports.isTwitch(twitchPath))
             url = exports.isTwitch(twitchPath);
+        if (!twitchPath && twitchDirectPath && exports.isTwitchDirect(twitchDirectPath))
+            url = exports.isTwitchDirect(twitchDirectPath);
         if (redditPath && exports.isReddit(redditPath))
             url = exports.isReddit(redditPath);
         if (gifPath && exports.isImgur(gifPath))
@@ -53,7 +56,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
         if (youtubePath && exports.isYoutube(youtubePath))
             url = exports.isYoutube(youtubePath);
         const nsfw = item.data.over_18;
-        const loud = (_z = item.data.link_flair_text) === null || _z === void 0 ? void 0 : _z.toLowerCase().includes('loud');
+        const loud = (_0 = item.data.link_flair_text) === null || _0 === void 0 ? void 0 : _0.toLowerCase().includes('loud');
         if (url !== '' && url) {
             const dataObj = {
                 id: `subr-${item.data.id}`,
@@ -68,6 +71,9 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
             if (twitchPath && exports.isTwitch(url)) {
                 dataObj.twitch_url = item.data.url;
             }
+            else if (!twitchPath && twitchDirectPath && exports.isTwitchDirect(twitchDirectPath)) {
+                dataObj.video_url = '';
+            }
             else if (redditPath && exports.isReddit(url)) {
                 const audio_url = `${url.substr(0, url.lastIndexOf('_') + 1)}audio.mp4`;
                 dataObj.audio_url = audio_url;
@@ -79,10 +85,10 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
         }
     }));
     yield Promise.all(parsedData.data.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-        var _0, _1, _2, _3, _4;
+        var _1, _2, _3, _4, _5;
         const commentsList = [];
-        const comments = yield subreddit_1.getSubreddit(`${(_0 = item.comments_url) === null || _0 === void 0 ? void 0 : _0.replace('/r/', '')}.json?sort=top&limit=15`, 2000);
-        const commentsArr = (_2 = (_1 = comments[1]) === null || _1 === void 0 ? void 0 : _1.data) === null || _2 === void 0 ? void 0 : _2.children;
+        const comments = yield subreddit_1.getSubreddit(`${(_1 = item.comments_url) === null || _1 === void 0 ? void 0 : _1.replace('/r/', '')}.json?sort=top&limit=15`, 2000);
+        const commentsArr = (_3 = (_2 = comments[1]) === null || _2 === void 0 ? void 0 : _2.data) === null || _3 === void 0 ? void 0 : _3.children;
         if (commentsArr && commentsArr.length > 0) {
             let i = 0;
             while (commentsList.length < 10 && i < commentsArr.length) {
@@ -94,7 +100,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
                         score: commentData.score
                     });
                     if (commentData.replies) {
-                        const replieData = (_4 = (_3 = commentData.replies.data) === null || _3 === void 0 ? void 0 : _3.children[0]) === null || _4 === void 0 ? void 0 : _4.data;
+                        const replieData = (_5 = (_4 = commentData.replies.data) === null || _4 === void 0 ? void 0 : _4.children[0]) === null || _5 === void 0 ? void 0 : _5.data;
                         if (replieData.body && commentData.body !== '[deleted]') {
                             commentsList.push({
                                 comment: replieData.body.replace('&gt;', ''),
@@ -104,6 +110,10 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
                         }
                     }
                     item.comments = commentsList;
+                }
+                else if (commentData.distinguished) {
+                    const parsedLink = commentData.body.substring(commentData.body.indexOf('https://production.assets.clips'), commentData.body.length);
+                    item.fallback_url = parsedLink.replace('amp;', '').replace(')', '');
                 }
                 i++;
             }
@@ -120,6 +130,14 @@ const isTwitch = (url) => {
         return false;
 };
 exports.isTwitch = isTwitch;
+const isTwitchDirect = (url) => {
+    const twitchAddress = 'https://clips.twitch.tv' || 'http://clips.twitch.tv';
+    if (url && url.includes(twitchAddress))
+        return url;
+    else
+        return false;
+};
+exports.isTwitchDirect = isTwitchDirect;
 const isReddit = (url) => {
     const redditAddress = 'https://v.redd.it' || 'http://v.redd.it';
     if (url && url.includes(redditAddress))

@@ -9,6 +9,7 @@ export interface responseClip {
 	id: string
 	title: string
 	video_url: string
+	fallback_url?: string
 	audio_url?: string
 	comments_url?: string
 	twitch_url?: string

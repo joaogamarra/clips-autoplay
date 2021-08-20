@@ -14,6 +14,7 @@ export const parseSubreddit = async (data: any) => {
 	data.children?.map(async (item: { data: any }) => {
 		let url: string | false = ''
 		const twitchPath = item.data?.media?.oembed?.thumbnail_url
+		const twitchDirectPath = item.data?.url_overridden_by_dest
 		let redditPath = item.data?.media?.reddit_video?.fallback_url
 		if (!redditPath && item.data?.crosspost_parent_list)
 			redditPath = item.data?.crosspost_parent_list[0]?.media?.reddit_video?.fallback_url
@@ -25,6 +26,8 @@ export const parseSubreddit = async (data: any) => {
 		if (!gifPath?.endsWith('.gif')) gifPath = false
 
 		if (twitchPath && isTwitch(twitchPath)) url = isTwitch(twitchPath)
+		if (!twitchPath && twitchDirectPath && isTwitchDirect(twitchDirectPath))
+			url = isTwitchDirect(twitchDirectPath)
 		if (redditPath && isReddit(redditPath)) url = isReddit(redditPath)
 		if (gifPath && isImgur(gifPath)) url = isImgur(gifPath)
 		if (gifPath && isGfycat(gifPath)) url = isGfycat(gifPath)
@@ -50,6 +53,8 @@ export const parseSubreddit = async (data: any) => {
 
 			if (twitchPath && isTwitch(url)) {
 				dataObj.twitch_url = item.data.url
+			} else if (!twitchPath && twitchDirectPath && isTwitchDirect(twitchDirectPath)) {
+				dataObj.video_url = ''
 			} else if (redditPath && isReddit(url)) {
 				const audio_url = `${url.substr(0, url.lastIndexOf('_') + 1)}audio.mp4`
 				dataObj.audio_url = audio_url
@@ -93,7 +98,15 @@ export const parseSubreddit = async (data: any) => {
 						}
 
 						item.comments = commentsList
+					} else if (commentData.distinguished) {
+						const parsedLink = commentData.body.substring(
+							commentData.body.indexOf('https://production.assets.clips'),
+							commentData.body.length
+						)
+
+						item.fallback_url = parsedLink.replace('amp;', '').replace(')', '')
 					}
+
 					i++
 				}
 			}
@@ -107,6 +120,12 @@ export const isTwitch = (url: string) => {
 	const twitchAddress = 'https://clips-media-assets2.twitch.tv' || 'http://clips-media-assets2.twitch.tv'
 
 	if (url && url.includes(twitchAddress)) return url.replace('-social', '').replace('-preview.jpg', '.mp4')
+	else return false
+}
+export const isTwitchDirect = (url: string) => {
+	const twitchAddress = 'https://clips.twitch.tv' || 'http://clips.twitch.tv'
+
+	if (url && url.includes(twitchAddress)) return url
 	else return false
 }
 export const isReddit = (url: string) => {

@@ -381,6 +381,16 @@ const Player: FC = () => {
 		currentClip.id !== '' && addClipSeen(currentClip.id)
 	}, [currentClip.id])
 
+	const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
+		const target = e.currentTarget
+
+		if (target.src !== currentClip.fallback_url && currentClip.fallback_url) {
+			target.src = currentClip.fallback_url
+		} else {
+			nextClip()
+		}
+	}
+
 	const autoplayValue: 0 | 1 | undefined = 1
 	const opts = {
 		playerVars: {
@@ -399,7 +409,7 @@ const Player: FC = () => {
 				style={{ maxWidth: videoMaxWidth }}
 			>
 				{finished && <PlayerFinished />}
-				{currentClip.video_url && (
+				{(currentClip.video_url || currentClip.fallback_url) && (
 					<>
 						<VideoTopControls
 							handleComments={() => setCommentsVisible(!commentsVisible)}
@@ -443,12 +453,14 @@ const Player: FC = () => {
 											<>
 												<video
 													className={transition}
-													src={currentClip.video_url}
+													src={
+														currentClip.video_url !== '' ? currentClip.video_url : currentClip.fallback_url
+													}
 													ref={videoEl}
 													autoPlay={true}
 													onEnded={() => nextClip()}
 													onLoadedData={() => setTransition('')}
-													onError={() => nextClip()}
+													onError={(e) => handleVideoError(e)}
 													onPlay={() => setVideoPlaying(true)}
 													onClick={() => handleVideoPlay()}
 													onMouseMove={() => setControlsVisible(true)}
