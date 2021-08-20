@@ -6,6 +6,7 @@ export interface responseClips {
 }
 
 export interface responseClip {
+	id: string
 	title: string
 	video_url: string
 	audio_url?: string

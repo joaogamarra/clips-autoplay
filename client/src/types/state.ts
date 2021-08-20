@@ -23,6 +23,10 @@ export type Action =
 			payload: number
 	  }
 	| {
+			type: 'SET_FILTERED_CLIPS'
+			payload: ResponseClip[]
+	  }
+	| {
 			type: 'UPDATE_CLIPS'
 			payload: ResponseClips
 	  }

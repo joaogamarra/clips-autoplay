@@ -59,11 +59,6 @@ export const removeFavourite = (search: searchClips) => {
 }
 
 export const saveUserOptions = (options: storageOptions) => {
-	const storedOptions = JSON.parse(localStorage.getItem('userOptions') || '')
-	console.log()
-	if (storedOptions !== '') {
-	}
-
 	localStorage.setItem('userOptions', JSON.stringify(options))
 }
 
@@ -76,9 +71,25 @@ export const getUserOptions = () => {
 		storedOptions = {
 			nsfw: true,
 			playbackSpeed: 1,
-			volume: 5
+			volume: 5,
+			filterSeen: false
 		}
 		localStorage.setItem('userOptions', JSON.stringify(storedOptions))
 	}
 	return storedOptions
+}
+
+export const addClipSeen = (id: string) => {
+	const storedClips = JSON.parse(localStorage.getItem('clipsSeen') || '[]')
+
+	if (!storedClips.includes(id)) {
+		storedClips.push(id)
+		localStorage.setItem('clipsSeen', JSON.stringify(storedClips))
+	}
+}
+
+export const getClipsSeen = () => {
+	const storedClips = JSON.parse(localStorage.getItem('clipsSeen') || '[]')
+
+	return storedClips
 }

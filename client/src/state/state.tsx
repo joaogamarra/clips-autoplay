@@ -5,11 +5,13 @@ import { Action, State } from 'src/types/state'
 const initialState: State = {
 	clips: {
 		data: [],
+		filtered: [],
 		pagination: {
-			cursor: '',
-		},
+			cursor: ''
+		}
 	},
 	currentClip: {
+		id: '',
 		title: '',
 		video_url: '',
 		comments_url: '',
@@ -20,9 +22,9 @@ const initialState: State = {
 		mode: searchType.channel,
 		value: '',
 		timePeriod: apiTimePeriod.all,
-		sort: sortType.hot,
+		sort: sortType.hot
 	},
-	favourites: [],
+	favourites: []
 }
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([initialState, () => initialState])

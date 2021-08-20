@@ -1,5 +1,12 @@
 import { FC } from 'react'
-import { MdChevronRight, MdChatBubble, MdFullscreenExit, MdFullscreen, MdBlock } from 'react-icons/md'
+import {
+	MdChevronRight,
+	MdChatBubble,
+	MdFullscreenExit,
+	MdFullscreen,
+	MdBlock,
+	MdNewReleases
+} from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
 import { searchType } from 'src/types/search'
@@ -10,10 +17,12 @@ interface Props {
 	handlePrev: () => void
 	handleInnerFullScreen: () => void
 	handleNsfw: () => void
+	handleFilterSeen: () => void
 	prevDisabled: boolean
 	nextDisabled: boolean
 	innerFullScreen: boolean
 	nsfw: boolean
+	filterSeen: boolean
 }
 
 const VideoTopControls: FC<Props> = ({
@@ -22,10 +31,12 @@ const VideoTopControls: FC<Props> = ({
 	handlePrev,
 	handleInnerFullScreen,
 	handleNsfw,
+	handleFilterSeen,
 	innerFullScreen,
 	prevDisabled,
 	nextDisabled,
-	nsfw
+	nsfw,
+	filterSeen
 }) => {
 	const [{ currentClip, currentSearch }] = useStateValue()
 
@@ -45,21 +56,34 @@ const VideoTopControls: FC<Props> = ({
 						<img className='' width='30' src={twitchLogo} alt='twitch logo' />
 					</a>
 				)}
+
+				<button
+					className={`btn-controls-top btn-filter-seen ${filterSeen ? 'is-active' : ''}`}
+					onClick={handleFilterSeen}
+				>
+					<MdNewReleases />
+					<span className='btn-text'>{filterSeen ? 'All Clips' : 'Only New'}</span>
+				</button>
+
 				{currentSearch.mode === searchType.subreddit && (
-					<button className={`btn-nsfw ${nsfw ? '' : 'hidden'}`} title='toggle nsfw' onClick={handleNsfw}>
+					<button
+						className={`btn-controls-top btn-nsfw ${nsfw ? '' : 'is-active'}`}
+						title='toggle nsfw'
+						onClick={handleNsfw}
+					>
 						<MdBlock />
 						<span className='btn-text'>{nsfw ? 'Hide' : 'Show'} 18+</span>
 					</button>
 				)}
 
 				{currentClip.comments && (
-					<button className='btn-comments' title='toggle comments' onClick={handleComments}>
+					<button className='btn-controls-top btn-comments' title='toggle comments' onClick={handleComments}>
 						<MdChatBubble />
 					</button>
 				)}
 
 				<button
-					className='btn-inner-fullscreen'
+					className='btn-controls-top btn-inner-fullscreen'
 					title='toggle inner fulscreen'
 					onClick={handleInnerFullScreen}
 				>

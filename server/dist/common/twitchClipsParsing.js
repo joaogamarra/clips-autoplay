@@ -8,16 +8,17 @@ const parseTwitchClips = (data) => {
     const resData = data.data.map((item) => {
         const itemLink = item.thumbnail_url.split('-preview-')[0];
         return {
+            id: item.id,
             title: item.title,
             video_url: `${itemLink}.mp4`,
-            twitch_url: item.url,
+            twitch_url: item.url
         };
     });
     return {
         data: resData,
         pagination: {
-            cursor: cursor,
-        },
+            cursor: cursor
+        }
     };
 };
 exports.parseTwitchClips = parseTwitchClips;

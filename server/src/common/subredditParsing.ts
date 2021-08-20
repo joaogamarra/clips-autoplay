@@ -39,6 +39,7 @@ export const parseSubreddit = async (data: any) => {
 
 		if (url !== '' && url) {
 			const dataObj: responseClip = {
+				id: `subr-${item.data.id}`,
 				title: item.data.title,
 				video_url: url,
 				comments_url: item.data.permalink

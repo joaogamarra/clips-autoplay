@@ -8,6 +8,7 @@ import {
 	setCurrentClip,
 	setCurrentSearch,
 	setFavourites,
+	setFilteredClips,
 	updateClips
 } from 'src/state/reducer'
 import { MdWarning } from 'react-icons/md'
@@ -17,7 +18,14 @@ import ReactGA from 'react-ga'
 import './player.scss'
 import 'src/styles/button-generic.scss'
 import Loader from '../common/loader/Loader'
-import { addFavourite, getFavourites, getUserOptions, saveUserOptions } from 'src/common/localstorage'
+import {
+	addClipSeen,
+	addFavourite,
+	getClipsSeen,
+	getFavourites,
+	getUserOptions,
+	saveUserOptions
+} from 'src/common/localstorage'
 import PlayerError from './PlayerError'
 import PlayerFinished from './PlayerFinished'
 import CommentsBox from './CommentsBox'
@@ -44,6 +52,7 @@ const Player: FC = () => {
 	const [videoFullScreen, setVideoFullScreen] = useState(false)
 	const [controlsVisible, setControlsVisible] = useState(false)
 	const [nsfw, setNsfw] = useState(true)
+	const [filterSeen, setFilterSeen] = useState(false)
 	const videoEl = useRef<HTMLVideoElement>(null)
 	const audioEl = useRef<HTMLAudioElement>(null)
 	const videoContainer = useRef<HTMLDivElement>(null)
@@ -53,6 +62,21 @@ const Player: FC = () => {
 	useEffect(() => {
 		ReactGA.pageview(window.location.pathname + window.location.search)
 	}, [params])
+
+	const loadMoreClips = useCallback(async () => {
+		const after = clips.pagination.cursor
+		console.log('called', after)
+		if (after !== '' && !loadingClips) {
+			setLoadingClips(true)
+			const data = await getClips(currentSearch, after)
+
+			if ('error' in data) {
+				console.log(data.error)
+			} else {
+				dispatch(updateClips(data))
+			}
+		}
+	}, [clips.pagination.cursor, currentSearch, dispatch, loadingClips])
 
 	useEffect(() => {
 		setTransition('loading')
@@ -91,6 +115,7 @@ const Player: FC = () => {
 		return () => {
 			dispatch(
 				setCurrentClip({
+					id: '',
 					title: '',
 					video_url: '',
 					twitch_url: '',
@@ -101,28 +126,35 @@ const Player: FC = () => {
 		}
 	}, [dispatch, params])
 
-	const loadMoreClips = useCallback(async () => {
-		const after = clips.pagination.cursor
-		if (after !== '' && !loadingClips) {
-			setLoadingClips(true)
-			const data = await getClips(currentSearch, after)
-			setLoadingClips(false)
+	useEffect(() => {
+		const clipsSeen = getClipsSeen()
+		const dataFiltered = clips.data.filter((item: any) => !clipsSeen.includes(item.id))
 
-			if ('error' in data) {
-				console.log(data.error)
-			} else {
-				dispatch(updateClips(data))
-			}
+		dispatch(setFilteredClips(dataFiltered))
+
+		if (clips.data.length > 0 && clips.pagination.cursor && dataFiltered.length <= 10) {
+			loadMoreClips()
 		}
-	}, [clips.pagination.cursor, currentSearch, dispatch, loadingClips])
+	}, [clips.data, clips.pagination.cursor, dispatch, loadMoreClips])
+
+	useEffect(() => {
+		if (filterSeen && clipIndex === 0 && clips.filtered.length > 0)
+			dispatch(setCurrentClip(clips.filtered[0]))
+	}, [clipIndex, clips.filtered, dispatch, filterSeen])
 
 	const nextClip = useCallback(
 		(direction?: string) => {
-			const clipsData = clips.data
+			let clipsData = clips.data
+			if (filterSeen) {
+				console.log('in')
+
+				clipsData = clips.filtered
+			}
+
 			let newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
+			console.log(newClipIndex)
 			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle)
 				return false
-			console.log(newClipIndex)
 
 			if (currentSearch.timePeriod === apiTimePeriod.shuffle) {
 				const indexUsedPopped = indexUsed.slice(0, indexUsed.length - 1)
@@ -162,11 +194,12 @@ const Player: FC = () => {
 
 			if (newClipIndex < clips.data.length) {
 				let newClip = clipsData[newClipIndex]
-
 				while (newClip.nsfw && !nsfw) {
 					direction === 'prev' ? newClipIndex-- : newClipIndex++
 					newClip = clipsData[newClipIndex]
 				}
+
+				console.log(newClip)
 
 				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
 				if (clipIndex > 0 && clipsData[clipIndex].video_url === newClip.video_url) {
@@ -197,11 +230,21 @@ const Player: FC = () => {
 				newClipIndex <= 0 ? setPrevDisabled(true) : setPrevDisabled(false)
 			}
 		},
-		[clipIndex, clips.data, currentSearch.timePeriod, dispatch, indexUsed, loadMoreClips, nsfw]
+		[
+			clipIndex,
+			clips.data,
+			clips.filtered,
+			currentSearch.timePeriod,
+			dispatch,
+			filterSeen,
+			indexUsed,
+			loadMoreClips,
+			nsfw
+		]
 	)
 
 	useEffect(() => {
-		//Just in case the first clip is nsfw and nsfw is turned off
+		//Just in case the first clip is nsfw and nsfw filter is on
 		if (currentClip.nsfw && !nsfw) {
 			nextClip()
 		}
@@ -213,6 +256,8 @@ const Player: FC = () => {
 		//When there are clips and the currentClip is reaching the last fetch more
 		if (clipsTotal > 0 && clipIndex + 10 > clipsTotal) {
 			loadMoreClips()
+		} else {
+			setLoadingClips(false)
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])
 
@@ -316,11 +361,25 @@ const Player: FC = () => {
 		setNsfw(!nsfw)
 	}
 
+	const handleFilterSeen = () => {
+		const savedOptions = getUserOptions()
+
+		saveUserOptions({
+			...savedOptions,
+			filterSeen: !filterSeen
+		})
+		setFilterSeen(!filterSeen)
+	}
+
 	useEffect(() => {
 		const savedOptions = getUserOptions()
 
 		setNsfw(savedOptions.nsfw)
 	}, [])
+
+	useEffect(() => {
+		currentClip.id !== '' && addClipSeen(currentClip.id)
+	}, [currentClip.id])
 
 	const autoplayValue: 0 | 1 | undefined = 1
 	const opts = {
@@ -347,11 +406,13 @@ const Player: FC = () => {
 							handleNext={() => nextClip()}
 							handlePrev={() => nextClip('prev')}
 							handleNsfw={() => handleNsfw()}
+							handleInnerFullScreen={() => setInnerFullScreen(!innerFullScreen)}
+							handleFilterSeen={() => handleFilterSeen()}
 							nsfw={nsfw}
 							nextDisabled={nextDisabled}
 							prevDisabled={prevDisabled}
 							innerFullScreen={innerFullScreen}
-							handleInnerFullScreen={() => setInnerFullScreen(!innerFullScreen)}
+							filterSeen={filterSeen}
 						/>
 						<div className='video-comments-wrapper'>
 							{

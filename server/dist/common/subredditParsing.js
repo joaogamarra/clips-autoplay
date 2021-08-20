@@ -56,6 +56,7 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
         const loud = (_z = item.data.link_flair_text) === null || _z === void 0 ? void 0 : _z.toLowerCase().includes('loud');
         if (url !== '' && url) {
             const dataObj = {
+                id: `subr-${item.data.id}`,
                 title: item.data.title,
                 video_url: url,
                 comments_url: item.data.permalink

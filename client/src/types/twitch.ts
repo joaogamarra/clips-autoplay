@@ -1,6 +1,7 @@
 import { searchClips } from './search'
 
 export interface ResponseClip {
+	id: string
 	title: string
 	video_url: string
 	audio_url?: string
@@ -21,6 +22,7 @@ export interface comment {
 
 export interface ResponseClips {
 	data: ResponseClip[]
+	filtered: ResponseClip[]
 	pagination: {
 		cursor: string
 	}

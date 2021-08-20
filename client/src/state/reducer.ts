@@ -5,49 +5,56 @@ import { favouritesType, ResponseClip, ResponseClips } from 'src/types/twitch'
 export const setClips = (clips: ResponseClips): Action => {
 	return {
 		type: 'SET_CLIPS',
-		payload: clips,
+		payload: clips
 	}
 }
 
 export const setCurrentClip = (clip: ResponseClip): Action => {
 	return {
 		type: 'SET_CURRENT_CLIP',
-		payload: clip,
+		payload: clip
 	}
 }
 
 export const setClipIndex = (clipIndex: number): Action => {
 	return {
 		type: 'SET_CLIP_INDEX',
-		payload: clipIndex,
+		payload: clipIndex
 	}
 }
 
 export const updateClips = (clips: ResponseClips): Action => {
 	return {
 		type: 'UPDATE_CLIPS',
-		payload: clips,
+		payload: clips
+	}
+}
+
+export const setFilteredClips = (clips: ResponseClip[]): Action => {
+	return {
+		type: 'SET_FILTERED_CLIPS',
+		payload: clips
 	}
 }
 
 export const setClipSeen = (clip: ResponseClip): Action => {
 	return {
 		type: 'CLIP_SEEN',
-		payload: clip,
+		payload: clip
 	}
 }
 
 export const setCurrentSearch = (search: searchClips): Action => {
 	return {
 		type: 'SET_CURRENT_SEARCH',
-		payload: search,
+		payload: search
 	}
 }
 
 export const setFavourites = (favourites: favouritesType[]): Action => {
 	return {
 		type: 'SET_FAVOURITES',
-		payload: favourites,
+		payload: favourites
 	}
 }
 
@@ -57,21 +64,21 @@ export const reducer = (state: State, action: Action): State => {
 			return {
 				...state,
 				clips: {
-					...action.payload,
-				},
+					...action.payload
+				}
 			}
 		case 'SET_CURRENT_CLIP':
 			return {
 				...state,
 				currentClip: {
-					...action.payload,
-				},
+					...action.payload
+				}
 			}
 
 		case 'SET_CLIP_INDEX':
 			return {
 				...state,
-				clipIndex: action.payload,
+				clipIndex: action.payload
 			}
 
 		case 'UPDATE_CLIPS':
@@ -79,17 +86,33 @@ export const reducer = (state: State, action: Action): State => {
 			return {
 				...state,
 				clips: {
+					...state.clips,
 					data,
 					pagination: {
-						cursor: action.payload.pagination.cursor,
-					},
-				},
+						cursor: action.payload.pagination.cursor
+					}
+				}
+			}
+
+		case 'SET_FILTERED_CLIPS':
+			let dataFiltered
+			if (state.clips.filtered) {
+				dataFiltered = state.clips.filtered.concat(action.payload)
+			} else {
+				dataFiltered = action.payload
+			}
+			return {
+				...state,
+				clips: {
+					...state.clips,
+					filtered: dataFiltered
+				}
 			}
 
 		case 'CLIP_SEEN':
 			const changedClip = {
 				...action.payload,
-				seen: true,
+				seen: true
 			}
 			const newClipsData = state.clips.data.map((clip) => {
 				return clip?.twitch_url !== action.payload.twitch_url ? clip : changedClip
@@ -98,20 +121,20 @@ export const reducer = (state: State, action: Action): State => {
 				...state,
 				clips: {
 					...state.clips,
-					data: newClipsData,
-				},
+					data: newClipsData
+				}
 			}
 
 		case 'SET_CURRENT_SEARCH':
 			return {
 				...state,
-				currentSearch: action.payload,
+				currentSearch: action.payload
 			}
 
 		case 'SET_FAVOURITES':
 			return {
 				...state,
-				favourites: action.payload,
+				favourites: action.payload
 			}
 		default:
 			return state
