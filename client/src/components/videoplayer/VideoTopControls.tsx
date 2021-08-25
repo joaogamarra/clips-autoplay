@@ -1,11 +1,12 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import {
 	MdChevronRight,
 	MdChatBubble,
 	MdFullscreenExit,
 	MdFullscreen,
 	MdBlock,
-	MdNewReleases
+	MdNewReleases,
+	MdSettings
 } from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
@@ -39,6 +40,7 @@ const VideoTopControls: FC<Props> = ({
 	filterSeen
 }) => {
 	const [{ currentClip, currentSearch }] = useStateValue()
+	const [settingsVisible, setSettingsVisible] = useState(false)
 
 	return (
 		<div className='video-top-controls'>
@@ -57,38 +59,55 @@ const VideoTopControls: FC<Props> = ({
 					</a>
 				)}
 
-				<button
-					className={`btn-controls-top btn-filter-seen ${filterSeen ? 'is-active' : ''}`}
-					onClick={handleFilterSeen}
-				>
-					<MdNewReleases />
-					<span className='btn-text'>{filterSeen ? 'All Clips' : 'Only New'}</span>
-				</button>
-
-				{currentSearch.mode === searchType.subreddit && (
+				<div className='settings-container'>
 					<button
-						className={`btn-controls-top btn-nsfw ${nsfw ? '' : 'is-active'}`}
-						title='toggle nsfw'
-						onClick={handleNsfw}
+						className='btn-settings btn-controls-top'
+						onClick={() => setSettingsVisible(!settingsVisible)}
 					>
-						<MdBlock />
-						<span className='btn-text'>{nsfw ? 'Hide' : 'Show'} 18+</span>
+						<MdSettings />
 					</button>
-				)}
 
-				{currentClip.comments && (
-					<button className='btn-controls-top btn-comments' title='toggle comments' onClick={handleComments}>
-						<MdChatBubble />
-					</button>
-				)}
+					<div className={`settings-options ${settingsVisible && 'is-visible'}`}>
+						<button
+							className={`btn-controls-top btn-filter-seen ${filterSeen ? 'is-active' : ''}`}
+							onClick={handleFilterSeen}
+						>
+							<MdNewReleases />
+							<span className='btn-text'>{filterSeen ? 'Show All Clips' : 'Show Only New Clips'}</span>
+						</button>
 
-				<button
-					className='btn-controls-top btn-inner-fullscreen'
-					title='toggle inner fulscreen'
-					onClick={handleInnerFullScreen}
-				>
-					{innerFullScreen ? <MdFullscreenExit /> : <MdFullscreen />}
-				</button>
+						{currentSearch.mode === searchType.subreddit && (
+							<button
+								className={`btn-controls-top btn-nsfw ${nsfw ? '' : 'is-active'}`}
+								title='toggle nsfw'
+								onClick={handleNsfw}
+							>
+								<MdBlock />
+								<span className='btn-text'>{nsfw ? 'Hide' : 'Show'} NSFW Content</span>
+							</button>
+						)}
+
+						{currentClip.comments && (
+							<button
+								className='btn-controls-top btn-comments'
+								title='toggle comments'
+								onClick={handleComments}
+							>
+								<MdChatBubble />
+								<span className='btn-text'>Toggle Comments</span>
+							</button>
+						)}
+
+						<button
+							className='btn-controls-top btn-inner-fullscreen'
+							title='toggle inner fulscreen'
+							onClick={handleInnerFullScreen}
+						>
+							{innerFullScreen ? <MdFullscreenExit /> : <MdFullscreen />}
+							<span className='btn-text'>Toggle Inner Full Screen</span>
+						</button>
+					</div>
+				</div>
 
 				<button className='btn-clips-control btn-left' onClick={handlePrev} disabled={prevDisabled}>
 					Previous

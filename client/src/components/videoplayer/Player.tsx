@@ -34,6 +34,7 @@ import VideoTopControls from './VideoTopControls'
 import VideoBottomControls from './VideoBottomControls'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import YouTube from 'react-youtube'
+import { storageOptions } from 'src/types/options'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -372,9 +373,10 @@ const Player: FC = () => {
 	}
 
 	useEffect(() => {
-		const savedOptions = getUserOptions()
+		const savedOptions: storageOptions = getUserOptions()
 
 		setNsfw(savedOptions.nsfw)
+		setFilterSeen(savedOptions.filterSeen)
 	}, [])
 
 	useEffect(() => {
