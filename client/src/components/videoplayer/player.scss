@@ -176,11 +176,11 @@
 		opacity: 1;
 	}
 
-	.settings-container {
+	.buttons-container {
 		position: relative;
 	}
 
-	.settings-options {
+	.hidden-options {
 		position: absolute;
 		display: flex;
 		flex-direction: column;
@@ -189,15 +189,16 @@
 		right: -1px;
 		padding: 0;
 		max-height: 0;
-		background: rgba($color-purple-dark, 1);
+		background: $color-purple-dark;
+		border-bottom-left-radius: 4px;
+		border-bottom-right-radius: 4px;
 		pointer-events: none;
 		z-index: 10;
 		overflow: hidden;
-		transition: max-height 300ms ease-in-out;
+		transition: all 300ms ease-in-out;
 
 		&.is-visible {
-			max-height: 300px;
-
+			max-height: 350px;
 			pointer-events: auto;
 		}
 
@@ -226,9 +227,34 @@
 				opacity: 1;
 			}
 		}
+
+		&.new-search {
+			.title-lg {
+				padding: 2px 16px;
+				margin-bottom: 0;
+				font-size: 16px;
+			}
+
+			.button-generic {
+				margin: 0 auto 16px;
+				padding: 8px 24px;
+			}
+		}
+
+		.inputs-group {
+			flex-wrap: nowrap;
+			margin-bottom: 12px;
+			padding: 0 16px;
+
+			.radio-custom label {
+				white-space: nowrap;
+				padding-right: 12px;
+			}
+		}
 	}
 
-	.btn-settings {
+	.btn-settings,
+	.btn-new-search {
 		height: 100%;
 
 		svg {

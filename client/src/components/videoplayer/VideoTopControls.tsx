@@ -6,11 +6,15 @@ import {
 	MdFullscreen,
 	MdBlock,
 	MdNewReleases,
-	MdSettings
+	MdSettings,
+	MdSearch
 } from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
-import { searchType } from 'src/types/search'
+import { apiTimePeriod, searchClips, searchType, sortType } from 'src/types/search'
+import SearchFilter from '../search/SearchFilter'
+import { useHistory, useParams } from 'react-router-dom'
+import SearchSort from '../search/SearchSort'
 
 interface Props {
 	handleComments: () => void
@@ -40,7 +44,44 @@ const VideoTopControls: FC<Props> = ({
 	filterSeen
 }) => {
 	const [{ currentClip, currentSearch }] = useStateValue()
+	const params = useParams<searchClips>()
 	const [settingsVisible, setSettingsVisible] = useState(false)
+	const [searchVisible, setSearchVisible] = useState(false)
+	const [localSearch, setLocalSearch] = useState<searchClips>({
+		mode: params.mode,
+		value: params.value,
+		timePeriod: params.timePeriod,
+		sort: params.sort
+	})
+	const history = useHistory()
+
+	console.log(localSearch)
+
+	const handleTimePeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const val = e.currentTarget.value as apiTimePeriod
+
+		setLocalSearch({ ...localSearch, timePeriod: val })
+	}
+
+	const handleSortChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const val = e.currentTarget.value as sortType
+
+		setLocalSearch({ ...localSearch, sort: val })
+	}
+
+	const searchSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+		e.preventDefault()
+		let value = localSearch.value
+		let mode = localSearch.mode
+		let period = localSearch.timePeriod
+
+		if (localSearch.sort === sortType.hot) period = apiTimePeriod.day
+		if (localSearch.sort && mode === searchType.subreddit) {
+			history.push(`/${mode}/${period}/${value}/${localSearch.sort}`)
+		} else {
+			history.push(`/${mode}/${period}/${value}`)
+		}
+	}
 
 	return (
 		<div className='video-top-controls'>
@@ -59,7 +100,36 @@ const VideoTopControls: FC<Props> = ({
 					</a>
 				)}
 
-				<div className='settings-container'>
+				<div className='buttons-container'>
+					<button
+						className='btn-new-search btn-controls-top'
+						onClick={() => setSearchVisible(!searchVisible)}
+					>
+						<MdSearch />
+					</button>
+
+					<div className={`hidden-options new-search ${searchVisible ? 'is-visible' : ''}`}>
+						{(localSearch.mode === searchType.subreddit ||
+							localSearch.mode === searchType.livestreamfail) && (
+							<SearchSort localSearch={localSearch} handleSortChange={(e) => handleSortChange(e)} />
+						)}
+						{localSearch.mode === searchType.channel ||
+						localSearch.mode === searchType.category ||
+						((localSearch.mode === searchType.subreddit || localSearch.mode === searchType.livestreamfail) &&
+							localSearch.sort === sortType.top) ? (
+							<SearchFilter
+								localSearch={localSearch}
+								handleTimePeriodChange={(e) => handleTimePeriodChange(e)}
+							/>
+						) : null}
+
+						<button type='submit' className='button-generic' onClick={searchSubmit}>
+							Search
+						</button>
+					</div>
+				</div>
+
+				<div className='buttons-container'>
 					<button
 						className='btn-settings btn-controls-top'
 						onClick={() => setSettingsVisible(!settingsVisible)}
@@ -67,7 +137,7 @@ const VideoTopControls: FC<Props> = ({
 						<MdSettings />
 					</button>
 
-					<div className={`settings-options ${settingsVisible && 'is-visible'}`}>
+					<div className={`hidden-options ${settingsVisible ? 'is-visible' : ''}`}>
 						<button
 							className={`btn-controls-top btn-filter-seen ${filterSeen ? 'is-active' : ''}`}
 							onClick={handleFilterSeen}

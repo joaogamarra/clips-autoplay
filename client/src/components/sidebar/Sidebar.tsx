@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { getFavourites, removeFavourite } from 'src/common/localstorage'
 import { apiTimePeriod, searchClips } from 'src/types/search'
 import './sidebar.scss'
-import { HeartFillIcon, XCircleFillIcon, SearchIcon } from '@primer/octicons-react'
+import { MdSearch, MdCancel } from 'react-icons/md'
+import { BsFillHeartFill } from 'react-icons/bs'
 import ChannelAndAvatar from '../common/channelAndAvatar/ChannelAndAvatar'
 import { useStateValue } from 'src/state/state'
 import { setFavourites } from 'src/state/reducer'
@@ -45,13 +46,13 @@ const Sidebar: FC = () => {
 					<div className='favourites-container'>
 						<h5 className='title-lg'>
 							<Link to='/' title='Homepage' onClick={() => handleFavouriteClick()}>
-								<SearchIcon size={30} className='sidebar-icon' />
+								<MdSearch className='sidebar-icon' />
 								<span className='title-text'>Search</span>
 							</Link>
 						</h5>
 
 						<button className='title-lg' onClick={() => handleFavouriteClick(true)}>
-							<HeartFillIcon size={30} className='sidebar-icon' />
+							<BsFillHeartFill className='sidebar-icon icon-heart' />
 							<span className='title-text'>
 								Your
 								<br /> Favourites
@@ -68,7 +69,7 @@ const Sidebar: FC = () => {
 											<ChannelAndAvatar src={avatar} name={search.value} type={search.mode} />
 										</Link>
 										<button title='Remove Favourite' onClick={() => handleRemove(search)}>
-											<XCircleFillIcon size={14} />
+											<MdCancel size={14} />
 										</button>
 									</li>
 								))}

@@ -7,7 +7,7 @@ interface Props {
 	label?: string
 	checked: boolean
 	value: string
-	onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const RadioCustom: FC<Props> = ({ id, name, label, checked, value, onChange }) => {

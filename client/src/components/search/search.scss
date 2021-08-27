@@ -7,12 +7,6 @@
 	.radio-custom label {
 		padding-right: 24px;
 	}
-
-	.title-lg {
-		margin-bottom: 12px;
-		width: 100%;
-		font-size: 16px;
-	}
 }
 
 .search-container {
@@ -21,6 +15,12 @@
 	flex-wrap: wrap;
 	margin: 0 auto 0;
 	max-width: 560px;
+
+	.title-lg {
+		margin-bottom: 12px;
+		width: 100%;
+		font-size: 16px;
+	}
 
 	.text-intro {
 		margin-bottom: 36px;

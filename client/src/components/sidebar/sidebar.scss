@@ -92,6 +92,12 @@
 
 	.sidebar-icon {
 		margin-right: 12px;
+		width: 30px;
+		height: 30px;
+
+		&.icon-heart {
+			height: 24px;
+		}
 	}
 
 	.favourites-list {

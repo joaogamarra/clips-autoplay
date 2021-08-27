@@ -7,6 +7,8 @@ import RadioCustom from '../common/radioCustom/RadioCustom'
 import './search.scss'
 import 'src/styles/button-generic.scss'
 import Suggestions from './Suggestions'
+import SearchSort from './SearchSort'
+import SearchFilter from './SearchFilter'
 
 const Search: FC = () => {
 	const [localSearch, setLocalSearch] = useState<searchClips>({
@@ -155,92 +157,13 @@ const Search: FC = () => {
 					/>
 				</div>
 				{(localSearch.mode === searchType.subreddit || localSearch.mode === searchType.livestreamfail) && (
-					<div className='inputs-group'>
-						<h2 className='title-lg'>Sort by</h2>
-						<RadioCustom
-							id='sort-popular'
-							name='sort'
-							label='Popular Now'
-							value={sortType.hot}
-							onChange={handleSortChange}
-							checked={localSearch.sort === sortType.hot}
-						/>
-						<RadioCustom
-							id='sort-top'
-							name='sort'
-							label='Most Votes'
-							value={sortType.top}
-							onChange={handleSortChange}
-							checked={localSearch.sort === sortType.top}
-						/>
-						<RadioCustom
-							id='sort-new'
-							name='sort'
-							label='Most Recent'
-							value={sortType.new}
-							onChange={handleSortChange}
-							checked={localSearch.sort === sortType.new}
-						/>
-					</div>
+					<SearchSort localSearch={localSearch} handleSortChange={(e) => handleSortChange(e)} />
 				)}
 				{localSearch.mode === searchType.channel ||
 				localSearch.mode === searchType.category ||
 				((localSearch.mode === searchType.subreddit || localSearch.mode === searchType.livestreamfail) &&
 					localSearch.sort === sortType.top) ? (
-					<div className='inputs-group'>
-						<h2 className='title-lg'>Filter by</h2>
-
-						<RadioCustom
-							id='timePeriod-day'
-							name='timePeriod'
-							label='Day'
-							value={apiTimePeriod.day}
-							onChange={handleTimePeriodChange}
-							checked={localSearch.timePeriod === apiTimePeriod.day}
-						/>
-						<RadioCustom
-							id='timePeriod-week'
-							name='timePeriod'
-							label='Week'
-							value={apiTimePeriod.week}
-							onChange={handleTimePeriodChange}
-							checked={localSearch.timePeriod === apiTimePeriod.week}
-						/>
-						<RadioCustom
-							id='timePeriod-month'
-							name='timePeriod'
-							label='Month'
-							value={apiTimePeriod.month}
-							onChange={handleTimePeriodChange}
-							checked={localSearch.timePeriod === apiTimePeriod.month}
-						/>
-						<RadioCustom
-							id='timePeriod-year'
-							name='timePeriod'
-							label='Year'
-							value={apiTimePeriod.year}
-							onChange={handleTimePeriodChange}
-							checked={localSearch.timePeriod === apiTimePeriod.year}
-						/>
-						<RadioCustom
-							id='timePeriod-all'
-							name='timePeriod'
-							label='All'
-							value={apiTimePeriod.all}
-							onChange={handleTimePeriodChange}
-							checked={localSearch.timePeriod === apiTimePeriod.all}
-						/>
-						{(localSearch.mode === searchType.channel || localSearch.mode === searchType.category) && (
-							<RadioCustom
-								id='timePeriod-shuffle'
-								name='timePeriod'
-								label='Shuffle'
-								value={apiTimePeriod.shuffle}
-								onChange={handleTimePeriodChange}
-								checked={localSearch.timePeriod === apiTimePeriod.shuffle}
-							/>
-						)}
-					</div>
+					<SearchFilter localSearch={localSearch} handleTimePeriodChange={(e) => handleTimePeriodChange(e)} />
 				) : null}
 
 				{localSearch.mode !== searchType.livestreamfail && (
