@@ -55,8 +55,6 @@ const VideoTopControls: FC<Props> = ({
 	})
 	const history = useHistory()
 
-	console.log(localSearch)
-
 	const handleTimePeriodChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const val = e.currentTarget.value as apiTimePeriod
 
@@ -102,6 +100,7 @@ const VideoTopControls: FC<Props> = ({
 
 				<div className='buttons-container'>
 					<button
+						title='Change Search'
 						className='btn-new-search btn-controls-top'
 						onClick={() => setSearchVisible(!searchVisible)}
 					>
@@ -131,6 +130,7 @@ const VideoTopControls: FC<Props> = ({
 
 				<div className='buttons-container'>
 					<button
+						title='Settings'
 						className='btn-settings btn-controls-top'
 						onClick={() => setSettingsVisible(!settingsVisible)}
 					>
