@@ -18,9 +18,11 @@ interface Props {
 	videoPercentage: number
 	videoFullScreen: boolean
 	hasAudio: boolean
+	soundMuted: boolean
 	handleVideoFullScreen: () => void
 	handleVideoPlay: () => void
 	handleMouseMove: () => void
+	handleSoundMuted: () => void
 }
 
 const VideoBottomControls: FC<Props> = ({
@@ -30,13 +32,14 @@ const VideoBottomControls: FC<Props> = ({
 	videoPercentage,
 	videoFullScreen,
 	hasAudio,
+	soundMuted,
 	handleVideoFullScreen,
 	handleVideoPlay,
-	handleMouseMove
+	handleMouseMove,
+	handleSoundMuted
 }) => {
 	const [playbackSpeed, setPlaybackSpeed] = useState(1)
 	const [playbackOptionsVisible, setPlaybackOptionsVisible] = useState(false)
-	const [videoMuted, setVideoMuted] = useState(false)
 	const [videoVolume, setVideoVolume] = useState(5)
 	const [progressPosition, setProgressPosition] = useState(0)
 	const VolumeEl = useRef<HTMLInputElement>(null)
@@ -71,23 +74,6 @@ const VideoBottomControls: FC<Props> = ({
 		//console.log(e.nativeEvent.offsetX, e.currentTarget.offsetWidth, percent)
 		if (videoEl) videoEl.currentTime = percent * videoEl.duration
 		if (audioEl?.src) audioEl.currentTime = percent * audioEl.duration
-	}
-
-	const toggleSound = () => {
-		const muted = !videoMuted
-		setVideoMuted(muted)
-		if (audioEl?.src) {
-			audioEl.muted = muted
-			if (!muted && videoVolume === 0) {
-				audioEl.volume = 0.2
-			}
-		} else if (videoEl) {
-			videoEl.muted = muted
-			if (!muted && videoVolume === 0) {
-				videoEl.volume = 0.2
-				setVideoVolume(2)
-			}
-		}
 	}
 
 	useEffect(() => {
@@ -134,8 +120,8 @@ const VideoBottomControls: FC<Props> = ({
 
 			{hasAudio && (
 				<>
-					<button className='btn-video-mute' onClick={() => toggleSound()}>
-						{videoMuted ? <MdVolumeOff /> : videoVolume > 4 ? <MdVolumeUp /> : <MdVolumeDown />}
+					<button className='btn-video-mute' onClick={handleSoundMuted}>
+						{soundMuted ? <MdVolumeOff /> : videoVolume > 4 ? <MdVolumeUp /> : <MdVolumeDown />}
 					</button>
 					<input
 						ref={VolumeEl}

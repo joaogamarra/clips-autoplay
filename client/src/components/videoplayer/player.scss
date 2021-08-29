@@ -127,6 +127,24 @@
 		pointer-events: none;
 		z-index: 5;
 
+		.btn-hide-comments {
+			position: absolute;
+			top: 7px;
+			right: 7px;
+			color: $color-main-white;
+			opacity: 0.4;
+			transition: opacity 200ms ease-in-out;
+
+			svg {
+				width: 20px;
+				height: 20px;
+			}
+
+			&:hover {
+				opacity: 1;
+			}
+		}
+
 		.comments-container {
 			padding-top: 12px;
 			padding-bottom: 46px;
@@ -143,6 +161,69 @@
 
 		.comment-author {
 			font-size: 12px;
+		}
+	}
+
+	.playlist-container {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: $comments-width;
+		height: 100%;
+		font-size: 16px;
+		line-height: 22px;
+		background-color: $color-purple-dark;
+		z-index: 6;
+		opacity: 0;
+		pointer-events: none;
+		transition: opacity 200ms ease-in-out;
+
+		&.is-visible {
+			opacity: 1;
+			pointer-events: auto;
+		}
+	}
+
+	.btn-hide-playlist {
+		position: absolute;
+		top: 7px;
+		right: 7px;
+		color: $color-main-white;
+		opacity: 0.4;
+		transition: opacity 200ms ease-in-out;
+		z-index: 5;
+
+		svg {
+			width: 20px;
+			height: 20px;
+		}
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	.playlist-list {
+		height: 100%;
+		overflow-y: auto;
+	}
+
+	.playlist-item {
+		position: relative;
+		padding: 4px 16px;
+		text-transform: lowercase;
+		cursor: pointer;
+		background-color: rgba($color-purple-main, 0);
+		border-bottom: 1px solid rgba($color-main-white, 0.1);
+		transition: background-color 200ms ease-in-out;
+
+		&:hover,
+		&.is-active {
+			background-color: rgba($color-purple-main, 0.2);
+		}
+
+		&.is-active {
+			text-decoration: underline;
 		}
 	}
 
@@ -178,6 +259,10 @@
 
 	.buttons-container {
 		position: relative;
+	}
+
+	.btn-playlist svg {
+		opacity: 1;
 	}
 
 	.hidden-options {
@@ -655,7 +740,6 @@
 			margin-right: 12px;
 			background: $color-main-white;
 			background-image: linear-gradient($color-purple-main, $color-purple-main);
-			background-size: 50% 100%;
 			background-repeat: no-repeat;
 			cursor: pointer;
 		}

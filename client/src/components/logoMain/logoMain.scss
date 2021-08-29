@@ -1,10 +1,22 @@
 @import 'src/styles/variables.scss';
 
 .logo-main {
+	display: flex;
+	justify-content: center;
 	margin: 36px;
-	text-align: center;
 	font-weight: 400;
 	color: $color-purple-main;
+
+	svg {
+		margin: 0 12px;
+		width: 38px;
+		height: 38px;
+	}
+
+	a {
+		display: flex;
+		align-items: center;
+	}
 
 	@media only screen and (max-width: $screen-xs) {
 		margin: 24px;

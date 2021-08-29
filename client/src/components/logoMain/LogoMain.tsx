@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
-import { DeviceCameraVideoIcon } from '@primer/octicons-react'
 import './logoMain.scss'
 import { Link } from 'react-router-dom'
+import { BsCameraVideo } from 'react-icons/bs'
 
 const LogoMain: FC = () => {
 	return (
 		<>
 			<h1 className='logo-main'>
 				<Link to='/'>
-					Clips <DeviceCameraVideoIcon size={36} /> Autoplay
+					Clips <BsCameraVideo /> Autoplay
 				</Link>
 			</h1>
 		</>

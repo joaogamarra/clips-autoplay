@@ -1,13 +1,18 @@
 import { FC } from 'react'
+import { MdCancel } from 'react-icons/md'
 import { ResponseClip } from 'src/types/twitch'
 
 interface Props {
 	currentClip: ResponseClip
+	handleComments: () => void
 }
 
-const CommentsBox: FC<Props> = ({ currentClip }) => {
+const CommentsBox: FC<Props> = ({ currentClip, handleComments }) => {
 	return (
 		<div className='comments-box'>
+			<button className='btn-hide-comments' title='Hidde Comments' onClick={handleComments}>
+				<MdCancel size={14} />
+			</button>
 			<div className='comments-container'>
 				{currentClip.comments?.map(({ comment, author }, index) => (
 					<div className='comments-item' key={index}>

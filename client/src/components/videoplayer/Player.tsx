@@ -35,6 +35,7 @@ import VideoBottomControls from './VideoBottomControls'
 import { FullScreen, useFullScreenHandle } from 'react-full-screen'
 import YouTube from 'react-youtube'
 import { storageOptions } from 'src/types/options'
+import Playlist from './Playlist'
 
 const Player: FC = () => {
 	const [{ clips, currentClip, clipIndex, currentSearch }, dispatch] = useStateValue()
@@ -54,6 +55,8 @@ const Player: FC = () => {
 	const [controlsVisible, setControlsVisible] = useState(false)
 	const [nsfw, setNsfw] = useState(true)
 	const [filterSeen, setFilterSeen] = useState(false)
+	const [soundMuted, setSoundMuted] = useState(false)
+	const [playlistVisible, setPlaylistVisible] = useState(false)
 	const videoEl = useRef<HTMLVideoElement>(null)
 	const audioEl = useRef<HTMLAudioElement>(null)
 	const videoContainer = useRef<HTMLDivElement>(null)
@@ -66,7 +69,6 @@ const Player: FC = () => {
 
 	const loadMoreClips = useCallback(async () => {
 		const after = clips.pagination.cursor
-		console.log('called', after)
 		if (after !== '' && !loadingClips) {
 			setLoadingClips(true)
 			const data = await getClips(currentSearch, after)
@@ -146,14 +148,9 @@ const Player: FC = () => {
 	const nextClip = useCallback(
 		(direction?: string) => {
 			let clipsData = clips.data
-			if (filterSeen) {
-				console.log('in')
-
-				clipsData = clips.filtered
-			}
+			if (filterSeen) clipsData = clips.filtered
 
 			let newClipIndex = direction === 'prev' ? clipIndex - 1 : clipIndex + 1
-			console.log(newClipIndex)
 			if (direction === 'prev' && clipIndex <= 0 && currentSearch.timePeriod !== apiTimePeriod.shuffle)
 				return false
 
@@ -199,8 +196,6 @@ const Player: FC = () => {
 					direction === 'prev' ? newClipIndex-- : newClipIndex++
 					newClip = clipsData[newClipIndex]
 				}
-
-				console.log(newClip)
 
 				//Twitch pagination sometimes sends the same clip as the last in the payload and first in the next
 				if (clipIndex > 0 && clipsData[clipIndex].video_url === newClip.video_url) {
@@ -420,6 +415,7 @@ const Player: FC = () => {
 							handleNsfw={() => handleNsfw()}
 							handleInnerFullScreen={() => setInnerFullScreen(!innerFullScreen)}
 							handleFilterSeen={() => handleFilterSeen()}
+							handlePlaylist={() => setPlaylistVisible(!playlistVisible)}
 							nsfw={nsfw}
 							nextDisabled={nextDisabled}
 							prevDisabled={prevDisabled}
@@ -460,6 +456,7 @@ const Player: FC = () => {
 													}
 													ref={videoEl}
 													autoPlay={true}
+													muted={soundMuted}
 													onEnded={() => nextClip()}
 													onLoadedData={() => setTransition('')}
 													onError={(e) => handleVideoError(e)}
@@ -479,6 +476,7 @@ const Player: FC = () => {
 														src={currentClip.audio_url}
 														autoPlay={true}
 														controls={false}
+														muted={soundMuted}
 														onError={() => handleAudioError()}
 													></audio>
 												)}
@@ -491,6 +489,8 @@ const Player: FC = () => {
 													videoPercentage={videoPercentage}
 													videoFullScreen={videoFullScreen}
 													hasAudio={!!!currentClip.isYoutube}
+													soundMuted={soundMuted}
+													handleSoundMuted={() => setSoundMuted(!soundMuted)}
 													handleVideoFullScreen={handleVideoFullScreen}
 													handleMouseMove={() => setControlsVisible(true)}
 												/>
@@ -500,8 +500,17 @@ const Player: FC = () => {
 								</>
 							}
 							{currentClip.comments && transition !== 'loading' ? (
-								<CommentsBox currentClip={currentClip}></CommentsBox>
+								<CommentsBox
+									currentClip={currentClip}
+									handleComments={() => setCommentsVisible(!commentsVisible)}
+								></CommentsBox>
 							) : null}
+
+							<Playlist
+								filterSeen={filterSeen}
+								playlistVisible={playlistVisible}
+								hidePlaylist={() => setPlaylistVisible(false)}
+							/>
 						</div>
 					</>
 				)}

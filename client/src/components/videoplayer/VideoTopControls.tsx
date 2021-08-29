@@ -7,7 +7,8 @@ import {
 	MdBlock,
 	MdNewReleases,
 	MdSettings,
-	MdSearch
+	MdSearch,
+	MdPlaylistPlay
 } from 'react-icons/md'
 import twitchLogo from '../../assets/logo-twitch.svg'
 import { useStateValue } from 'src/state/state'
@@ -23,6 +24,7 @@ interface Props {
 	handleInnerFullScreen: () => void
 	handleNsfw: () => void
 	handleFilterSeen: () => void
+	handlePlaylist: () => void
 	prevDisabled: boolean
 	nextDisabled: boolean
 	innerFullScreen: boolean
@@ -37,6 +39,7 @@ const VideoTopControls: FC<Props> = ({
 	handleInnerFullScreen,
 	handleNsfw,
 	handleFilterSeen,
+	handlePlaylist,
 	innerFullScreen,
 	prevDisabled,
 	nextDisabled,
@@ -178,6 +181,10 @@ const VideoTopControls: FC<Props> = ({
 						</button>
 					</div>
 				</div>
+
+				<button title='Toggle Playlist' className='btn-playlist btn-controls-top' onClick={handlePlaylist}>
+					<MdPlaylistPlay />
+				</button>
 
 				<button className='btn-clips-control btn-left' onClick={handlePrev} disabled={prevDisabled}>
 					Previous
