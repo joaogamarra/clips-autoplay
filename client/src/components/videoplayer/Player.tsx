@@ -400,9 +400,9 @@ const Player: FC = () => {
 		<FullScreen handle={handle}>
 			<div
 				ref={videoContainer}
-				className={`player-container ${commentsVisible && currentClip.comments ? 'has-comments' : ''} 
-				${videoFullScreen && 'is-fullscreen'}
-				${innerFullScreen && 'is-inner-fullscreen'}`}
+				className={`player-container ${commentsVisible && currentClip.comments ? 'has-comments' : ''}${
+					videoFullScreen ? ' is-fullscreen' : ''
+				}${innerFullScreen ? ' is-inner-fullscreen' : ''}`}
 				style={{ maxWidth: videoMaxWidth }}
 			>
 				{finished && <PlayerFinished />}
