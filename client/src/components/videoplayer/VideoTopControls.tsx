@@ -140,7 +140,7 @@ const VideoTopControls: FC<Props> = ({
 						<MdSettings />
 					</button>
 
-					<div className={`hidden-options ${settingsVisible ? 'is-visible' : ''}`}>
+					<div className={`hidden-options options-settings ${settingsVisible ? 'is-visible' : ''}`}>
 						<button
 							className={`btn-controls-top btn-filter-seen ${filterSeen ? 'is-active' : ''}`}
 							onClick={handleFilterSeen}

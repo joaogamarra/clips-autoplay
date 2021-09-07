@@ -791,6 +791,20 @@
 			height: 0;
 		}
 
+		.hidden-options {
+			right: auto;
+			left: 0;
+			width: calc(100vw - 24px);
+
+			&.options-settings {
+				width: auto;
+			}
+
+			.inputs-group {
+				flex-wrap: wrap;
+			}
+		}
+
 		&.has-comments {
 			video {
 				width: 100%;
