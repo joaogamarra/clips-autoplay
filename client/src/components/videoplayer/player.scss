@@ -744,7 +744,9 @@
 			cursor: pointer;
 		}
 
-		input[type='range']::-webkit-slider-thumb {
+		input[type='range']::-webkit-slider-thumb,
+		input[type='range']::-moz-range-thumb,
+		input[type='range']::-ms-thumb {
 			-webkit-appearance: none;
 			height: 12px;
 			width: 12px;
@@ -763,6 +765,16 @@
 	}
 
 	@media only screen and (max-width: $screen-xs) {
+		.btn-controls-top {
+			padding: 0 6px;
+		}
+		.btn-clips-control {
+			font-size: 13px;
+		}
+		.btn-twitch-page {
+			padding: 0 4px;
+			min-width: 30px;
+		}
 		.video-bottom-controls {
 			padding: 0 6px;
 			.btn-video-play {
