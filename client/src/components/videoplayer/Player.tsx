@@ -406,10 +406,21 @@ const Player: FC = () => {
 		}
 	}
 
+	const handleVideoUpdate = () => {
+		const videoTime = videoEl.current?.currentTime
+		const audioCurrent = audioEl.current
+		const audioTime = audioCurrent?.currentTime
+
+		if (audioCurrent && videoTime && audioTime && Math.round(videoTime) !== Math.round(audioTime)) {
+			console.log(videoTime, audioTime)
+
+			audioCurrent.currentTime = videoTime + 0.2
+		}
+	}
+
 	const autoplayValue: 0 | 1 | undefined = 1
 	const opts = {
 		playerVars: {
-			// https://developers.google.com/youtube/player_parameters
 			autoplay: autoplayValue
 		}
 	}
@@ -481,6 +492,7 @@ const Player: FC = () => {
 													onPlay={() => setVideoPlaying(true)}
 													onClick={() => handleVideoPlay()}
 													onMouseMove={() => setControlsVisible(true)}
+													onTimeUpdateCapture={() => handleVideoUpdate()}
 													onTimeUpdate={() =>
 														setVideoPercentage(
 															(100 / videoEl.current!.duration) * videoEl.current!.currentTime
@@ -492,7 +504,7 @@ const Player: FC = () => {
 													<audio
 														ref={audioEl}
 														src={currentClip.audio_url}
-														autoPlay={true}
+														autoPlay={videoPlaying}
 														controls={false}
 														muted={soundMuted}
 														onError={() => handleAudioError()}
