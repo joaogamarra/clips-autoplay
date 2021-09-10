@@ -744,9 +744,16 @@
 			cursor: pointer;
 		}
 
-		input[type='range']::-webkit-slider-thumb,
-		input[type='range']::-moz-range-thumb,
-		input[type='range']::-ms-thumb {
+		input[type='range']::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			height: 12px;
+			width: 12px;
+			border-radius: 50%;
+			background: $color-purple-main;
+			cursor: grab;
+			box-shadow: 0 0 2px 0 #555;
+		}
+		input[type='range']::-moz-range-thumb {
 			-webkit-appearance: none;
 			height: 12px;
 			width: 12px;

@@ -82,7 +82,11 @@ export const reducer = (state: State, action: Action): State => {
 			}
 
 		case 'UPDATE_CLIPS':
-			const data = state.clips.data.concat(action.payload.data)
+			const stateData = state.clips.data
+			const dataIds = new Set(stateData.map(({ id }) => id))
+			const payloadFiltered = action.payload.data.filter(({ id }) => !dataIds.has(id))
+			const data = stateData.concat(payloadFiltered)
+
 			return {
 				...state,
 				clips: {
@@ -95,17 +99,22 @@ export const reducer = (state: State, action: Action): State => {
 			}
 
 		case 'SET_FILTERED_CLIPS':
-			let dataFiltered
+			let dataFilteredParsed
+
 			if (state.clips.filtered) {
-				dataFiltered = state.clips.filtered.concat(action.payload)
+				const stateFiltered = state.clips.filtered
+				const dataFilteredIds = new Set(stateFiltered.map(({ id }) => id))
+				const payloadFiltered1 = action.payload.filter(({ id }) => !dataFilteredIds.has(id))
+				dataFilteredParsed = state.clips.filtered.concat(payloadFiltered1)
 			} else {
-				dataFiltered = action.payload
+				dataFilteredParsed = action.payload
 			}
+
 			return {
 				...state,
 				clips: {
 					...state.clips,
-					filtered: dataFiltered
+					filtered: dataFilteredParsed
 				}
 			}
 

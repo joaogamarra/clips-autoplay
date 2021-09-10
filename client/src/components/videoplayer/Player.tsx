@@ -74,9 +74,11 @@ const Player: FC = () => {
 			const data = await getClips(currentSearch, after)
 
 			if ('error' in data) {
+				setLoadingClips(false)
 				console.log(data.error)
 			} else {
 				dispatch(updateClips(data))
+				setLoadingClips(false)
 			}
 		}
 	}, [clips.pagination.cursor, currentSearch, dispatch, loadingClips])
@@ -141,8 +143,19 @@ const Player: FC = () => {
 	}, [clips.data, clips.pagination.cursor, dispatch, loadMoreClips])
 
 	useEffect(() => {
-		if (filterSeen && clipIndex === 0 && clips.filtered.length > 0)
+		if (filterSeen && clipIndex === 0 && clips.filtered?.length > 0)
 			dispatch(setCurrentClip(clips.filtered[0]))
+		else if (filterSeen && clipIndex === 0 && clips.filtered?.length === 0) {
+			dispatch(
+				setCurrentClip({
+					id: '',
+					title: '',
+					video_url: '',
+					comments_url: '',
+					twitch_url: ''
+				})
+			)
+		}
 	}, [clipIndex, clips.filtered, dispatch, filterSeen])
 
 	const nextClip = useCallback(
@@ -252,10 +265,15 @@ const Player: FC = () => {
 		//When there are clips and the currentClip is reaching the last fetch more
 		if (clipsTotal > 0 && clipIndex + 10 > clipsTotal) {
 			loadMoreClips()
-		} else {
-			setLoadingClips(false)
 		}
 	}, [clips, clipIndex, nextClip, loadMoreClips])
+
+	useEffect(() => {
+		const clipsTotal = clips.filtered?.length
+		if (filterSeen && clipIndex + 10 > clipsTotal) {
+			loadMoreClips()
+		}
+	}, [clips, clipIndex, nextClip, loadMoreClips, filterSeen])
 
 	const handleVideoPlay = useCallback(() => {
 		if (videoPlaying) {
