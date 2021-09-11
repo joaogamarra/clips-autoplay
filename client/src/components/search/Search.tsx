@@ -81,7 +81,6 @@ const Search: FC = () => {
 			mode = searchType.subreddit
 			value = 'livestreamfail'
 		}
-		console.log(value)
 
 		if (localSearch.sort === sortType.hot) period = apiTimePeriod.day
 		if (localSearch.sort && mode === searchType.subreddit) {

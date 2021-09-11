@@ -15,7 +15,6 @@ const Playlist: FC<Props> = ({ filterSeen, playlistVisible, hidePlaylist }) => {
 
 	const setNewClip = (index: number) => {
 		const clipsData = filterSeen ? clips.filtered : clips.data
-		console.log(index)
 		dispatch(setCurrentClip(clipsData[index]))
 		dispatch(setClipIndex(index))
 	}

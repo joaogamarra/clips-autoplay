@@ -412,8 +412,6 @@ const Player: FC = () => {
 		const audioTime = audioCurrent?.currentTime
 
 		if (audioCurrent && videoTime && audioTime && Math.round(videoTime) !== Math.round(audioTime)) {
-			console.log(videoTime, audioTime)
-
 			audioCurrent.currentTime = videoTime + 0.2
 		}
 	}
