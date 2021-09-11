@@ -7,7 +7,11 @@ Search for Twitch Channels, Games or Categories, LiveStreamFail with some filter
 
 - Autocomplete Search
 - API wrapper based on Twitch API
+- API wrapper based on Reddit API
+- Viewed Clips tracking
+- Custom Video Player
 - Favourite Searches Saving (Local Storage)
+- Settings Saving (Local Storage)
 - Continuous Playlist Creation
 
 ## Built With
