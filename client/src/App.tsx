@@ -3,6 +3,7 @@ import Sidebar from './components/sidebar/Sidebar'
 import Search from './components/search/Search'
 import Player from './components/videoplayer/Player'
 import './styles/App.scss'
+import { ImTwitter } from 'react-icons/im'
 import LogoMain from './components/logoMain/LogoMain'
 import ReactGA from 'react-ga'
 import { createBrowserHistory } from 'history'
@@ -37,9 +38,19 @@ const App: React.FC = () => {
 
 					<Route path='/'>
 						<Search />
-						<Link className='link-privacy' to='/privacy'>
-							Privacy Policy
-						</Link>
+						<div className='bottom-links'>
+							<a
+								className='link-twitter'
+								target='_blank'
+								rel='noreferrer'
+								href='https://twitter.com/clipsautoplay'
+							>
+								<ImTwitter /> Follow on Twitter for Feedback/Updates <ImTwitter />
+							</a>
+							<Link className='link-privacy' to='/privacy'>
+								Privacy Policy
+							</Link>
+						</div>
 					</Route>
 				</Switch>
 			</main>

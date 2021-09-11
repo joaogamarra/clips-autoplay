@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { apiTimePeriod, searchClips, searchType, sortType } from 'src/types/search'
+import { apiTimePeriod, searchClips, searchType } from 'src/types/search'
 import RadioCustom from '../common/radioCustom/RadioCustom'
 
 interface Props {
