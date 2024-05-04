@@ -14,7 +14,7 @@ const subreddit_1 = require("../../services/reddit/subreddit");
 const reddit_1 = require("../models/reddit");
 const suggestionsLimit = 8;
 const subredditsDefault = () => __awaiter(void 0, void 0, void 0, function* () {
-    const res = yield reddit_1.subredditAutoComplete.find({}).sort({ rank: -1 }).limit(30);
+    const res = yield reddit_1.subredditAutoComplete.find({}).sort({ rank: -1 }).limit(12);
     const shuffle = res.sort(() => Math.random() - 0.5).slice(0, suggestionsLimit);
     return shuffle;
 });
