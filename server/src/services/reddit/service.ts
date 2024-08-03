@@ -1,19 +1,19 @@
-import axios from 'axios'
+import axios from 'axios';
 
 const getResponse = async (baseUrl: string, timeout?: number) => {
-	let configTimeout = 4000
-	if (timeout) configTimeout = timeout
+	let configTimeout = 4000;
+	if (timeout) configTimeout = timeout;
 
 	try {
 		const res = await axios.get(baseUrl, {
 			timeout: configTimeout
-		})
+		});
 
-		return res
+		return res;
 	} catch (e) {
-		console.log(e)
-		return false
+		console.log(e);
+		return false;
 	}
-}
+};
 
-export default getResponse
+export default getResponse;

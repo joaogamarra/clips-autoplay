@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isYoutube = exports.isThumbsGfycat = exports.isGiphy = exports.isGfycat = exports.isImgur = exports.isRedditGif = exports.isReddit = exports.isTwitchDirect = exports.isTwitch = exports.parseSubreddit = void 0;
-const subreddit_1 = require("../services/reddit/subreddit");
 const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const parsedData = {
@@ -84,41 +83,6 @@ const parseSubreddit = (data) => __awaiter(void 0, void 0, void 0, function* () 
             parsedData.data.push(dataObj);
         }
     }));
-    yield Promise.all(parsedData.data.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-        var _1, _2, _3, _4, _5;
-        const commentsList = [];
-        const comments = yield subreddit_1.getSubreddit(`${(_1 = item.comments_url) === null || _1 === void 0 ? void 0 : _1.replace('/r/', '')}.json?sort=top&limit=15`, 2000);
-        const commentsArr = (_3 = (_2 = comments[1]) === null || _2 === void 0 ? void 0 : _2.data) === null || _3 === void 0 ? void 0 : _3.children;
-        if (commentsArr && commentsArr.length > 0) {
-            let i = 0;
-            while (commentsList.length < 10 && i < commentsArr.length) {
-                const commentData = commentsArr[i].data;
-                if (!commentData.distinguished && commentData.body && commentData.body !== '[deleted]') {
-                    commentsList.push({
-                        comment: commentData.body.replace('&gt;', ''),
-                        author: commentData.author,
-                        score: commentData.score
-                    });
-                    if (commentData.replies) {
-                        const replieData = (_5 = (_4 = commentData.replies.data) === null || _4 === void 0 ? void 0 : _4.children[0]) === null || _5 === void 0 ? void 0 : _5.data;
-                        if (replieData.body && commentData.body !== '[deleted]') {
-                            commentsList.push({
-                                comment: replieData.body.replace('&gt;', ''),
-                                author: replieData.author,
-                                score: replieData.score
-                            });
-                        }
-                    }
-                    item.comments = commentsList;
-                }
-                else if (commentData.distinguished) {
-                    const parsedLink = commentData.body.substring(commentData.body.indexOf('https://production.assets.clips'), commentData.body.length);
-                    item.fallback_url = parsedLink.replace('amp;', '').replace(')', '');
-                }
-                i++;
-            }
-        }
-    })));
     return parsedData;
 });
 exports.parseSubreddit = parseSubreddit;

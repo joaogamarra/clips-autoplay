@@ -13,10 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSubreddit = void 0;
-const service_1 = __importDefault(require("./service"));
-const getSubreddit = (query, timeout) => __awaiter(void 0, void 0, void 0, function* () {
-    const baseUrl = `https://reddit.com/r/${query}`;
-    const res = yield service_1.default(encodeURI(baseUrl), timeout);
+const axios_1 = __importDefault(require("axios"));
+const getSubreddit = (query, token) => __awaiter(void 0, void 0, void 0, function* () {
+    const baseUrl = `https://oauth.reddit.com/r/${query}`;
+    const res = yield axios_1.default.get(baseUrl, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+            'User-Agent': 'clipsautoplay/0.0.1'
+        }
+    });
     if (res) {
         return res.data;
     }

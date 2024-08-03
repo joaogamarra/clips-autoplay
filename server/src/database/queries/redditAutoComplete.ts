@@ -24,7 +24,7 @@ const subredditIncreaseRanking = async (subreddit: string) => {
 
 	//if not add new channel to DB, else just increase existing channel's rank
 	if (channelFind.length === 0) {
-		const { data } = await getSubreddit(`${subreddit}/about.json`);
+		const { data } = await getSubreddit(`${subreddit}/about.json`); 
 
 		if (data) {
 			const avatar = data.icon_img !== null ? data.icon_img : data.header_img;
