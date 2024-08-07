@@ -89,7 +89,7 @@ export const parseRedditQuery = (req: Request, limit?: number) => {
 	}
 	if (typeof req.query.after === 'string') after = `&after=${req.query.after}`;
 
-	query = `${req.params.id}/${sort}`;
+	query = `${req.params.id}/${sort}?limit=${limit}${timeQuery}${after}`;
 
 	return query;
 };

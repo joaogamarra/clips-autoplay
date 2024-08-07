@@ -11,7 +11,7 @@ const router = express.Router();
 router.get('/:id', async (req, res) => {
 	const tries = 3;
 	let currentTry = 1;
-	let limit = 2500;
+	let limit = 50;
 	let dataParsed;
 
 	const redditAuth = async () => {

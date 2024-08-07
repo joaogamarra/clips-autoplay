@@ -22,7 +22,7 @@ const router = express_1.default.Router();
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tries = 3;
     let currentTry = 1;
-    let limit = 2500;
+    let limit = 50;
     let dataParsed;
     const redditAuth = () => __awaiter(void 0, void 0, void 0, function* () {
         const response = yield axios_1.default.post('https://www.reddit.com/api/v1/access_token', new URLSearchParams({
