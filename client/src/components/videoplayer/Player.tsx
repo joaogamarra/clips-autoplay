@@ -88,7 +88,6 @@ const Player: FC = () => {
 		const getdata = async () => {
 			dispatch(setCurrentSearch(params));
 			const data = await getClips(params);
-			console.log(data);
 
 			if ('error' in data) {
 				setError(true);
