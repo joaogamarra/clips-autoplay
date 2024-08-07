@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const subredditParsing_1 = require("../../common/subredditParsing");
 const axios_1 = __importDefault(require("axios"));
 const queryParsing_1 = require("../../common/queryParsing");
+const redditAutoComplete_1 = require("../../database/queries/redditAutoComplete");
 const router = express_1.default.Router();
 router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const tries = 3;
@@ -58,6 +59,7 @@ router.get('/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         try {
             const token = yield redditAuth();
             yield requestLoop(token);
+            yield redditAutoComplete_1.subredditIncreaseRanking(req.params.id);
             res.send(dataParsed);
         }
         catch (error) {

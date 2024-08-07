@@ -58,6 +58,8 @@ router.get('/:id', async (req, res) => {
 			const token = await redditAuth();
 			await requestLoop(token);
 
+			await subredditIncreaseRanking(req.params.id);
+
 			res.send(dataParsed);
 		} catch (error) {
 			console.error('Error fetching posts:', error);
