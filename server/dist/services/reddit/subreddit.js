@@ -16,7 +16,6 @@ exports.getSubreddit = void 0;
 const axios_1 = __importDefault(require("axios"));
 const getSubreddit = (query, token) => __awaiter(void 0, void 0, void 0, function* () {
     const baseUrl = `https://oauth.reddit.com/r/${query}`;
-    console.log(baseUrl);
     const res = yield axios_1.default.get(baseUrl, {
         headers: {
             Authorization: `Bearer ${token}`,

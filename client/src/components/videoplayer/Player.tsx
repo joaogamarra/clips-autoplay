@@ -328,10 +328,15 @@ const Player: FC = () => {
 
 	const handleAudioError = () => {
 		const audio = audioEl.current;
+
 		if (audio && audio.src.includes('DASH_audio')) {
 			const currentSrc = audio.src;
 
-			audio.src = currentSrc?.replace('DASH_audio.mp4', 'audio');
+			audio.src = currentSrc?.replace('DASH_audio', 'DASH_AUDIO_128');
+		} else if (audio && audio.src.includes('DASH_AUDIO_128')) {
+			const currentSrc = audio.src;
+
+			audio.src = currentSrc?.replace('DASH_AUDIO_128.mp4', 'audio');
 		} else {
 			dispatch(
 				setCurrentClip({
