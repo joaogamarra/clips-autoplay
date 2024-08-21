@@ -1,23 +1,23 @@
 {
   "files": {
     "main.css": "/static/css/main.0db7c558.chunk.css",
-    "main.js": "/static/js/main.c6a3ab32.chunk.js",
-    "main.js.map": "/static/js/main.c6a3ab32.chunk.js.map",
+    "main.js": "/static/js/main.8aacedaf.chunk.js",
+    "main.js.map": "/static/js/main.8aacedaf.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.900dd88b.js",
     "runtime-main.js.map": "/static/js/runtime-main.900dd88b.js.map",
-    "static/js/2.10517862.chunk.js": "/static/js/2.10517862.chunk.js",
-    "static/js/2.10517862.chunk.js.map": "/static/js/2.10517862.chunk.js.map",
+    "static/js/2.bb62dede.chunk.js": "/static/js/2.bb62dede.chunk.js",
+    "static/js/2.bb62dede.chunk.js.map": "/static/js/2.bb62dede.chunk.js.map",
     "index.html": "/index.html",
     "static/css/main.0db7c558.chunk.css.map": "/static/css/main.0db7c558.chunk.css.map",
-    "static/js/2.10517862.chunk.js.LICENSE.txt": "/static/js/2.10517862.chunk.js.LICENSE.txt",
+    "static/js/2.bb62dede.chunk.js.LICENSE.txt": "/static/js/2.bb62dede.chunk.js.LICENSE.txt",
     "static/media/App.scss": "/static/media/notlikethis.abcad286.png",
     "static/media/logo-twitch.ad99d699.svg": "/static/media/logo-twitch.ad99d699.svg",
     "static/media/reddit-avatar.79044a65.svg": "/static/media/reddit-avatar.79044a65.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.900dd88b.js",
-    "static/js/2.10517862.chunk.js",
+    "static/js/2.bb62dede.chunk.js",
     "static/css/main.0db7c558.chunk.css",
-    "static/js/main.c6a3ab32.chunk.js"
+    "static/js/main.8aacedaf.chunk.js"
   ]
 }
